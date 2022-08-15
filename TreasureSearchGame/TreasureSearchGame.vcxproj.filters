@@ -42,6 +42,9 @@
     <ClInclude Include="include\Sprite.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="include\Text.hpp">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp">
@@ -71,9 +74,14 @@
     <ClCompile Include="src\Sprite.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="src\Text.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\Sprite.vert" />
     <None Include="shaders\Sprite.frag" />
+    <None Include="shaders\Text.vert" />
+    <None Include="shaders\Text.frag" />
   </ItemGroup>
 </Project>

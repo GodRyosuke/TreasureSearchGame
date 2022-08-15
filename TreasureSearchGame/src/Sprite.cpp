@@ -51,18 +51,24 @@ bool Sprite::Load(std::string filePath, float alpha)
 	return true;
 }
 
+
+void Sprite::SetUniforms(Shader* shader)
+{
+	glm::mat4 translate = glm::translate(glm::mat4(1.0f), mPos);
+	shader->SetMatrixUniform("gTranslate", translate);
+	shader->SetMatrixUniform("gRotate", mRotate);
+	shader->SetFloatUniform("gSpriteAlpha", mAlpha);
+	glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(mTexture->getWidth() * mScale, mTexture->getHeight() * mScale, mScale));
+	shader->SetMatrixUniform("gScaling", scale);
+}
+
 void Sprite::Draw(Shader* shader)
 {
 	shader->UseProgram();
 	glBindVertexArray(mVertexArray);
 
 	// sprite‚Ì•`‰æˆÊ’u‚ðÝ’è
-	glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(mScale, mScale, mScale));
-	glm::mat4 translate = glm::translate(glm::mat4(1.0f), mPos);
-	shader->SetMatrixUniform("gTranslate", translate);
-	shader->SetMatrixUniform("gRotate", mRotate);
-	shader->SetMatrixUniform("gScaling", scale);
-	shader->SetFloatUniform("gSpriteAlpha", mAlpha);
+	SetUniforms(shader);	// TransformÝ’è
 	mTexture->BindTexture();
 	glDrawElements(GL_TRIANGLES, sizeof(SpriteIndices) / sizeof(unsigned int), GL_UNSIGNED_INT, 0);
 	mTexture->UnBindTexture();

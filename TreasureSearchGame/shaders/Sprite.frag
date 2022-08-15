@@ -13,6 +13,10 @@ uniform float gSpriteAlpha;
 void main()
 {
 	// Sample color from texture
-    outColor = texture(uTexture, fragTexCoord);
-	outColor.a = gSpriteAlpha;
+	vec4 texColor = texture(uTexture, fragTexCoord);
+	if (texColor.a < 0.1f) {
+		discard;
+	}
+	texColor.a = gSpriteAlpha;
+    outColor = texColor;
 }

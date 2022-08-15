@@ -7,6 +7,7 @@
 #include "Shader.hpp"
 #include "UnityChan.hpp"
 #include "Sprite.hpp"
+#include "Text.hpp"
 
 class Game {
 public:
@@ -59,6 +60,8 @@ private:
 	};
 	std::vector<MeshData> mMeshes;
 	std::vector<SpriteData> mSprites;
+	
+	Text* mText;
 
 	std::vector<SkinMesh*> mSkinMeshes;
 	Mesh* mUnityChan;
@@ -70,6 +73,7 @@ private:
 	Shader* mSkinningShader;
 	Shader* mMeshShader;
 	Shader* mSpriteShader;
+	Shader* mTextShader;
 
 	Shader* mShadowMapShader;
 	Shader* mShadowLightingShader;

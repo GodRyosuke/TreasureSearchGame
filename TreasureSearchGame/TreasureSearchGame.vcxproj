@@ -104,19 +104,20 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)TreasureSearchGame\include;$(SolutionDir)dependencies\SDL2\include;$(SolutionDir)dependencies\fmod\include;$(SolutionDir)dependencies\glew\include;$(SolutionDir)dependencies\glm\glm;$(SolutionDir)dependencies\assimp\include;$(SolutionDir)dependencies\STB_Image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)TreasureSearchGame\include;$(SolutionDir)dependencies\SDL2\include;$(SolutionDir)dependencies\fmod\include;$(SolutionDir)dependencies\glew\include;$(SolutionDir)dependencies\glm\glm;$(SolutionDir)dependencies\assimp\include;$(SolutionDir)dependencies\STB_Image;$(SolutionDir)dependencies\freetype\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)dependencies\SDL2\lib\x64;$(SolutionDir)dependencies\fmod\lib;$(SolutionDir)dependencies\glew\lib;$(SolutionDir)dependencies\assimp\lib\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>fmod_vc.lib;fmodstudio_vc.lib;SDL2.lib;SDL2main.lib;glew32.lib;opengl32.lib;assimp-vc142-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)dependencies\SDL2\lib\x64;$(SolutionDir)dependencies\fmod\lib;$(SolutionDir)dependencies\glew\lib;$(SolutionDir)dependencies\assimp\lib\Debug;%(AdditionalLibraryDirectories);$(SolutionDir)dependencies\freetype\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>fmod_vc.lib;fmodstudio_vc.lib;SDL2.lib;SDL2main.lib;freetype.lib;glew32.lib;opengl32.lib;assimp-vc142-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>XCOPY "$(SolutionDir)dependencies\SDL2\lib\x64\*.dll" "$(OutDir)" /e /y  
 XCOPY "$(SolutionDir)dependencies\fmod\lib\*.dll" "$(OutDir)" /e /y
 XCOPY "$(SolutionDir)dependencies\glew\lib\*.dll" "$(OutDir)" /e /y
 XCOPY "$(SolutionDir)dependencies\assimp\lib\Debug\*.dll" "$(OutDir)" /e /y
+XCOPY "$(SolutionDir)dependencies\freetype\lib\*.dll" "$(OutDir)" /e /y
 set OUTPUT_DIRECTORY="$(OutDir)shaders"
 if not exist %OUTPUT_DIRECTORY% mkdir %OUTPUT_DIRECTORY%
 XCOPY "$(SolutionDir)TreasureSearchGame\shaders" %OUTPUT_DIRECTORY% /e /y
@@ -134,21 +135,22 @@ XCOPY "$(SolutionDir)TreasureSearchGame\resources" %OUTPUT_DIRECTORY% /e /y</Com
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)TreasureSearchGame\include;$(SolutionDir)dependencies\SDL2\include;$(SolutionDir)dependencies\fmod\include;$(SolutionDir)dependencies\glew\include;$(SolutionDir)dependencies\glm\glm;$(SolutionDir)dependencies\assimp\include;$(SolutionDir)dependencies\STB_Image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)TreasureSearchGame\include;$(SolutionDir)dependencies\SDL2\include;$(SolutionDir)dependencies\fmod\include;$(SolutionDir)dependencies\glew\include;$(SolutionDir)dependencies\glm\glm;$(SolutionDir)dependencies\assimp\include;$(SolutionDir)dependencies\STB_Image;$(SolutionDir)dependencies\freetype\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)dependencies\SDL2\lib\x64;$(SolutionDir)dependencies\fmod\lib;$(SolutionDir)dependencies\glew\lib;$(SolutionDir)dependencies\assimp\lib\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>fmod_vc.lib;fmodstudio_vc.lib;SDL2.lib;SDL2main.lib;glew32s.lib;opengl32.lib;assimp-vc142-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)dependencies\SDL2\lib\x64;$(SolutionDir)dependencies\fmod\lib;$(SolutionDir)dependencies\glew\lib;$(SolutionDir)dependencies\assimp\lib\Release;%(AdditionalLibraryDirectories);$(SolutionDir)dependencies\freetype\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>fmod_vc.lib;fmodstudio_vc.lib;SDL2.lib;SDL2main.lib;freetype.lib;glew32s.lib;opengl32.lib;assimp-vc142-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>XCOPY "$(SolutionDir)dependencies\SDL2\lib\x64\*.dll" "$(OutDir)" /e /y  
 XCOPY "$(SolutionDir)dependencies\fmod\lib\*.dll" "$(OutDir)" /e /y
 XCOPY "$(SolutionDir)dependencies\glew\lib\*.dll" "$(OutDir)" /e /y
 XCOPY "$(SolutionDir)dependencies\assimp\lib\Release\*.dll" "$(OutDir)" /e /y
+XCOPY "$(SolutionDir)dependencies\freetype\lib\*.dll" "$(OutDir)" /e /y
 set OUTPUT_DIRECTORY="$(OutDir)shaders"
 if not exist %OUTPUT_DIRECTORY% mkdir %OUTPUT_DIRECTORY%
 XCOPY "$(SolutionDir)TreasureSearchGame\shaders" %OUTPUT_DIRECTORY% /e /y
@@ -165,6 +167,7 @@ XCOPY "$(SolutionDir)TreasureSearchGame\resources" %OUTPUT_DIRECTORY% /e /y</Com
     <ClInclude Include="include\Shader.hpp" />
     <ClInclude Include="include\Skinning.hpp" />
     <ClInclude Include="include\Sprite.hpp" />
+    <ClInclude Include="include\Text.hpp" />
     <ClInclude Include="include\Texture.hpp" />
     <ClInclude Include="include\TextureShadowMap.hpp" />
     <ClInclude Include="include\UnityChan.hpp" />
@@ -176,6 +179,7 @@ XCOPY "$(SolutionDir)TreasureSearchGame\resources" %OUTPUT_DIRECTORY% /e /y</Com
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\Skinning.cpp" />
     <ClCompile Include="src\Sprite.cpp" />
+    <ClCompile Include="src\Text.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\TextureShadowMap.cpp" />
     <ClCompile Include="src\UnityChan.cpp" />
@@ -183,6 +187,8 @@ XCOPY "$(SolutionDir)TreasureSearchGame\resources" %OUTPUT_DIRECTORY% /e /y</Com
   <ItemGroup>
     <None Include="shaders\Sprite.frag" />
     <None Include="shaders\Sprite.vert" />
+    <None Include="shaders\Text.frag" />
+    <None Include="shaders\Text.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

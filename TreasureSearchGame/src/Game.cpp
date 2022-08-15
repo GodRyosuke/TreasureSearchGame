@@ -185,6 +185,25 @@ bool Game::LoadData()
 		mSpriteShader->SetMatrixUniform("gSpriteViewProj", spriteViewProj);
 	}
 
+	// Font Rendering—p‚ÌShader
+	{
+		std::string vert_file = "./Shaders/Text.vert";
+		std::string frag_file = "./Shaders/Text.frag";
+		mTextShader = new Shader();
+		if (!mTextShader->CreateShaderProgram(vert_file, frag_file)) {
+			return false;
+		}
+	}
+	{
+		// Set Sprite View Proj
+		glm::mat4 spriteViewProj = glm::mat4(1.0f);
+		spriteViewProj[0][0] = 2.0f / (float)mWindowWidth;
+		spriteViewProj[1][1] = 2.0f / (float)mWindowHeight;
+		spriteViewProj[3][2] = 1.0f;
+		mTextShader->UseProgram();
+		mTextShader->SetMatrixUniform("gSpriteViewProj", spriteViewProj);
+	}
+
 	//{
 	//	// Shadow Map
 	//	std::string vert_file = "./Shaders/ShadowMap.vert";
@@ -292,11 +311,22 @@ bool Game::LoadData()
 	// Load Sprites
 	{
 		Sprite* sprite = new Sprite();
-		if (sprite->Load("")) {
-			mSprites.push_back(SpriteData(sprite, ""));
+		if (sprite->Load("./resources/TextBox.png")) {
+			sprite->SetPos(glm::vec3(0.0f, -mWindowHeight / 4.0f, 0.0f));
+			sprite->SetRotate(glm::mat4(1.0f));
+			sprite->SetScale(1.5f);
+			sprite->SetAlpha(0.7f);
+			mSprites.push_back(SpriteData(sprite, "TextBox"));
 		}
 	}
 
+	// Load Text
+	mText = new Text("./resources/arialuni.ttf");
+	mText->SetPos(glm::vec3(0.0f));
+	mText->SetRotate(glm::mat4(1.0f));
+	mText->SetScale(1.0f);
+	mText->SetAlpha(1.0f);
+	mText->SetTextColor(glm::vec3(0.0f, 0.0f, 0.2f));
 
 
 	//// Unity Chan world
@@ -598,6 +628,11 @@ void Game::Draw()
 	for (auto sprite : mSprites) {
 		sprite.sprite->Draw(mSpriteShader);
 	}
+
+	// •¶Žš•`‰æ
+	mText->SetText(u"•¶Žš—ñ2");
+	mText->Draw(mTextShader);
+
 
 	//mShadowLightingShader->UseProgram();
 	//mTextureShadowMapFBO->BindTexture(GL_TEXTURE1);
