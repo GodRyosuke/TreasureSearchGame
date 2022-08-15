@@ -1,0 +1,5 @@
+.vs/
+.vscode/
+/x64/Debug/
+/x64/Release/
+/TreasureSearchGame/x64/
