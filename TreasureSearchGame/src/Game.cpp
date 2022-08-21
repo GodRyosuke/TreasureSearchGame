@@ -91,6 +91,7 @@ void Game::SetShaderLighting()
 {
 	std::vector<Shader*> Shaders;
 	Shaders.push_back(mMeshShader);
+	Shaders.push_back(mSkinningShader);
 	//Shaders.push_back(mSkinShadowLightingShader);
 	//Shaders.push_back(mUnityChanShader);
 
@@ -165,6 +166,21 @@ bool Game::LoadData()
 	mMeshShader->UseProgram();
 	mMeshShader->SetMatrixUniform("LightView", SpotLightView);
 	mMeshShader->SetMatrixUniform("CameraProj", CameraProj);
+
+	// Skinning Shader
+	{
+		std::string vert_file = "./Shaders/Skinning.vert";
+		std::string frag_file = "./Shaders/Lighting.frag";
+		mSkinningShader = new Shader();
+		if (!mSkinningShader->CreateShaderProgram(vert_file, frag_file)) {
+			return false;
+		}
+	}
+	mSkinningShader->UseProgram();
+	mSkinningShader->SetMatrixUniform("LightView", SpotLightView);
+	mSkinningShader->SetMatrixUniform("CameraProj", CameraProj);
+
+
 
 	// Sprite用のShader
 	{
@@ -306,6 +322,19 @@ bool Game::LoadData()
 			mMeshes.push_back(MeshData(mesh, "TreasureChest"));
 		}
 	}
+
+	{
+		// Player Box
+		SkinMesh* mesh = new SkinMesh();
+		if (mesh->Load("./resources/SimpleMan/", "test_output3.fbx")) {
+			mesh->SetMeshPos(glm::vec3(0.0f));
+			mesh->SetMeshRotate(glm::mat4(1.0f));
+			mesh->SetMeshScale(0.002f);
+			mPlayer = mesh;
+		}
+	}
+
+
 
 
 	// Load Sprites
@@ -544,6 +573,7 @@ void Game::UpdateGame()
 	// 更新されたカメラの位置をShaderに反映
 	std::vector<Shader*> Shaders;
 	Shaders.push_back(mMeshShader);
+	Shaders.push_back(mSkinningShader);
 	for (auto shader : Shaders) {
 		shader->UseProgram();
 		shader->SetVectorUniform("gEyeWorldPos", mCameraPos);
@@ -615,8 +645,11 @@ void Game::Draw()
 				}
 			}
 		}
-
 	}
+
+	// Draw Skin Mesh
+	mSkinningShader->UseProgram();
+	mPlayer->Draw(mSkinningShader, mTicksCount / 1000.0f);
 
 	// Draw Sprites
 	glDisable(GL_DEPTH_TEST);

@@ -65,7 +65,7 @@ private:
 
 	std::vector<SkinMesh*> mSkinMeshes;
 	Mesh* mUnityChan;
-	SkinMesh* mRunAnim;
+	SkinMesh* mPlayer;
 	UnityChan* mAnimUnityChan;
 
 	TextureShadowMap* mTextureShadowMapFBO;
