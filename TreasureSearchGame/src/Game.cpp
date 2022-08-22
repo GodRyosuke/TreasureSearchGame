@@ -322,9 +322,21 @@ bool Game::LoadData()
 			mMeshes.push_back(MeshData(mesh, "TreasureChest"));
 		}
 	}
+	{
+		// Maze Box
+		MazeBox* mazeBox = new MazeBox("./resources/MazeBox/", 
+			"MazeBox.fbx", "BlackUV.png", "WhiteUV.png");
+		mazeBox->SetMeshPos(glm::vec3(4.0f, 5.0f, 0.0f));
+		mazeBox->SetMeshRotate(glm::mat4(1.0f));
+		mazeBox->SetMeshScale(1.0f);
+		mazeBox->SetBoxType(MazeBox::BLACK);
+		mMazeBox = mazeBox;
+	}
+
+
 
 	{
-		// Player Box
+		// Player
 		SkinMesh* mesh = new SkinMesh();
 		if (mesh->Load("./resources/SimpleMan/", "test_output3.fbx")) {
 			mesh->SetMeshPos(glm::vec3(0.0f));
@@ -645,7 +657,23 @@ void Game::Draw()
 				}
 			}
 		}
+		else {
+			mesh.mesh->Draw(mMeshShader, mTicksCount / 1000.0f);
+		}
 	}
+
+	// Maze‚Ì°•`‰æ
+	for (int y = 5; y < 15; y++) {
+		for (int x = 0; x < 15; x++) {
+			float x_pos = 1.0f + 2.0f * x;
+			float y_pos = 1.0f + 2.0f * y;
+			mMazeBox->SetBoxType((y * 15 + x) % 2 ? MazeBox::BLACK : MazeBox::WHITE);
+			mMazeBox->SetMeshPos(glm::vec3(x_pos, y_pos, 0.0f));
+			mMazeBox->Draw(mMeshShader, mTicksCount / 1000.0f);
+
+		}
+	}
+
 
 	// Draw Skin Mesh
 	mSkinningShader->UseProgram();

@@ -233,6 +233,13 @@ void Mesh::UpdateTransform(Shader* shader, float timeInSeconds)
     shader->SetMatrixUniform("ModelTransform", TransformMat);
 }
 
+void Mesh::BindTexture(int materialIdx)
+{
+    if (m_Materials[materialIdx].DiffuseTexture) {
+        m_Materials[materialIdx].DiffuseTexture->BindTexture(GL_TEXTURE0);
+    }
+}
+
 void Mesh::Draw(Shader* shader, float timeInSeconds)
 {
     shader->UseProgram();
@@ -251,28 +258,8 @@ void Mesh::Draw(Shader* shader, float timeInSeconds)
         shader->SetVectorUniform("uDirLight.mSpecColor", m_Materials[MaterialIndex].SpecColor);
         shader->SetFloatUniform("gSpecularPower", 0.3f);
         //shader->SetFloatUniform("gMatSpecularIntensity", 1.0f);
+        BindTexture(MaterialIndex);
 
-        if (m_Materials[MaterialIndex].DiffuseTexture) {
-            m_Materials[MaterialIndex].DiffuseTexture->BindTexture(GL_TEXTURE0);
-        }
-
-        //if (m_Materials[MaterialIndex].pSpecularExponent) {
-        //    m_Materials[MaterialIndex].pSpecularExponent->Bind(SPECULAR_EXPONENT_UNIT);
-
-        //    if (pRenderCallbacks) {
-        //        pRenderCallbacks->ControlSpecularExponent(true);
-        //    }
-        //}
-        //else {
-        //    if (pRenderCallbacks) {
-        //        pRenderCallbacks->ControlSpecularExponent(false);
-        //    }
-        //}
-
-        //if (pRenderCallbacks) {
-        //    pRenderCallbacks->DrawStartCB(i);
-        //    pRenderCallbacks->SetMaterial(m_Materials[MaterialIndex]);
-        //}
 
         glDrawElementsBaseVertex(GL_TRIANGLES,
             m_Meshes[i].NumIndices,

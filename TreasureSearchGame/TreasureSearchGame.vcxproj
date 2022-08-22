@@ -163,6 +163,7 @@ XCOPY "$(SolutionDir)TreasureSearchGame\resources" %OUTPUT_DIRECTORY% /e /y</Com
   <ItemGroup>
     <ClInclude Include="include\Game.hpp" />
     <ClInclude Include="include\GLUtil.hpp" />
+    <ClInclude Include="include\MazeBox.hpp" />
     <ClInclude Include="include\Mesh.hpp" />
     <ClInclude Include="include\Shader.hpp" />
     <ClInclude Include="include\Skinning.hpp" />
@@ -175,6 +176,7 @@ XCOPY "$(SolutionDir)TreasureSearchGame\resources" %OUTPUT_DIRECTORY% /e /y</Com
   <ItemGroup>
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\MazeBox.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\Skinning.cpp" />

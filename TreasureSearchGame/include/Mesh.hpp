@@ -48,6 +48,7 @@ protected:
     virtual void LoadMesh(const aiMesh* pMesh, unsigned int meshIdx);
     virtual void GetGlobalInvTrans() {}
     virtual void UpdateTransform(Shader* shader, float timeInSeconds);
+    virtual void BindTexture(int materialIdx);
 
     const aiScene* m_pScene;
     Assimp::Importer m_Importer;    // Importer•Û‚¹‚ñ‚©‚Á‚½‚çAScene‚à•Û‚Å‚«‚È‚¢!!

@@ -8,6 +8,7 @@
 #include "UnityChan.hpp"
 #include "Sprite.hpp"
 #include "Text.hpp"
+#include "MazeBox.hpp"
 
 class Game {
 public:
@@ -66,6 +67,7 @@ private:
 	std::vector<SkinMesh*> mSkinMeshes;
 	Mesh* mUnityChan;
 	SkinMesh* mPlayer;
+	MazeBox* mMazeBox;
 	UnityChan* mAnimUnityChan;
 
 	TextureShadowMap* mTextureShadowMapFBO;
