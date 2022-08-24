@@ -25,10 +25,26 @@ private:
 		PHASE_MOVE,
 		PHASE_MAX
 	};
-	struct SpotLight {
+	struct BaseLight {
+		glm::vec3 Color;
+		float AmbientIntensity;
+		float DiffuseIntensity;
+	};
+	struct Attenuation {
+		float Constant;
+		float Linear;
+		float Exp;
+	};
+	struct PointLight {
+		BaseLight Base;
 		glm::vec3 Position;
+		Attenuation Atten;
+	};
+	struct SpotLight {
+		PointLight pointLight;
 		glm::vec3 Direction;
 		glm::vec3 Up;
+		float Cutoff;
 	};
 
 	void ProcessInput();
@@ -42,7 +58,7 @@ private:
 	const int mWindowHeight;
 	bool mIsRunning;
 
-	SpotLight mSpotLight;
+	std::vector<SpotLight> mSpotLights;
 
 	struct MeshData {
 		MeshData(Mesh* mesh, std::string name)

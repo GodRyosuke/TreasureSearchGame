@@ -19,9 +19,7 @@ Game::Game()
 	mCameraUP = glm::vec3(0.0f, 0.0f, 1.0f);
 	mCameraOrientation = glm::vec3(0.5f, 0, 0);
 
-	mSpotLight.Position = glm::vec3(-1.0f, 2.5f, 10.0f);
-	mSpotLight.Direction = glm::vec3(0.5f, 0.0f, -1.0f);
-	mSpotLight.Up = glm::vec3(0.0f, 0.0f, 1.0f);
+
 }
 
 
@@ -100,28 +98,31 @@ void Game::SetShaderLighting()
 		shader->SetVectorUniform("gEyeWorldPos", mCameraPos);
 		shader->SetSamplerUniform("gShadowMap", 1);
 		shader->SetSamplerUniform("gSampler", 0);
-		shader->SetSamplerUniform("gNumSpotLights", 1);
+		shader->SetSamplerUniform("gNumSpotLights", mSpotLights.size());
 
 		// spot light
-		for (int i = 0; i < 1; i++) {
+		for (int i = 0; i < mSpotLights.size(); i++) {
+			SpotLight spotLight = mSpotLights[i];
 			std::string uniformName;
 			std::string pD = std::to_string(i);
 			uniformName = "gSpotLights[" + pD + "].Base.Base.Color";
-			shader->SetVectorUniform(uniformName, glm::vec3(1.0f, 1.0f, 1.0f));
+			shader->SetVectorUniform(uniformName, spotLight.pointLight.Base.Color);
 			uniformName = "gSpotLights[" + pD + "].Base.Base.AmbientIntensity";
-			shader->SetFloatUniform(uniformName, 0.01f);
+			shader->SetFloatUniform(uniformName, spotLight.pointLight.Base.AmbientIntensity);
 			uniformName = "gSpotLights[" + pD + "].Base.Position";
-			shader->SetVectorUniform(uniformName, mSpotLight.Position);
+			shader->SetVectorUniform(uniformName, spotLight.pointLight.Position);
 			uniformName = "gSpotLights[" + pD + "].Direction";
-			shader->SetVectorUniform(uniformName, mSpotLight.Direction);
+			shader->SetVectorUniform(uniformName, spotLight.Direction);
 			uniformName = "gSpotLights[" + pD + "].Cutoff";
-			shader->SetFloatUniform(uniformName, cosf(20.0f * M_PI / 180.0f));
+			shader->SetFloatUniform(uniformName, spotLight.Cutoff);
 			uniformName = "gSpotLights[" + pD + "].Base.Base.DiffuseIntensity";
-			shader->SetFloatUniform(uniformName, 0.05f);
+			shader->SetFloatUniform(uniformName, spotLight.pointLight.Base.DiffuseIntensity);
 			uniformName = "gSpotLights[" + pD + "].Base.Atten.Constant";
+			shader->SetFloatUniform(uniformName, spotLight.pointLight.Atten.Constant);
 			uniformName = "gSpotLights[" + pD + "].Base.Atten.Linear";
-			shader->SetFloatUniform(uniformName, 0.01f);
+			shader->SetFloatUniform(uniformName, spotLight.pointLight.Atten.Linear);
 			uniformName = "gSpotLights[" + pD + "].Base.Atten.Exp";
+			shader->SetFloatUniform(uniformName, spotLight.pointLight.Atten.Exp);
 		}
 
 		 // directional light
@@ -134,22 +135,57 @@ void Game::SetShaderLighting()
 			uniformName = "gDirectionalLight.Base.DiffuseIntensity";
 			shader->SetFloatUniform(uniformName, 0.9f);
 			uniformName = "gDirectionalLight.Direction";
-			shader->SetVectorUniform(uniformName, mSpotLight.Direction);
+			shader->SetVectorUniform(uniformName, glm::vec3(0.0f, 0.0f, -1.0f));
 		}
 	}
 }
 
 bool Game::LoadData()
 {
+	// Set Light
+	{
+		BaseLight base;
+		base.Color = glm::vec3(1.0f);
+		base.AmbientIntensity = 0.1f;
+		base.DiffuseIntensity = 0.05f;
+		Attenuation atten;
+		atten.Constant = 0;
+		atten.Linear = 0.01f;
+		atten.Exp = 0.f;
+		PointLight pointlight;
+		pointlight.Base = base;
+		pointlight.Position = glm::vec3(5.0f, 5.0f, 10.0f);
+		pointlight.Atten = atten;
+		SpotLight spotLight;
+		spotLight.pointLight = pointlight;
+		spotLight.Direction = glm::vec3(0.f, 0.0f, -1.0f);
+		spotLight.Up = glm::vec3(0.0f, 0.0f, 1.0f);
+		spotLight.Cutoff = cosf(60.0f * M_PI / 180.0f);
+		//spotLight.Position = glm::vec3(-1.0f, 2.5f, 10.0f);
+		//spotLight.Direction = glm::vec3(0.5f, 0.0f, -1.0f);
+		//spotLight.Up = glm::vec3(0.0f, 0.0f, 1.0f);
+		mSpotLights.push_back(spotLight);
+		spotLight.pointLight.Position = glm::vec3(25.0f, 5.0f, 10.0f);
+		mSpotLights.push_back(spotLight);
+		spotLight.pointLight.Base.Color = glm::vec3(0.0f, 0.0f, 1.0f);
+		spotLight.pointLight.Position = glm::vec3(5.0f, 25.0f, 10.0f);
+		mSpotLights.push_back(spotLight);
+		//spotLight.pointLight.Position = glm::vec3(25.0f, 25.0f, 10.0f);
+		//mSpotLights.push_back(spotLight);
+
+	}
+
+
+	// Set Camera
 	glm::mat4 CameraView = glm::lookAt(
 		mCameraPos,
 		mCameraPos + mCameraOrientation,
 		mCameraUP);
 	glm::mat4 CameraProj = glm::perspective(glm::radians(45.0f), (float)mWindowWidth / mWindowHeight, 0.1f, 100.0f);
 	glm::mat4 SpotLightView = glm::lookAt(
-		mSpotLight.Position,
-		mSpotLight.Direction,
-		mSpotLight.Up
+		mSpotLights[0].pointLight.Position,
+		mSpotLights[0].Direction,
+		mSpotLights[0].Up
 	);
 
 
