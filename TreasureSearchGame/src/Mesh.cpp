@@ -1,6 +1,9 @@
 #include "Mesh.hpp"
 #include <iostream>
 #include "GLUtil.hpp"
+#include "Texture.hpp"
+#include "Shader.hpp"
+
 
 
 Mesh::Mesh()

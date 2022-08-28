@@ -3,9 +3,7 @@
 #include <string>
 #include <vector>
 #include "glm.hpp"
-#include "Shader.hpp"
 #include <map>
-#include "Texture.hpp"
 #include <assimp/Importer.hpp>      // C++ importer interface
 #include <assimp/scene.h>       // Output data structure
 #include <assimp/postprocess.h> // Post processing flags
@@ -20,11 +18,13 @@ public:
     Mesh();
     ~Mesh() {}
     bool Load(std::string FilePath, std::string ObjFileName);
-    void Draw(Shader* shader, float timeInSeconds);
+    void Draw(class Shader* shader, float timeInSeconds);
 
-    void SetMeshPos(glm::vec3 pos) { mMeshPos = pos; }
-    void SetMeshRotate(glm::mat4 rot) { mMeshRotate = rot; }
-    void SetMeshScale(float scale) { mMeshScale = scale; }
+    void SetPos(glm::vec3 pos) { mMeshPos = pos; }
+    void SetRotate(glm::mat4 rot) { mMeshRotate = rot; }
+    void SetScale(float scale) { mMeshScale = scale; }
+    glm::vec3 GetPos() { return mMeshPos; }
+
     glm::mat4 GetWorldMat();
 
 protected:
@@ -47,7 +47,7 @@ protected:
     virtual void ReserveVertexSpace();
     virtual void LoadMesh(const aiMesh* pMesh, unsigned int meshIdx);
     virtual void GetGlobalInvTrans() {}
-    virtual void UpdateTransform(Shader* shader, float timeInSeconds);
+    virtual void UpdateTransform(class Shader* shader, float timeInSeconds);
     virtual void BindTexture(int materialIdx);
 
     const aiScene* m_pScene;
@@ -58,6 +58,10 @@ protected:
     unsigned int mNumVertices;
     unsigned int mNumIndices;
     std::vector<BasicMeshEntry> m_Meshes;
+
+    glm::vec3 mMeshPos;
+    glm::mat4 mMeshRotate;
+    float mMeshScale;
 
 
 private:
@@ -72,7 +76,7 @@ private:
         glm::vec3 Emissive;
         glm::vec3 Bump;
         glm::vec3 NormalMap;
-        Texture* DiffuseTexture;
+        class Texture* DiffuseTexture;
     };
 
 
@@ -88,9 +92,7 @@ private:
 
 
 
-    glm::vec3 mMeshPos;
-    glm::mat4 mMeshRotate;
-    float mMeshScale;
+
 
     std::string ObjFileRoot;
     std::string ObjFileName;

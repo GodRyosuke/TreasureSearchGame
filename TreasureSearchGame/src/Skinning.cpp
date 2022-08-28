@@ -1,6 +1,7 @@
 #include "Skinning.hpp"
 #include <iostream>
 #include <GLUtil.hpp>
+#include "Shader.hpp"
 
 //MeshSkinningAssimp::MeshSkinningAssimp(std::string ObjFilePath, std::string MtlFilePath, Shader* shader)
 //    :MeshAssimp(ObjFilePath, MtlFilePath, shader)

@@ -3,8 +3,6 @@
 #include "SDL.h"
 #include "glew.h"
 #include "TextureShadowMap.hpp"
-#include "Skinning.hpp"
-#include "Shader.hpp"
 #include "UnityChan.hpp"
 #include "Sprite.hpp"
 #include "Text.hpp"
@@ -18,6 +16,8 @@ public:
 	bool Initialize();
 	void RunLoop();
 	void Shutdown();
+	void SetViewMatrix(glm::mat4 view, glm::vec3 cameraPos);	// View MatrixÇÃê›íËÇÇ∑ÇÈÅB
+
 
 private:
 	enum PHASE {
@@ -52,7 +52,7 @@ private:
 	void Draw();
 
 	bool LoadData();
-	void SetShaderLighting();
+	void SetLighting();
 
 	const int mWindowWidth;
 	const int mWindowHeight;
@@ -77,32 +77,32 @@ private:
 	};
 	std::vector<MeshData> mMeshes;
 	std::vector<SpriteData> mSprites;
+	Mesh* mConcretePlane;
 	
 	Text* mText;
 
 	std::vector<SkinMesh*> mSkinMeshes;
 	Mesh* mUnityChan;
-	SkinMesh* mPlayer;
+	class Player* mPlayer;
+
+	class Plane* mPlane;
 	MazeBox* mMazeBox;
+	float** mMazeData;
+	
 	UnityChan* mAnimUnityChan;
+
 
 	TextureShadowMap* mTextureShadowMapFBO;
 
-	Shader* mSkinningShader;
-	Shader* mMeshShader;
-	Shader* mSpriteShader;
-	Shader* mTextShader;
+	class Shader* mSkinningShader;
+	class Shader* mMeshShader;
+	class Shader* mSpriteShader;
+	class Shader* mTextShader;
 
-	Shader* mShadowMapShader;
-	Shader* mShadowLightingShader;
-	Shader* mSkinShadowMapShader;
-	Shader* mSkinShadowLightingShader;
-	Shader* mUnityChanShader;
 
 	PHASE mPhase;
 
 	// Camera
-	glm::vec3 mCameraPos;
 	glm::vec3 mCameraUP;
 	glm::vec3 mCameraOrientation;
 	float mMoveSpeed;

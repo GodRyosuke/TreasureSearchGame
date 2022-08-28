@@ -20,7 +20,7 @@ private:
 		}
 	};
 
-	virtual void UpdateTransform(Shader* shader, float timeInSeconds) override;
+	virtual void UpdateTransform(class Shader* shader, float timeInSeconds) override;
 	virtual const aiAnimation* SetAnimPointer() override;
 
 

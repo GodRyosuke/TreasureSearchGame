@@ -1,4 +1,5 @@
 #include "UnityChan.hpp"
+#include "Shader.hpp"
 
 UnityChan::UnityChan()
 	:SkinMesh()

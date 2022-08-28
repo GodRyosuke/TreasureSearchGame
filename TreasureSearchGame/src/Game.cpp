@@ -6,6 +6,9 @@
 #include "gtc/type_ptr.hpp"
 #include "gtx/rotate_vector.hpp"
 #include "gtx/vector_angle.hpp"
+#include "Player.hpp"
+#include "Shader.hpp"
+#include "Plane.hpp"
 #define STB_IMAGE_IMPLEMENTATION
 
 Game::Game()
@@ -15,7 +18,6 @@ Game::Game()
 	mMoveSpeed(0.1),
 	mMoveSensitivity(100.0f)
 {
-	mCameraPos = glm::vec3(1.0f, 1.0f, 1.0f);
 	mCameraUP = glm::vec3(0.0f, 0.0f, 1.0f);
 	mCameraOrientation = glm::vec3(0.5f, 0, 0);
 
@@ -85,17 +87,15 @@ bool Game::Initialize()
 	return true;
 }
 
-void Game::SetShaderLighting()
+void Game::SetLighting()
 {
 	std::vector<Shader*> Shaders;
 	Shaders.push_back(mMeshShader);
 	Shaders.push_back(mSkinningShader);
-	//Shaders.push_back(mSkinShadowLightingShader);
-	//Shaders.push_back(mUnityChanShader);
 
 	for (auto shader : Shaders) {
 		shader->UseProgram();
-		shader->SetVectorUniform("gEyeWorldPos", mCameraPos);
+		//shader->SetVectorUniform("gEyeWorldPos", mCameraPos);
 		shader->SetSamplerUniform("gShadowMap", 1);
 		shader->SetSamplerUniform("gSampler", 0);
 		shader->SetSamplerUniform("gNumSpotLights", mSpotLights.size());
@@ -140,6 +140,19 @@ void Game::SetShaderLighting()
 	}
 }
 
+void Game::SetViewMatrix(glm::mat4 view, glm::vec3 cameraPos)
+{
+	std::vector<Shader*> shaders;
+	shaders.push_back(mMeshShader);
+	shaders.push_back(mSkinningShader);
+	for (auto shader : shaders) {
+		shader->UseProgram();
+		shader->SetVectorUniform("gEyeWorldPos", cameraPos);
+		shader->SetMatrixUniform("CameraView", view);
+	}
+
+}
+
 bool Game::LoadData()
 {
 	// Set Light
@@ -167,20 +180,19 @@ bool Game::LoadData()
 		mSpotLights.push_back(spotLight);
 		spotLight.pointLight.Position = glm::vec3(25.0f, 5.0f, 10.0f);
 		mSpotLights.push_back(spotLight);
-		spotLight.pointLight.Base.Color = glm::vec3(0.0f, 0.0f, 1.0f);
 		spotLight.pointLight.Position = glm::vec3(5.0f, 25.0f, 10.0f);
 		mSpotLights.push_back(spotLight);
-		//spotLight.pointLight.Position = glm::vec3(25.0f, 25.0f, 10.0f);
-		//mSpotLights.push_back(spotLight);
+		spotLight.pointLight.Position = glm::vec3(25.0f, 25.0f, 10.0f);
+		mSpotLights.push_back(spotLight);
 
 	}
 
 
 	// Set Camera
-	glm::mat4 CameraView = glm::lookAt(
-		mCameraPos,
-		mCameraPos + mCameraOrientation,
-		mCameraUP);
+	//glm::mat4 CameraView = glm::lookAt(
+	//	mCameraPos,
+	//	mCameraPos + mCameraOrientation,
+	//	mCameraUP);
 	glm::mat4 CameraProj = glm::perspective(glm::radians(45.0f), (float)mWindowWidth / mWindowHeight, 0.1f, 100.0f);
 	glm::mat4 SpotLightView = glm::lookAt(
 		mSpotLights[0].pointLight.Position,
@@ -332,29 +344,41 @@ bool Game::LoadData()
 	//mUnityChanShader->SetSamplerUniform("gShadowMap", 1);
 
 	// light setting
-	SetShaderLighting();
+	SetLighting();
 
 
 	// Modelì«Ç›çûÇ›èàóù
+	//{
+	//	// Concrete Planeì«Ç›çûÇ›
+	//	Mesh* mesh = new Mesh();
+	//	if (mesh->Load("./resources/ConcretePlane/", "ConcretePlane.obj")) {
+	//		mesh->SetPos(glm::vec3(0.0f));
+	//		glm::mat4 rotate = glm::rotate(glm::mat4(1.0f), (float)M_PI / 2.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	//		mesh->SetRotate(rotate);
+	//		//mesh->SetMeshRotate(glm::mat4(1.0f));
+	//		mesh->SetScale(1.0f);
+	//		mConcretePlane = mesh;
+	//	}
+	//}
 	{
-		// Concrete Planeì«Ç›çûÇ›
-		Mesh* mesh = new Mesh();
-		if (mesh->Load("./resources/ConcretePlane/", "ConcretePlane.obj")) {
-			mesh->SetMeshPos(glm::vec3(0.0f));
+		Plane* plane = new Plane();
+		if (plane->Load("./resources/Plane/", "Plane.obj")) {
+			plane->LoadConcreteTex("./resources/Plane/Textures/concrete_brick_wall_001_diffuse_4k.jpg");
+			plane->LoadBrickTex("./resources/Plane/Textures/Bricks077_4K_Color.jpg");
+			plane->SetPos(glm::vec3(0.f));
 			glm::mat4 rotate = glm::rotate(glm::mat4(1.0f), (float)M_PI / 2.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-			mesh->SetMeshRotate(rotate);
-			//mesh->SetMeshRotate(glm::mat4(1.0f));
-			mesh->SetMeshScale(1.0f);
-			mMeshes.push_back(MeshData(mesh, "ConcretePlane"));
+			plane->SetRotate(rotate);
+			plane->SetScale(1.f);
+			mPlane = plane;
 		}
 	}
 	{
 		// Treasure Box
 		Mesh* mesh = new Mesh();
 		if (mesh->Load("./resources/TreasureBox/", "scene.gltf")) {
-			mesh->SetMeshPos(glm::vec3(4.0f, 5.0f / 2.0f, 0.0f));
-			mesh->SetMeshRotate(glm::mat4(1.0f));
-			mesh->SetMeshScale(0.01f / 2.0f);
+			mesh->SetPos(glm::vec3(4.0f, 5.0f / 2.0f, 0.0f));
+			mesh->SetRotate(glm::mat4(1.0f));
+			mesh->SetScale(0.01f / 2.0f);
 			mMeshes.push_back(MeshData(mesh, "TreasureChest"));
 		}
 	}
@@ -362,22 +386,29 @@ bool Game::LoadData()
 		// Maze Box
 		MazeBox* mazeBox = new MazeBox("./resources/MazeBox/", 
 			"MazeBox.fbx", "BlackUV.png", "WhiteUV.png");
-		mazeBox->SetMeshPos(glm::vec3(4.0f, 5.0f, 0.0f));
-		mazeBox->SetMeshRotate(glm::mat4(1.0f));
-		mazeBox->SetMeshScale(1.0f);
+		mazeBox->SetPos(glm::vec3(4.0f, 5.0f, 0.0f));
+		mazeBox->SetRotate(glm::mat4(1.0f));
+		mazeBox->SetScale(1.0f);
 		mazeBox->SetBoxType(MazeBox::BLACK);
 		mMazeBox = mazeBox;
+		mMazeData = new float* [10];
+		for (int y = 0; y < 10; y++) {
+			mMazeData[y] = new float[15];
+			for (int x = 0; x < 15; x++) {
+				mMazeData[y][x] = 0.f;
+			}
+		}
 	}
 
 
 
 	{
 		// Player
-		SkinMesh* mesh = new SkinMesh();
+		Player* mesh = new Player(this);
 		if (mesh->Load("./resources/SimpleMan/", "test_output3.fbx")) {
-			mesh->SetMeshPos(glm::vec3(0.0f));
-			mesh->SetMeshRotate(glm::mat4(1.0f));
-			mesh->SetMeshScale(0.002f);
+			mesh->SetPos(glm::vec3(29.0f, 1.0f, 0.0f));
+			mesh->SetRotate(glm::mat4(1.0f));
+			mesh->SetScale(0.002f);
 			mPlayer = mesh;
 		}
 	}
@@ -566,16 +597,18 @@ void Game::ProcessInput()
 	}
 
 	if (keyState[SDL_SCANCODE_W]) {
-		mCameraPos += (float)mMoveSpeed * mCameraOrientation;
+		mPlayer->SetPos(
+			mPlayer->GetPos() + mPlayer->GetForward() * (float)mMoveSpeed);
 	}
 	if (keyState[SDL_SCANCODE_S]) {
-		mCameraPos -= (float)mMoveSpeed * mCameraOrientation;
+		mPlayer->SetPos(
+			mPlayer->GetPos() - mPlayer->GetForward() * (float)mMoveSpeed);
 	}
 	if (keyState[SDL_SCANCODE_A]) {
-		mCameraPos -= (float)mMoveSpeed * glm::normalize(glm::cross(mCameraOrientation, mCameraUP));
+		mPlayer->SetPlayerRot(mPlayer->GetPlayerRot() + 1.f);
 	}
 	if (keyState[SDL_SCANCODE_D]) {
-		mCameraPos += (float)mMoveSpeed * glm::normalize(glm::cross(mCameraOrientation, mCameraUP));
+		mPlayer->SetPlayerRot(mPlayer->GetPlayerRot() - 1.f);
 	}
 }
 
@@ -618,15 +651,21 @@ void Game::UpdateGame()
 		}
 	}
 
+	mPlayer->Update(deltaTime);
+
+
+
 	// çXêVÇ≥ÇÍÇΩÉJÉÅÉâÇÃà íuÇShaderÇ…îΩâf
-	std::vector<Shader*> Shaders;
-	Shaders.push_back(mMeshShader);
-	Shaders.push_back(mSkinningShader);
-	for (auto shader : Shaders) {
-		shader->UseProgram();
-		shader->SetVectorUniform("gEyeWorldPos", mCameraPos);
-		shader->SetMatrixUniform("CameraView", glm::lookAt(mCameraPos, mCameraPos + mCameraOrientation, mCameraUP));
-	}
+	//std::vector<Shader*> Shaders;
+	//Shaders.push_back(mMeshShader);
+	//Shaders.push_back(mSkinningShader);
+	//for (auto shader : Shaders) {
+	//	shader->UseProgram();
+	//	mCameraPos = mPlayerPos - glm::vec3(2.0f, 0.0f, 3.0f);
+	//	mCameraPos.z = 3.0f;
+	//	shader->SetVectorUniform("gEyeWorldPos", mCameraPos);
+	//	shader->SetMatrixUniform("CameraView", glm::lookAt(mCameraPos, mCameraPos + mCameraOrientation, mCameraUP));
+	//}
 
 
 
@@ -634,38 +673,6 @@ void Game::UpdateGame()
 
 void Game::Draw()
 {
-	// Frame BufferÇ…ï`âÊ
-	//mTextureShadowMapFBO->WriteBind();
-
-	//glClear(GL_DEPTH_BUFFER_BIT);
-
-	//mShadowMapShader->UseProgram();
-
-	////{
-	////	// Spot LightÇÃView ProjectionÇê›íË
-	////	glm::mat4 projection = glm::perspective(glm::radians(20.0f), (float)mWindowWidth / mWindowHeight, 0.1f, 100.0f);
-	////	glm::mat4 view = glm::lookAt(
-	////		mSpotLight.Position,
-	////		mSpotLight.Direction,
-	////		mSpotLight.Up
-	////	);
-	////	mShadowMapShader->SetMatrixUniform("LightView", view);
-	////	mShadowMapShader->SetMatrixUniform("LightProj", projection);
-	////}
-	//for (auto mesh : mMeshes) {
-	//	if (mesh.IsShadow) {
-	//		mesh.mesh->Draw(mShadowMapShader, mTicksCount / 1000.0f);
-	//	}
-	//}
-	//for (auto skinmesh : mSkinMeshes) {
-	//	skinmesh->Draw(mSkinShadowMapShader, mTicksCount / 1000.0f);
-	//}
-	////mAnimUnityChan->Draw(mSkinShadowMapShader, mTicksCount / 1000.0f);
-
-
-	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-	// ---------------------------------
 	glEnable(GL_DEPTH_TEST);
 
 	glClearColor(0, 0.5, 0.7, 1.0f);
@@ -677,34 +684,95 @@ void Game::Draw()
 	mMeshShader->UseProgram();
 	for (auto mesh : mMeshes) {
 		if (mesh.meshName == "TreasureChest") {
-			mesh.mesh->SetMeshPos(glm::vec3(4.0f, 5.0f / 2.0f, 0.0f));
+			mesh.mesh->SetPos(glm::vec3(4.0f, 5.0f / 2.0f, 0.0f));
 			mesh.mesh->Draw(mMeshShader, mTicksCount / 1000.0f);
-			mesh.mesh->SetMeshPos(glm::vec3(4.0f, 4.0f, 0.0f));
+			mesh.mesh->SetPos(glm::vec3(4.0f, 4.0f, 0.0f));
 			mesh.mesh->Draw(mMeshShader, mTicksCount / 1000.0f);
 		}
-		else if (mesh.meshName == "ConcretePlane") {
-			// è∞Çï`Ç≠
-			for (int y = 0; y < 5; y++) {
-				for (int x = 0; x < 15; x++) {
-					float x_pos = 1.0f + 2.0f * x;
-					float y_pos = 1.0f + 2.0f * y;
-					mesh.mesh->SetMeshPos(glm::vec3(x_pos, y_pos, 0.0f));
-					mesh.mesh->Draw(mMeshShader, mTicksCount / 1000.0f);
-				}
-			}
+	}
+
+	// è∞ï`âÊ
+	mPlane->SetPlaneType(Plane::CONCRETE);
+	for (int y = 0; y < 5; y++) {
+		for (int x = 0; x < 15; x++) {
+			float x_pos = 1.0f + 2.0f * x;
+			float y_pos = 1.0f + 2.0f * y;
+			glm::mat4 rotate = glm::rotate(glm::mat4(1.0f), (float)M_PI / 2.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+			mPlane->SetRotate(rotate);
+			mPlane->SetPos(glm::vec3(x_pos, y_pos, 0.0f));
+			mPlane->Draw(mMeshShader, mTicksCount / 1000.0f);
 		}
-		else {
-			mesh.mesh->Draw(mMeshShader, mTicksCount / 1000.0f);
+	}
+
+	// ï«ï`âÊ
+	mPlane->SetPlaneType(Plane::BRICK);
+	for (int x = 0; x < 15; x++) {
+		for (float z = 1.f; z <= 3.f; z += 2.f) {
+			float x_pos = 1.0f + 2.0f * x;
+			float y_pos = 0.f;
+			mPlane->SetPos(glm::vec3(x_pos, y_pos, z));
+			mPlane->SetRotate(glm::mat4(1.f));
+			mPlane->Draw(mMeshShader, mTicksCount / 1000.0f);
+			y_pos = 30.f;
+			mPlane->SetPos(glm::vec3(x_pos, y_pos, z));
+			mPlane->SetRotate(glm::mat4(1.f));
+			mPlane->Draw(mMeshShader, mTicksCount / 1000.0f);
+			y_pos = 0.f;
+			mPlane->SetPos(glm::vec3(y_pos, x_pos, z));
+			glm::mat4 rotate = glm::rotate(glm::mat4(1.0f), (float)M_PI / 2.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+			mPlane->SetRotate(rotate);
+			mPlane->Draw(mMeshShader, mTicksCount / 1000.0f);
+			y_pos = 30.f;
+			mPlane->SetPos(glm::vec3(y_pos, x_pos, z));
+			mPlane->SetRotate(rotate);
+			mPlane->Draw(mMeshShader, mTicksCount / 1000.0f);
 		}
 	}
 
 	// MazeÇÃè∞ï`âÊ
 	for (int y = 5; y < 15; y++) {
 		for (int x = 0; x < 15; x++) {
+			mMazeBox->SetBoxType((y * 15 + x) % 2 ? MazeBox::BLACK : MazeBox::WHITE);
 			float x_pos = 1.0f + 2.0f * x;
 			float y_pos = 1.0f + 2.0f * y;
-			mMazeBox->SetBoxType((y * 15 + x) % 2 ? MazeBox::BLACK : MazeBox::WHITE);
-			mMazeBox->SetMeshPos(glm::vec3(x_pos, y_pos, 0.0f));
+			
+			glm::vec3 playerPos = mPlayer->GetPos();
+			if (
+				(x_pos - 1.5 <= playerPos.x) && (playerPos.x <= x_pos + 1.5) &&
+				(y_pos - 1.5 <= playerPos.y) && (playerPos.y <= y_pos + 1.5)
+				) {
+				if (mMazeData[y - 5][x] <= 2.0f) {
+					mMazeData[y - 5][x] += 0.01;
+				}
+			}
+			else {
+				if (mMazeData[y - 5][x] >= 0.f) {
+					mMazeData[y - 5][x] -= 0.01;
+				}
+			}
+			mMazeBox->SetPos(glm::vec3(x_pos, y_pos, mMazeData[y - 5][x]));
+			/*if (x == 14) {
+				MazeBox::MazeBoxState currentState = mMazeBox->GetMazeBoxState();
+				switch (currentState) {
+				case MazeBox::GROW_UP_STATE:
+					mMazeBox->GrowUp();
+					break;
+				case MazeBox::GROW_DOWN_STATE:
+					mMazeBox->GrowDown();
+					break;
+				case MazeBox::UP_STATE:
+					mMazeBox->GrowDown();
+					break;
+				case MazeBox::DOWN_STATE:
+					mMazeBox->GrowUp();
+					break;
+				}
+				mMazeBox->SetPos(glm::vec3(x_pos, y_pos, mMazeBox->GetZ()));
+			}
+			else {
+				mMazeBox->SetPos(glm::vec3(x_pos, y_pos, 0.0f));
+			}*/
+
 			mMazeBox->Draw(mMeshShader, mTicksCount / 1000.0f);
 
 		}
