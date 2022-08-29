@@ -23,6 +23,7 @@ private:
 	enum PHASE {
 		PHASE_IDLE,
 		PHASE_MOVE,
+		PHASE_TALK,
 		PHASE_MAX
 	};
 	struct BaseLight {
@@ -77,17 +78,19 @@ private:
 	};
 	std::vector<MeshData> mMeshes;
 	std::vector<SpriteData> mSprites;
+	Sprite* mTextBox;
 	Mesh* mConcretePlane;
 	
 	Text* mText;
 
 	std::vector<SkinMesh*> mSkinMeshes;
-	Mesh* mUnityChan;
 	class Player* mPlayer;
 
 	class Plane* mPlane;
 	MazeBox* mMazeBox;
 	float** mMazeData;
+	char** mLevelData;
+
 	
 	UnityChan* mAnimUnityChan;
 

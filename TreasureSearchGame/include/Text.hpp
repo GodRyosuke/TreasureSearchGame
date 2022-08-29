@@ -9,8 +9,12 @@ class Text : public Sprite {
 public:
 	Text(std::string ttfPath);
 	void Draw(Shader* shader) override;
+	void DrawTalkText(Shader* shader);
+	void Update(float deltaTime);
+	void Input(const uint8_t* keys);
 	void SetTextColor(glm::vec3 textColor) { mTextColor = textColor; }
 	void SetText(std::u16string text) { mText = text; }
+	void SetDrawSpeed(float speed) { mDrawSpeed = speed; }
 
 private:
 	struct TexChar {
@@ -28,4 +32,5 @@ private:
 	glm::vec3 mTextColor;
 	std::u16string mText;
 	unsigned int mVertexBuffer;
+	float mDrawSpeed;
 };

@@ -96,7 +96,6 @@ void Text::Draw(Shader* shader)
 	glm::vec3 FontCenter = glm::vec3(0.0f);
 	// •¶Žš‚Ìtexchar‚Ì‘å‚«‚³‚ðŽæ“¾
 	{
-		int TexWidth = 0;
 		int width = (mJapanTexChars.begin()->second.Advance >> 6) * mScale;
 		FontCenter.x = (width * mText.length()) / 2.0f;
 		FontCenter.y = width / 2.0f;
@@ -105,8 +104,8 @@ void Text::Draw(Shader* shader)
 
 	glActiveTexture(GL_TEXTURE0);
 
-	int x2 = 0;
-	int y2 = 0;
+	int x2 = -FontCenter.x;
+	int y2 = -FontCenter.y;
 	//float scale = 1.0f;
 	const char16_t* str = mText.c_str();
 	for (int i = 0; str[i] != '\0'; i++) {
@@ -150,4 +149,68 @@ void Text::Draw(Shader* shader)
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+void Text::DrawTalkText(Shader* shader)
+{
+	shader->UseProgram();
+	glBindVertexArray(mVertexArray);
 
+	glm::vec3 FontCenter = glm::vec3(0.0f);
+	// •¶Žš‚Ìtexchar‚Ì‘å‚«‚³‚ðŽæ“¾
+	{
+		int width = (mJapanTexChars.begin()->second.Advance >> 6) * mScale;
+		FontCenter.x = (width * mText.length()) / 2.0f;
+		FontCenter.y = width / 2.0f;
+	}
+	SetUniforms(shader);
+
+	glActiveTexture(GL_TEXTURE0);
+
+	int x2 = FontCenter.x;
+	int y2 = FontCenter.y;
+	//float scale = 1.0f;
+	const char16_t* str = mText.c_str();
+	for (int i = 0; str[i] != '\0'; i++) {
+		auto itr = mJapanTexChars.find(str[i]);
+		TexChar ch;
+		if (itr == mJapanTexChars.end()) {		// ‚Ü‚¾“Ç‚Ýž‚Ü‚ê‚Ä‚¢‚È‚¢•¶Žš‚È‚ç
+			ch = LoadUTFChar(str[i]);
+			mJapanTexChars.insert(std::make_pair(str[i], ch));
+		}
+		else {
+			ch = itr->second;
+		}
+
+		float xpos = x2 + ch.Bearing.x * mScale;
+		float ypos = y2 - (ch.Size.y - ch.Bearing.y) * mScale;
+		float w = ch.Size.x * mScale;
+		float h = ch.Size.y * mScale;
+
+
+		float textVertices[6][4] = {
+			{ xpos,     ypos + h,   0.0f, 0.0f },
+			{ xpos,     ypos,       0.0f, 1.0f },
+			{ xpos + w, ypos,       1.0f, 1.0f },
+
+			{ xpos,     ypos + h,   0.0f, 0.0f },
+			{ xpos + w, ypos,       1.0f, 1.0f },
+			{ xpos + w, ypos + h,   1.0f, 0.0f }
+		};
+
+		glBindTexture(GL_TEXTURE_2D, ch.texID);
+		// update content of VBO memory
+		glBindBuffer(GL_ARRAY_BUFFER, mVertexBuffer);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(textVertices), textVertices);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+		// now advance cursors for next glyph (note that advance is number of 1/64 pixels)
+		x2 += (ch.Advance >> 6) * mScale;
+	}
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void Text::Update(float deltatime)
+{
+	
+}

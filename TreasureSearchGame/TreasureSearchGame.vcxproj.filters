@@ -107,5 +107,6 @@
     <None Include="shaders\Sprite.frag" />
     <None Include="shaders\Text.vert" />
     <None Include="shaders\Text.frag" />
+    <None Include="resources\1.level" />
   </ItemGroup>
 </Project>

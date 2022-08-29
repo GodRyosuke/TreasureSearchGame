@@ -193,6 +193,7 @@ XCOPY "$(SolutionDir)TreasureSearchGame\resources" %OUTPUT_DIRECTORY% /e /y</Com
     <ClCompile Include="src\UnityChan.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="resources\1.level" />
     <None Include="shaders\Sprite.frag" />
     <None Include="shaders\Sprite.vert" />
     <None Include="shaders\Text.frag" />

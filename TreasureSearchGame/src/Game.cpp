@@ -424,6 +424,7 @@ bool Game::LoadData()
 			sprite->SetRotate(glm::mat4(1.0f));
 			sprite->SetScale(1.5f);
 			sprite->SetAlpha(0.7f);
+			mTextBox = sprite;;
 			mSprites.push_back(SpriteData(sprite, "TextBox"));
 		}
 	}
@@ -436,108 +437,37 @@ bool Game::LoadData()
 	mText->SetAlpha(1.0f);
 	mText->SetTextColor(glm::vec3(0.0f, 0.0f, 0.2f));
 
-
-	//// Unity Chan world
-	//{
-	//	Mesh* mesh = new Mesh();
-	//	if (mesh->Load("./resources/world/", "terrain.fbx")) {
-	//		mesh->SetMeshPos(glm::vec3(0.0f));
-	//		glm::mat4 rotate = glm::rotate(glm::mat4(1.0f), (float)M_PI / 2.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-	//		//mesh->SetMeshRotate(rotate);
-	//		mesh->SetMeshRotate(glm::mat4(1.0f));
-	//		mesh->SetMeshScale(1.0f);
-	//		mMeshes.push_back(MeshData(mesh, false));
-	//	}
-	//}
-	//// Treasure Chest(Move)
-	//{
-	//	// Treasure Box
-	//	SkinMesh* mesh = new SkinMesh();
-	//	if (mesh->Load("./resources/TreasureBox3/", "scene.gltf")) {
-	//		mesh->SetMeshPos(glm::vec3(4.0f, 4.0f, 0.0f));
-	//		glm::mat4 rotate = glm::rotate(glm::mat4(1.0f), (float)M_PI, glm::vec3(1.0f, 0.0f, 0.0f));
-	//		mesh->SetMeshRotate(rotate);
-	//		mesh->SetMeshScale(0.01f / 2.0f);
-	//		mSkinMeshes.push_back(mesh);
-	//	}
-	//}
-
-	// Bob mesh clean
+	// Load Level Data
+	mLevelData = new char* [10];
+	for (int y = 0; y < 10; y++) {
+		mLevelData[y] = new char[15];
+	}
 	{
-		// Treasure Box
-		//SkinMesh* mesh = new SkinMesh();
-		//if (mesh->Load("./resources/boblampclean/", "boblampclean.md5mesh")) {
-		//	mesh->SetMeshPos(glm::vec3(4.0f, 1.5, 0.0f));
-		//	glm::mat4 rotate = glm::rotate(glm::mat4(1.0f), (float)M_PI, glm::vec3(1.0f, 0.0f, 0.0f));
-		//	mesh->SetMeshRotate(glm::mat4(1.0f));
-		//	mesh->SetMeshScale(0.01f);
-		//	mSkinMeshes.push_back(mesh);
-		//}
+		std::string fileName = "./resources/1.level";
+		FILE* fp = fopen(fileName.c_str(), "rb");
+		char c;
+
+		//	EOFまでファイルから文字を1文字ずつ読み込む
+		int x = 0;
+		int y = 0;
+		while ((c = fgetc(fp)) != EOF)
+		{
+			//	読み込んだ1文字を画面に出力する
+			if (y == 10) {
+				break;
+			}
+			if (c == '\n') {
+				y++;
+				x = 0;
+				continue;
+			}
+			mLevelData[y][x++] = c;
+		}
+
+		fclose(fp);
 	}
 
 
-	// Load Unity Chan!!
-	//{
-	//	// Treasure Box
-	//	SkinMesh* mesh = new SkinMesh();
-	//	if (mesh->Load("./resources/UnityChan/", "unitychansetup.fbx")) {
-	//		mesh->SetMeshPos(glm::vec3(6.0f, 4.0f, 0.0f));
-	//		glm::mat4 rotate = glm::rotate(glm::mat4(1.0f), (float)M_PI, glm::vec3(1.0f, 0.0f, 0.0f));
-	//		mesh->SetMeshRotate(rotate);
-	//		mesh->SetMeshScale(0.1f);
-	//		mSkinMeshes.push_back(mesh);
-	//	}
-	//}
-	//{
-	//	// Unity Chan
-	//	Mesh* mesh = new Mesh();
-	//	if (mesh->Load("./resources/UnityChan/", "unitychan2.fbx")) {
-	//		mesh->SetMeshPos(glm::vec3(6.0f, 4.0f, 0.0f));
-	//		glm::mat4 rotate = glm::rotate(glm::mat4(1.0f), (float)M_PI / 2.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-	//		mesh->SetMeshRotate(rotate);
-	//		mesh->SetMeshScale(0.01);
-	//		mUnityChan = mesh;
-	//	}
-	//}
-
-	//{
-	//	// Running Animation
-	//	SkinMesh* mesh = new SkinMesh();
-	//	if (mesh->Load("./resources/UnityChan/", "running.fbx")) {
-	//		mesh->SetMeshPos(glm::vec3(6.0f, 4.0f, 0.0f));
-	//		glm::mat4 rotate = glm::rotate(glm::mat4(1.0f), (float)M_PI / 2.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-	//		mesh->SetMeshRotate(rotate);
-	//		mesh->SetMeshScale(0.01);
-	//		mRunAnim = mesh;
-	//	}
-	//}
-
-	//{
-	//	UnityChan* unitychan = new UnityChan();
-	//	std::vector<std::string> animFillePaths;
-	//	animFillePaths.push_back("unitychan_RUN00_F.fbx");
-	//	if (unitychan->Load("./resources/UnityChan/", "unitychan.fbx", animFillePaths)) {
-	//		unitychan->SetMeshPos(glm::vec3(6.0f, 4.0f, 0.0f));
-	//		glm::mat4 rotate = glm::rotate(glm::mat4(1.0f), (float)M_PI / 2.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-	//		unitychan->SetMeshRotate(rotate);
-	//		unitychan->SetMeshScale(0.01);
-	//		mAnimUnityChan = unitychan;
-	//	}
-	//	else {
-	//		delete unitychan;
-	//		mAnimUnityChan = nullptr;
-	//		return false;
-	//	}
-	//}
-
-
-
-	// Load ShadowMap FBO
-	//mTextureShadowMapFBO = new TextureShadowMap();
-	//if (!mTextureShadowMapFBO->Load(mWindowWidth, mWindowHeight)) {
-	//	printf("error: Failed to load shadwo map fbo\n");
-	//	return false;
-	//}
 
 	return true;
 }
@@ -595,20 +525,75 @@ void Game::ProcessInput()
 	{
 		mIsRunning = false;
 	}
-
+	glm::vec3 playerNewPos = mPlayer->GetPos();
 	if (keyState[SDL_SCANCODE_W]) {
-		mPlayer->SetPos(
-			mPlayer->GetPos() + mPlayer->GetForward() * (float)mMoveSpeed);
+		playerNewPos = mPlayer->GetPos() + mPlayer->GetForward() * (float)mMoveSpeed;
 	}
 	if (keyState[SDL_SCANCODE_S]) {
-		mPlayer->SetPos(
-			mPlayer->GetPos() - mPlayer->GetForward() * (float)mMoveSpeed);
+		playerNewPos = mPlayer->GetPos() - mPlayer->GetForward() * (float)mMoveSpeed;
 	}
 	if (keyState[SDL_SCANCODE_A]) {
 		mPlayer->SetPlayerRot(mPlayer->GetPlayerRot() + 1.f);
 	}
 	if (keyState[SDL_SCANCODE_D]) {
 		mPlayer->SetPlayerRot(mPlayer->GetPlayerRot() - 1.f);
+	}
+
+	// 受付と話す
+	if (mPhase != PHASE_TALK) {
+		if (
+			(2.0f < mPlayer->GetPos().x) && (mPlayer->GetPos().x < 3.0f) &&
+			(1.0f < mPlayer->GetPos().y) && (mPlayer->GetPos().y < 2.0f)
+			) {
+			if (keyState[SDL_SCANCODE_RETURN]) {
+				mPhase = PHASE_TALK;
+			}
+		}
+	}
+
+
+
+	// Playerの行動範囲制限
+	bool IsUpdatePlayerPos = false;
+	// 壁の外には行けない
+	if ((playerNewPos.x < 0.25f) || (playerNewPos.x > 29.75f) ||
+		(playerNewPos.y < 0.25f) || (playerNewPos.y > 29.75f)
+		) {
+		IsUpdatePlayerPos = false;
+	}
+	else if (
+		// カウンターの中には入れない
+		(0.f < playerNewPos.x) && (playerNewPos.x < 2.f) &&
+		(0.f < playerNewPos.y) && (playerNewPos.y < 3.5f)
+		) {
+		IsUpdatePlayerPos = false;
+	}
+	else if (mPhase == PHASE_TALK) {
+		// 話し中なら動かない
+		IsUpdatePlayerPos = false;
+	}
+	else {
+		IsUpdatePlayerPos = true;
+	}
+	// PlayerがMazeの領域にあるか？
+	if (
+		(0.f < playerNewPos.x) && (playerNewPos.x < 30.f) &&
+		(10.f < playerNewPos.y) && (playerNewPos.y < 30.f)
+		) {
+		if (mLevelData[static_cast<int>(playerNewPos.y / 2) - 5][static_cast<int>(playerNewPos.x / 2)] == '#') {
+			// Playerのいる場所が壁なら更新しない
+			IsUpdatePlayerPos = false;
+		}
+		else {
+			IsUpdatePlayerPos = true;
+
+		}
+	}
+
+
+
+	if (IsUpdatePlayerPos) {
+		mPlayer->SetPos(playerNewPos);
 	}
 }
 
@@ -652,6 +637,7 @@ void Game::UpdateGame()
 	}
 
 	mPlayer->Update(deltaTime);
+
 
 
 
@@ -729,52 +715,53 @@ void Game::Draw()
 		}
 	}
 
+	// 受付カウンター描画
+	mMazeBox->SetScale(0.25f);
+	for (int z = 0; z < 2; z++) {
+		for (int y = 0; y < 7; y++) {
+			mMazeBox->SetBoxType((z * 7 + y) % 2 ? MazeBox::BLACK : MazeBox::WHITE);
+			mMazeBox->SetPos(glm::vec3(1.75f, 0.5f * y + 0.25, 0.5f * z + 0.5f));
+			mMazeBox->Draw(mMeshShader, mTicksCount / 1000.0f);
+		}
+		for (int x = 0; x < 3; x++) {
+			mMazeBox->SetBoxType((z * 3 + x) % 2 ? MazeBox::WHITE : MazeBox::BLACK);
+			mMazeBox->SetPos(glm::vec3(0.5f * x + 0.25, 3.25f, 0.5f * z + 0.5f));
+			mMazeBox->Draw(mMeshShader, mTicksCount / 1000.0f);
+		}
+	}
+
 	// Mazeの床描画
+	mMazeBox->SetScale(1.0f);
 	for (int y = 5; y < 15; y++) {
 		for (int x = 0; x < 15; x++) {
 			mMazeBox->SetBoxType((y * 15 + x) % 2 ? MazeBox::BLACK : MazeBox::WHITE);
 			float x_pos = 1.0f + 2.0f * x;
 			float y_pos = 1.0f + 2.0f * y;
-			
-			glm::vec3 playerPos = mPlayer->GetPos();
-			if (
-				(x_pos - 1.5 <= playerPos.x) && (playerPos.x <= x_pos + 1.5) &&
-				(y_pos - 1.5 <= playerPos.y) && (playerPos.y <= y_pos + 1.5)
-				) {
-				if (mMazeData[y - 5][x] <= 2.0f) {
-					mMazeData[y - 5][x] += 0.01;
-				}
+
+			if (mLevelData[y - 5][x] == '-') {
+				// 通路
+				mMazeBox->SetPos(glm::vec3(x_pos, y_pos, 0.f));
 			}
 			else {
-				if (mMazeData[y - 5][x] >= 0.f) {
-					mMazeData[y - 5][x] -= 0.01;
+				// 通れない
+				glm::vec3 playerPos = mPlayer->GetPos();
+				if (
+					(x_pos - 1.5 <= playerPos.x) && (playerPos.x <= x_pos + 1.5) &&
+					(y_pos - 1.5 <= playerPos.y) && (playerPos.y <= y_pos + 1.5)
+					) {
+					if (mMazeData[y - 5][x] <= 2.0f) {
+						mMazeData[y - 5][x] += 0.01;
+					}
 				}
-			}
-			mMazeBox->SetPos(glm::vec3(x_pos, y_pos, mMazeData[y - 5][x]));
-			/*if (x == 14) {
-				MazeBox::MazeBoxState currentState = mMazeBox->GetMazeBoxState();
-				switch (currentState) {
-				case MazeBox::GROW_UP_STATE:
-					mMazeBox->GrowUp();
-					break;
-				case MazeBox::GROW_DOWN_STATE:
-					mMazeBox->GrowDown();
-					break;
-				case MazeBox::UP_STATE:
-					mMazeBox->GrowDown();
-					break;
-				case MazeBox::DOWN_STATE:
-					mMazeBox->GrowUp();
-					break;
+				else {
+					if (mMazeData[y - 5][x] >= 0.f) {
+						mMazeData[y - 5][x] -= 0.01;
+					}
 				}
-				mMazeBox->SetPos(glm::vec3(x_pos, y_pos, mMazeBox->GetZ()));
+				mMazeBox->SetPos(glm::vec3(x_pos, y_pos, mMazeData[y - 5][x]));
 			}
-			else {
-				mMazeBox->SetPos(glm::vec3(x_pos, y_pos, 0.0f));
-			}*/
 
 			mMazeBox->Draw(mMeshShader, mTicksCount / 1000.0f);
-
 		}
 	}
 
@@ -790,28 +777,26 @@ void Game::Draw()
 	glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
 	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ZERO);
 
-	for (auto sprite : mSprites) {
-		sprite.sprite->Draw(mSpriteShader);
-	}
 
 	// 文字描画
-	mText->SetText(u"文字列2");
-	mText->Draw(mTextShader);
+	// エンターキーではなす
+	if (mPhase != PHASE_TALK) {
+		if (
+			(2.0f < mPlayer->GetPos().x) && (mPlayer->GetPos().x < 3.0f) &&
+			(1.0f < mPlayer->GetPos().y) && (mPlayer->GetPos().y < 2.0f)
+			) {
+			mText->SetPos(glm::vec3(0.0f, 300.0f, 0.f));
+			mText->SetText(u"エンターキーで話す");
+			mText->SetTextColor(glm::vec3(0.f, 0.f, 0.2f));
+			mText->Draw(mTextShader);
+		}
+	}
 
+	// 話し中ならトーク画面描画
+	if (mPhase == PHASE_TALK) {
+		mTextBox->Draw(mSpriteShader);
+	}
 
-	//mShadowLightingShader->UseProgram();
-	//mTextureShadowMapFBO->BindTexture(GL_TEXTURE1);
-	//for (auto mesh : mMeshes) {
-	//	mesh.mesh->Draw(mShadowLightingShader, mTicksCount / 1000.0f);
-	//}
-	//for (auto skinmesh : mSkinMeshes) {
-	//	skinmesh->Draw(mSkinShadowLightingShader, mTicksCount / 1000.0f);
-	//}
-
-	//glEnable(GL_BLEND);
-	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	//mUnityChanShader->UseProgram();
-	//mAnimUnityChan->Draw(mUnityChanShader, mTicksCount / 1000.0f);
 
 
 
