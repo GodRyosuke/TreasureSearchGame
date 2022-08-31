@@ -149,6 +149,18 @@ void Text::Draw(Shader* shader)
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+void Text::StartDrawing()
+{
+	glm::vec3 FontCenter = glm::vec3(0.0f);
+	// •¶Žš‚Ìtexchar‚Ì‘å‚«‚³‚ðŽæ“¾
+	{
+		int width = (mJapanTexChars.begin()->second.Advance >> 6) * mScale;
+		FontCenter.x = (width * mText.length()) / 2.0f;
+		FontCenter.y = width / 2.0f;
+	}
+	mCurrentTextPos = -FontCenter;
+}
+
 void Text::DrawTalkText(Shader* shader)
 {
 	shader->UseProgram();
@@ -165,8 +177,8 @@ void Text::DrawTalkText(Shader* shader)
 
 	glActiveTexture(GL_TEXTURE0);
 
-	int x2 = FontCenter.x;
-	int y2 = FontCenter.y;
+	int x2 = -FontCenter.x;
+	int y2 = -FontCenter.y;
 	//float scale = 1.0f;
 	const char16_t* str = mText.c_str();
 	for (int i = 0; str[i] != '\0'; i++) {
@@ -212,5 +224,5 @@ void Text::DrawTalkText(Shader* shader)
 
 void Text::Update(float deltatime)
 {
-	
+	mCurrentTextPos += mDrawSpeed * deltatime;
 }

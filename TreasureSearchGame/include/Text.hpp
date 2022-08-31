@@ -11,6 +11,7 @@ public:
 	void Draw(Shader* shader) override;
 	void DrawTalkText(Shader* shader);
 	void Update(float deltaTime);
+	void StartDrawing();
 	void Input(const uint8_t* keys);
 	void SetTextColor(glm::vec3 textColor) { mTextColor = textColor; }
 	void SetText(std::u16string text) { mText = text; }
@@ -33,4 +34,5 @@ private:
 	std::u16string mText;
 	unsigned int mVertexBuffer;
 	float mDrawSpeed;
+	glm::vec3 mCurrentTextPos;
 };
