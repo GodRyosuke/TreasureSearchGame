@@ -1,4 +1,5 @@
 #include "Sprite.hpp"
+#include "Shader.hpp"
 
 static float SpriteVertices[] =
 { //     COORDINATES     /        Normals      /   TexCoord  //

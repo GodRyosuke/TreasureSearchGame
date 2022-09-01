@@ -9,6 +9,8 @@
 #include "Player.hpp"
 #include "Shader.hpp"
 #include "Plane.hpp"
+#include <fstream>
+#include <codecvt>
 #define STB_IMAGE_IMPLEMENTATION
 
 Game::Game()
@@ -430,7 +432,7 @@ bool Game::LoadData()
 	}
 
 	// Load Text
-	mText = new Text("./resources/arialuni.ttf");
+	mText = new Text();
 	mText->SetPos(glm::vec3(0.0f));
 	mText->SetRotate(glm::mat4(1.0f));
 	mText->SetScale(1.0f);
@@ -466,6 +468,20 @@ bool Game::LoadData()
 
 		fclose(fp);
 	}
+
+	// 会話に使う文字列読み込み
+	{
+		std::string filePath = "./resources/TextData.json";
+		std::ifstream ifs(filePath.c_str());
+		if (ifs.good())
+		{
+			ifs >> mTextData;
+		}
+		ifs.close();
+	}
+
+
+
 
 
 
@@ -657,6 +673,14 @@ void Game::UpdateGame()
 
 }
 
+std::u16string Game::GetText(nl::json data)
+{
+	std::string str;
+	data.get_to(str);
+	std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> convert;
+	return convert.from_bytes(str);
+}
+
 void Game::Draw()
 {
 	glEnable(GL_DEPTH_TEST);
@@ -785,7 +809,7 @@ void Game::Draw()
 			(2.0f < mPlayer->GetPos().x) && (mPlayer->GetPos().x < 3.0f) &&
 			(1.0f < mPlayer->GetPos().y) && (mPlayer->GetPos().y < 2.0f)
 			) {
-			mText->SetPos(glm::vec3(0.0f, 300.0f, 0.f));
+			mText->SetPos(glm::vec3(0.0f, 300.f, 0.f));
 			mText->SetText(u"エンターキーで話す");
 			mText->SetTextColor(glm::vec3(0.f, 0.f, 0.2f));
 			mText->Draw(mTextShader);
@@ -794,7 +818,14 @@ void Game::Draw()
 
 	// 話し中ならトーク画面描画
 	if (mPhase == PHASE_TALK) {
-		mTextBox->Draw(mSpriteShader);
+	}
+	mTextBox->Draw(mSpriteShader);
+
+	{
+		mText->SetText(GetText(mTextData["TalkCostomer"]["Welcome"]["Talk2"]));
+		mText->SetPos(glm::vec3(0.0f, -150.0f, 0.f));
+		mText->SetTextColor(glm::vec3(0.f, 0.f, 0.2f));
+		mText->DrawTalkText(mTextShader);
 	}
 
 

@@ -57,6 +57,9 @@
     <ClInclude Include="include\Plane.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="include\TalkText.hpp">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp">
@@ -101,6 +104,9 @@
     <ClCompile Include="src\Plane.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="src\TalkText.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\Sprite.vert" />
@@ -108,5 +114,6 @@
     <None Include="shaders\Text.vert" />
     <None Include="shaders\Text.frag" />
     <None Include="resources\1.level" />
+    <None Include="resources\TextData.json" />
   </ItemGroup>
 </Project>

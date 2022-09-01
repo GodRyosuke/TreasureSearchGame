@@ -7,6 +7,9 @@
 #include "Sprite.hpp"
 #include "Text.hpp"
 #include "MazeBox.hpp"
+#include "json.hpp"
+
+namespace nl = nlohmann;
 
 class Game {
 public:
@@ -54,6 +57,7 @@ private:
 
 	bool LoadData();
 	void SetLighting();
+	std::u16string GetText(nl::json data);
 
 	const int mWindowWidth;
 	const int mWindowHeight;
@@ -82,6 +86,7 @@ private:
 	Mesh* mConcretePlane;
 	
 	Text* mText;
+	nl::json mTextData;
 
 	std::vector<SkinMesh*> mSkinMeshes;
 	class Player* mPlayer;

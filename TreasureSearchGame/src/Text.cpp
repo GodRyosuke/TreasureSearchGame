@@ -1,7 +1,9 @@
 #include "Text.hpp"
 #include <iostream>
+#include "Shader.hpp"
 
-Text::Text(std::string ttfPath)
+
+Text::Text()
 	:Sprite()
 {
 	// TTF読み込み
@@ -10,11 +12,8 @@ Text::Text(std::string ttfPath)
 	FT_GlyphSlot slot;
 	// Load Font
 	FT_Init_FreeType(&library);
-	//FT_New_Face(library, ".\\resources\\Carlito-Regular.ttf", 0, &mFontFace);
-	FT_New_Face(library, ttfPath.c_str(), 0, &mFontFace);
+	FT_New_Face(library, "./resources/arialuni.ttf", 0, &mFontFace);
 	FT_Select_Charmap(mFontFace, ft_encoding_unicode);
-	//FT_Select_Charmap(mFontFace, ft_encoding_sjis);
-	//FT_Select_Charmap（m_face、FT_ENCODING_UNICODE）;
 	FT_Set_Pixel_Sizes(mFontFace, 0, 48);
 	slot = mFontFace->glyph;
 
@@ -27,6 +26,8 @@ Text::Text(std::string ttfPath)
 			mJapanTexChars.insert(std::make_pair(str[i], tc));
 		}
 	}
+
+
 
 	// Vertex Array 作成
 	glGenVertexArrays(1, &mVertexArray);
@@ -168,10 +169,11 @@ void Text::DrawTalkText(Shader* shader)
 
 	glm::vec3 FontCenter = glm::vec3(0.0f);
 	// 文字のtexcharの大きさを取得
+	int FontWidth = 0;
 	{
-		int width = (mJapanTexChars.begin()->second.Advance >> 6) * mScale;
-		FontCenter.x = (width * mText.length()) / 2.0f;
-		FontCenter.y = width / 2.0f;
+		FontWidth = (mJapanTexChars.begin()->second.Advance >> 6) * mScale;
+		FontCenter.x = FontWidth * 20 / 2.0f; // 文字数は20文字
+		FontCenter.y = FontWidth / 2.0f;
 	}
 	SetUniforms(shader);
 
@@ -179,9 +181,18 @@ void Text::DrawTalkText(Shader* shader)
 
 	int x2 = -FontCenter.x;
 	int y2 = -FontCenter.y;
+	int rowCount = 1;
 	//float scale = 1.0f;
 	const char16_t* str = mText.c_str();
 	for (int i = 0; str[i] != '\0'; i++) {
+		// 3行以内に収める
+		if ((rowCount < 3) && (str[i] == '\n')) {
+			x2 = -FontCenter.x;
+			y2 -= FontWidth;	// 改行をする
+			rowCount++;
+			continue;
+		}
+		
 		auto itr = mJapanTexChars.find(str[i]);
 		TexChar ch;
 		if (itr == mJapanTexChars.end()) {		// まだ読み込まれていない文字なら

@@ -1,0 +1,85 @@
+#include "TalkText.hpp"
+#include "Shader.hpp"
+
+TalkText::TalkText()
+	:Text()
+{
+
+}
+
+void TalkText::Input(const uint8_t* keyState)
+{
+
+}
+
+void TalkText::Draw(Shader* shader)
+{
+	shader->UseProgram();
+	glBindVertexArray(mVertexArray);
+
+	glm::vec3 FontCenter = glm::vec3(0.0f);
+	// •¶š‚Ìtexchar‚Ì‘å‚«‚³‚ğæ“¾
+	int FontWidth = 0;
+	{
+		FontWidth = (mJapanTexChars.begin()->second.Advance >> 6) * mScale;
+		FontCenter.x = FontWidth * 20 / 2.0f; // •¶š”‚Í20•¶š
+		FontCenter.y = FontWidth / 2.0f;
+	}
+	SetUniforms(shader);
+
+	glActiveTexture(GL_TEXTURE0);
+
+	int x2 = -FontCenter.x;
+	int y2 = -FontCenter.y;
+	int rowCount = 1;
+	//float scale = 1.0f;
+	const char16_t* str = mText.c_str();
+	for (int i = 0; str[i] != '\0'; i++) {
+		// 3sˆÈ“à‚Éû‚ß‚é
+		if ((rowCount < 3) && (str[i] == '\n')) {
+			x2 = -FontCenter.x;
+			y2 -= FontWidth;	// ‰üs‚ğ‚·‚é
+			rowCount++;
+			continue;
+		}
+
+		auto itr = mJapanTexChars.find(str[i]);
+		TexChar ch;
+		if (itr == mJapanTexChars.end()) {		// ‚Ü‚¾“Ç‚İ‚Ü‚ê‚Ä‚¢‚È‚¢•¶š‚È‚ç
+			ch = LoadUTFChar(str[i]);
+			mJapanTexChars.insert(std::make_pair(str[i], ch));
+		}
+		else {
+			ch = itr->second;
+		}
+
+		float xpos = x2 + ch.Bearing.x * mScale;
+		float ypos = y2 - (ch.Size.y - ch.Bearing.y) * mScale;
+		float w = ch.Size.x * mScale;
+		float h = ch.Size.y * mScale;
+
+
+		float textVertices[6][4] = {
+			{ xpos,     ypos + h,   0.0f, 0.0f },
+			{ xpos,     ypos,       0.0f, 1.0f },
+			{ xpos + w, ypos,       1.0f, 1.0f },
+
+			{ xpos,     ypos + h,   0.0f, 0.0f },
+			{ xpos + w, ypos,       1.0f, 1.0f },
+			{ xpos + w, ypos + h,   1.0f, 0.0f }
+		};
+
+		glBindTexture(GL_TEXTURE_2D, ch.texID);
+		// update content of VBO memory
+		glBindBuffer(GL_ARRAY_BUFFER, mVertexBuffer);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(textVertices), textVertices);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+		// now advance cursors for next glyph (note that advance is number of 1/64 pixels)
+		x2 += (ch.Advance >> 6) * mScale;
+	}
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+

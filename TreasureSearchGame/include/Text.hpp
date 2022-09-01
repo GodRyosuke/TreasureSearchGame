@@ -3,21 +3,22 @@
 #include "Sprite.hpp"
 #include <map>
 #include "ft2build.h"
+
 #include FT_FREETYPE_H
+
 
 class Text : public Sprite {
 public:
-	Text(std::string ttfPath);
-	void Draw(Shader* shader) override;
+	Text();
+	virtual void Draw(Shader* shader) override;
 	void DrawTalkText(Shader* shader);
 	void Update(float deltaTime);
 	void StartDrawing();
-	void Input(const uint8_t* keys);
 	void SetTextColor(glm::vec3 textColor) { mTextColor = textColor; }
 	void SetText(std::u16string text) { mText = text; }
 	void SetDrawSpeed(float speed) { mDrawSpeed = speed; }
 
-private:
+protected:
 	struct TexChar {
 		GLuint texID;
 		glm::ivec2 Size;
@@ -25,14 +26,20 @@ private:
 		unsigned int Advance;
 	};
 
-	void SetUniforms(Shader* shader) override;
-
 	TexChar	LoadUTFChar(char16_t c);
 	std::map<char16_t, TexChar> mJapanTexChars;
+	void SetUniforms(Shader* shader) override;
+
+
+private:
+
+
+
 	FT_Face mFontFace;
 	glm::vec3 mTextColor;
 	std::u16string mText;
 	unsigned int mVertexBuffer;
 	float mDrawSpeed;
 	glm::vec3 mCurrentTextPos;
+
 };
