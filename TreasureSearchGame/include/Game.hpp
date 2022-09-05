@@ -21,6 +21,16 @@ public:
 	void Shutdown();
 	void SetViewMatrix(glm::mat4 view, glm::vec3 cameraPos);	// View MatrixÇÃê›íËÇÇ∑ÇÈÅB
 
+	void AddActor(class Actor* actor);
+	void RemoveActor(class Actor* actor);
+
+	void AddSprite(class Sprite* sprite) { mSprites.push_back(sprite); }
+	void RemoveSprite(class Sprite* sprite);
+
+	void AddMesh(class Mesh* mesh) { mMeshes.push_back(mesh); }
+	void RemoveMesh(class Mesh* mesh);
+
+
 
 private:
 	enum PHASE {
@@ -65,25 +75,10 @@ private:
 
 	std::vector<SpotLight> mSpotLights;
 
-	struct MeshData {
-		MeshData(Mesh* mesh, std::string name)
-			:mesh(mesh),
-			meshName(name)
-		{
-		}
-		std::string meshName;
-		Mesh* mesh;
-	};
-	struct SpriteData {
-		SpriteData(Sprite* sprite, std::string name)
-			:sprite(sprite),spriteName(name){}
-		Sprite* sprite;
-		std::string spriteName;
-	};
-	std::vector<MeshData> mMeshes;
-	std::vector<SpriteData> mSprites;
+
 	Sprite* mTextBox;
 	Mesh* mConcretePlane;
+	Mesh* mRoof;
 	
 	Text* mText;
 	nl::json mTextData;
@@ -117,6 +112,10 @@ private:
 	float mMoveSensitivity;
 
 	glm::vec3 mMousePos;
+
+
+	std::vector<class Sprite*> mSprites;
+	std::vector<class Mesh*> mMeshes;
 
 	SDL_Window* mWindow;
 	// OpenGL context

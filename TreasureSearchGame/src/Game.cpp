@@ -401,13 +401,23 @@ bool Game::LoadData()
 			}
 		}
 	}
+	{
+		// 屋根
+		Mesh* mesh = new Mesh();
+		if (mesh->Load("./resources/Roof/", "Roof.obj")) {
+			mesh->SetPos(glm::vec3(15.f, 15.f, 4.0f));
+			mesh->SetRotate(glm::mat4(1.0f));
+			mesh->SetScale(1.f);
+		}
+		mRoof = mesh;
+	}
 
 
 
 	{
 		// Player
 		Player* mesh = new Player(this);
-		if (mesh->Load("./resources/SimpleMan/", "test_output3.fbx")) {
+		if (mesh->Load("./resources/SimpleMan/", "simple_man.fbx")) {
 			mesh->SetPos(glm::vec3(29.0f, 1.0f, 0.0f));
 			mesh->SetRotate(glm::mat4(1.0f));
 			mesh->SetScale(0.002f);
@@ -468,19 +478,6 @@ bool Game::LoadData()
 
 		fclose(fp);
 	}
-
-	// 会話に使う文字列読み込み
-	{
-		std::string filePath = "./resources/TextData.json";
-		std::ifstream ifs(filePath.c_str());
-		if (ifs.good())
-		{
-			ifs >> mTextData;
-		}
-		ifs.close();
-	}
-
-
 
 
 
@@ -655,22 +652,6 @@ void Game::UpdateGame()
 	mPlayer->Update(deltaTime);
 
 
-
-
-	// 更新されたカメラの位置をShaderに反映
-	//std::vector<Shader*> Shaders;
-	//Shaders.push_back(mMeshShader);
-	//Shaders.push_back(mSkinningShader);
-	//for (auto shader : Shaders) {
-	//	shader->UseProgram();
-	//	mCameraPos = mPlayerPos - glm::vec3(2.0f, 0.0f, 3.0f);
-	//	mCameraPos.z = 3.0f;
-	//	shader->SetVectorUniform("gEyeWorldPos", mCameraPos);
-	//	shader->SetMatrixUniform("CameraView", glm::lookAt(mCameraPos, mCameraPos + mCameraOrientation, mCameraUP));
-	//}
-
-
-
 }
 
 std::u16string Game::GetText(nl::json data)
@@ -679,6 +660,18 @@ std::u16string Game::GetText(nl::json data)
 	data.get_to(str);
 	std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> convert;
 	return convert.from_bytes(str);
+}
+
+void Game::RemoveSprite(Sprite* sprite)
+{
+	auto iter = std::find(mSprites.begin(), mSprites.end(), sprite);
+	mSprites.erase(iter);
+}
+
+void Game::RemoveMesh(Mesh* mesh)
+{
+	auto iter = std::find(mMeshes.begin(), mMeshes.end(), mesh);
+	mMeshes.erase(iter);
 }
 
 void Game::Draw()
@@ -692,14 +685,14 @@ void Game::Draw()
 	glDisable(GL_BLEND);
 
 	mMeshShader->UseProgram();
-	for (auto mesh : mMeshes) {
-		if (mesh.meshName == "TreasureChest") {
-			mesh.mesh->SetPos(glm::vec3(4.0f, 5.0f / 2.0f, 0.0f));
-			mesh.mesh->Draw(mMeshShader, mTicksCount / 1000.0f);
-			mesh.mesh->SetPos(glm::vec3(4.0f, 4.0f, 0.0f));
-			mesh.mesh->Draw(mMeshShader, mTicksCount / 1000.0f);
-		}
-	}
+	//for (auto mesh : mMeshes) {
+	//	if (mesh.meshName == "TreasureChest") {
+	//		mesh.mesh->SetPos(glm::vec3(4.0f, 5.0f / 2.0f, 0.0f));
+	//		mesh.mesh->Draw(mMeshShader, mTicksCount / 1000.0f);
+	//		mesh.mesh->SetPos(glm::vec3(4.0f, 4.0f, 0.0f));
+	//		mesh.mesh->Draw(mMeshShader, mTicksCount / 1000.0f);
+	//	}
+	//}
 
 	// 床描画
 	mPlane->SetPlaneType(Plane::CONCRETE);
@@ -738,6 +731,12 @@ void Game::Draw()
 			mPlane->Draw(mMeshShader, mTicksCount / 1000.0f);
 		}
 	}
+
+	// 屋根描画
+	mRoof->SetPos(glm::vec3(15.f, 15.f, 4.f));
+	mRoof->SetRotate(glm::mat4(1.f));
+	mRoof->SetScale(15.f);
+	mRoof->Draw(mMeshShader, mTicksCount / 1000.f);
 
 	// 受付カウンター描画
 	mMazeBox->SetScale(0.25f);
@@ -821,12 +820,7 @@ void Game::Draw()
 	}
 	mTextBox->Draw(mSpriteShader);
 
-	{
-		mText->SetText(GetText(mTextData["TalkCostomer"]["Welcome"]["Talk2"]));
-		mText->SetPos(glm::vec3(0.0f, -150.0f, 0.f));
-		mText->SetTextColor(glm::vec3(0.f, 0.f, 0.2f));
-		mText->DrawTalkText(mTextShader);
-	}
+
 
 
 

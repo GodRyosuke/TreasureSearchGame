@@ -7,25 +7,19 @@
 #include <assimp/Importer.hpp>      // C++ importer interface
 #include <assimp/scene.h>       // Output data structure
 #include <assimp/postprocess.h> // Post processing flags
-
+#include "Component.hpp"
 
 #define MAX_NUM_BONES_PER_VERTEX 4
 #define ASSIMP_LOAD_FLAGS (aiProcess_Triangulate | aiProcess_GenSmoothNormals |  aiProcess_JoinIdenticalVertices )
 #define INVALID_MATERIAL 0xFFFFFFFF
 
-class Mesh {
+class Mesh : public Component{
 public:
-    Mesh();
+    Mesh(class Actor* owner);
     ~Mesh() {}
     bool Load(std::string FilePath, std::string ObjFileName);
-    void Draw(class Shader* shader, float timeInSeconds);
+    void Draw(class Shader* shader);
 
-    void SetPos(glm::vec3 pos) { mMeshPos = pos; }
-    void SetRotate(glm::mat4 rot) { mMeshRotate = rot; }
-    void SetScale(float scale) { mMeshScale = scale; }
-    glm::vec3 GetPos() { return mMeshPos; }
-
-    glm::mat4 GetWorldMat();
 
 protected:
     struct BasicMeshEntry {
@@ -47,8 +41,9 @@ protected:
     virtual void ReserveVertexSpace();
     virtual void LoadMesh(const aiMesh* pMesh, unsigned int meshIdx);
     virtual void GetGlobalInvTrans() {}
-    virtual void UpdateTransform(class Shader* shader, float timeInSeconds);
     virtual void BindTexture(int materialIdx);
+    virtual void SetMatrixUniform(class Shader* shaser);
+
 
     const aiScene* m_pScene;
     Assimp::Importer m_Importer;    // Importerï€éùÇπÇÒÇ©Ç¡ÇΩÇÁÅASceneÇ‡ï€éùÇ≈Ç´Ç»Ç¢!!
@@ -58,10 +53,6 @@ protected:
     unsigned int mNumVertices;
     unsigned int mNumIndices;
     std::vector<BasicMeshEntry> m_Meshes;
-
-    glm::vec3 mMeshPos;
-    glm::mat4 mMeshRotate;
-    float mMeshScale;
 
 
 private:
@@ -79,19 +70,13 @@ private:
         class Texture* DiffuseTexture;
     };
 
-
-
     unsigned int mVertexArray;
-
 
     std::vector<Material> m_Materials;
     std::vector<glm::vec3> m_Positions;
     std::vector<glm::vec3> m_Normals;
     std::vector<glm::vec2> m_TexCoords;
     std::vector<unsigned int> m_Indices;
-
-
-
 
 
     std::string ObjFileRoot;

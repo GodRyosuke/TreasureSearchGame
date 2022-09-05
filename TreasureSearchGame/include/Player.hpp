@@ -1,8 +1,8 @@
 #pragma once
+#include "Actor.hpp"
 
-#include "Skinning.hpp"
 
-class Player : public SkinMesh
+class Player : public Actor
 {
 public:
 	Player(class Game* game);
@@ -14,7 +14,10 @@ public:
 
 private:
 	class FollowCamera* mFollowCamera;
+	class SkinMesh* mMesh;
 
 	float mPlayerRot;
 	class Game* mGame;
+	glm::vec3 mPos;
+	float mScale;
 };

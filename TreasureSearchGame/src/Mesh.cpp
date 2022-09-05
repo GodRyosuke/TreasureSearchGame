@@ -3,12 +3,14 @@
 #include "GLUtil.hpp"
 #include "Texture.hpp"
 #include "Shader.hpp"
+#include "Actor.hpp"
 
 
 
-Mesh::Mesh()
+Mesh::Mesh(Actor* owner)
+    :Component(owner)
 {
-
+    mOwner->GetGame()->AddMeshComp(this);
 }
 
 bool Mesh::Load(std::string RootPath, std::string ObjFileName)
@@ -226,16 +228,6 @@ void Mesh::PopulateBuffers()
 }
 
 
-
-void Mesh::UpdateTransform(Shader* shader, float timeInSeconds)
-{
-    glm::mat4 ScaleMat = glm::scale(glm::mat4(1.0f), glm::vec3(mMeshScale, mMeshScale, mMeshScale));
-    glm::mat4 TranslateMat = glm::translate(glm::mat4(1.0f), mMeshPos);
-    glm::mat4 TransformMat = TranslateMat * mMeshRotate * ScaleMat;
-
-    shader->SetMatrixUniform("ModelTransform", TransformMat);
-}
-
 void Mesh::BindTexture(int materialIdx)
 {
     if (m_Materials[materialIdx].DiffuseTexture) {
@@ -243,11 +235,16 @@ void Mesh::BindTexture(int materialIdx)
     }
 }
 
-void Mesh::Draw(Shader* shader, float timeInSeconds)
+void Mesh::SetMatrixUniform(Shader* shader)
+{
+    shader->SetMatrixUniform("ModelTransform", mOwner->GetWorldTransform());
+}
+
+void Mesh::Draw(Shader* shader)
 {
     shader->UseProgram();
-    UpdateTransform(shader, timeInSeconds);
-
+    
+    SetMatrixUniform(shader);
 
     glBindVertexArray(mVertexArray);
 
@@ -274,10 +271,3 @@ void Mesh::Draw(Shader* shader, float timeInSeconds)
     glBindVertexArray(0);
 }
 
-glm::mat4 Mesh::GetWorldMat()
-{
-    glm::mat4 ScaleMat = glm::scale(glm::mat4(1.0f), glm::vec3(mMeshScale, mMeshScale, mMeshScale));
-    glm::mat4 TranslateMat = glm::translate(glm::mat4(1.0f), mMeshPos);
-    glm::mat4 TransformMat = TranslateMat * mMeshRotate * ScaleMat;
-    return TransformMat;
-}

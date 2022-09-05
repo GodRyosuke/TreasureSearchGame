@@ -30,6 +30,7 @@ protected:
 	std::map<char16_t, TexChar> mJapanTexChars;
 	void SetUniforms(Shader* shader) override;
 
+	unsigned int mVertexBuffer;
 
 private:
 
@@ -38,7 +39,6 @@ private:
 	FT_Face mFontFace;
 	glm::vec3 mTextColor;
 	std::u16string mText;
-	unsigned int mVertexBuffer;
 	float mDrawSpeed;
 	glm::vec3 mCurrentTextPos;
 

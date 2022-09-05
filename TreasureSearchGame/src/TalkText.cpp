@@ -1,10 +1,22 @@
 #include "TalkText.hpp"
 #include "Shader.hpp"
+#include <fstream>
+#include <codecvt>
+
 
 TalkText::TalkText()
 	:Text()
 {
-
+	// ‰ï˜b‚ÉŽg‚¤•¶Žš—ñ“Ç‚Ýž‚Ý
+	{
+		std::string filePath = "./resources/TextData.json";
+		std::ifstream ifs(filePath.c_str());
+		if (ifs.good())
+		{
+			ifs >> mData;
+		}
+		ifs.close();
+	}
 }
 
 void TalkText::Input(const uint8_t* keyState)
@@ -82,4 +94,21 @@ void TalkText::Draw(Shader* shader)
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
+
+std::u16string TalkText::GetText(nl::json data)
+{
+	std::string str;
+	data.get_to(str);
+	std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> convert;
+	return convert.from_bytes(str);
+}
+
+void TalkText::ShowTalkText(Shader* shader)
+{
+	SetText(GetText(mData["TalkCostomer"]["Welcome"]["Talk2"]));
+	SetPos(glm::vec3(0.0f, -150.0f, 0.f));
+	SetTextColor(glm::vec3(0.f, 0.f, 0.2f));
+	DrawTalkText(shader);
+}
+
 

@@ -161,6 +161,8 @@ XCOPY "$(SolutionDir)TreasureSearchGame\resources" %OUTPUT_DIRECTORY% /e /y</Com
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\Actor.hpp" />
+    <ClInclude Include="include\Component.hpp" />
     <ClInclude Include="include\FollowCamera.hpp" />
     <ClInclude Include="include\Game.hpp" />
     <ClInclude Include="include\GLUtil.hpp" />
@@ -175,9 +177,10 @@ XCOPY "$(SolutionDir)TreasureSearchGame\resources" %OUTPUT_DIRECTORY% /e /y</Com
     <ClInclude Include="include\Text.hpp" />
     <ClInclude Include="include\Texture.hpp" />
     <ClInclude Include="include\TextureShadowMap.hpp" />
-    <ClInclude Include="include\UnityChan.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Actor.cpp" />
+    <ClCompile Include="src\Component.cpp" />
     <ClCompile Include="src\FollowCamera.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\Main.cpp" />
@@ -192,7 +195,6 @@ XCOPY "$(SolutionDir)TreasureSearchGame\resources" %OUTPUT_DIRECTORY% /e /y</Com
     <ClCompile Include="src\Text.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\TextureShadowMap.cpp" />
-    <ClCompile Include="src\UnityChan.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\1.level" />

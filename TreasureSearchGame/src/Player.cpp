@@ -7,10 +7,9 @@
 #include "gtx/vector_angle.hpp"
 
 Player::Player(Game* game)
-	:SkinMesh(),
-	mGame(game)
+	:mGame(game)
 {
-	SetPos(glm::vec3(29.0f, 1.0f, 0.0f));
+	mPos = glm::vec3(29.0f, 1.0f, 0.0f);
 	mFollowCamera = new FollowCamera(this);
 	mFollowCamera->SnapToIdeal();
 }

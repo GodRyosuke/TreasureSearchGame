@@ -2,15 +2,11 @@
 #include <iostream>
 #include <GLUtil.hpp>
 #include "Shader.hpp"
+#include "Actor.hpp"
 
-//MeshSkinningAssimp::MeshSkinningAssimp(std::string ObjFilePath, std::string MtlFilePath, Shader* shader)
-//    :MeshAssimp(ObjFilePath, MtlFilePath, shader)
-//{
-//
-//}
 
-SkinMesh::SkinMesh()
-    :Mesh()
+SkinMesh::SkinMesh(Actor* owner)
+    :Mesh(owner)
 {
 
 }
@@ -295,22 +291,23 @@ void SkinMesh::GetBoneTransform(float TimeInSeconds, std::vector<glm::mat4>& Tra
     }
 }
 
-void SkinMesh::UpdateBoneTransform(Shader* shader, float TimeInSeconds)
+void SkinMesh::UpdateBoneTransform(float TimeInSeconds)
 {
     // åªç›éûçèÇÃBone TransformÇéÊìæ
-    std::vector<glm::mat4> BoneMatrixPalete;
-    GetBoneTransform(TimeInSeconds, BoneMatrixPalete);
+    GetBoneTransform(TimeInSeconds, mBoneMatrixPallete);
+}
 
+void SkinMesh::SetMatrixUniform(Shader* shader)
+{
     // ShaderÇ…ìnÇ∑
-    for (int i = 0; i < BoneMatrixPalete.size(); i++) {
+    for (int i = 0; i < mBoneMatrixPallete.size(); i++) {
         std::string uniformName = "uMatrixPalette[" + std::to_string(i) + ']';
-        shader->SetMatrixUniform(uniformName, BoneMatrixPalete[i]);
+        shader->SetMatrixUniform(uniformName, mBoneMatrixPallete[i]);
     }
 }
 
-void SkinMesh::UpdateTransform(Shader* shader, float timeInSeconds)
+void SkinMesh::Update(float deltatime)
 {
-    Mesh::UpdateTransform(shader, timeInSeconds);
-    UpdateBoneTransform(shader, timeInSeconds);
+    UpdateBoneTransform(deltatime);
 }
 
