@@ -3,6 +3,7 @@
 #include <GLUtil.hpp>
 #include "Shader.hpp"
 #include "Actor.hpp"
+#include "Game.hpp"s
 
 
 SkinMesh::SkinMesh(Actor* owner)
@@ -294,11 +295,12 @@ void SkinMesh::GetBoneTransform(float TimeInSeconds, std::vector<glm::mat4>& Tra
 void SkinMesh::UpdateBoneTransform(float TimeInSeconds)
 {
     // Œ»ÝŽž‚ÌBone Transform‚ðŽæ“¾
-    GetBoneTransform(TimeInSeconds, mBoneMatrixPallete);
+    GetBoneTransform(mOwner->GetGame()->GetTicksCount(), mBoneMatrixPallete);
 }
 
 void SkinMesh::SetMatrixUniform(Shader* shader)
 {
+    Mesh::SetMatrixUniform(shader);
     // Shader‚É“n‚·
     for (int i = 0; i < mBoneMatrixPallete.size(); i++) {
         std::string uniformName = "uMatrixPalette[" + std::to_string(i) + ']';

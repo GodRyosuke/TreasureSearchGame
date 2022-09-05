@@ -29,7 +29,7 @@ public:
 
 	void AddMesh(class Mesh* mesh) { mMeshes.push_back(mesh); }
 	void RemoveMesh(class Mesh* mesh);
-
+	Uint32 GetTicksCount() { return mTicksCount; }
 
 
 private:

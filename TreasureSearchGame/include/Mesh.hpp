@@ -56,7 +56,6 @@ protected:
 
 
 private:
-
     struct Material {
         glm::vec3 AmbientColor;
         glm::vec3 DiffuseColor;

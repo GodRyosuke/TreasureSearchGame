@@ -113,7 +113,7 @@ void Actor::ComputeWorldTransform()
 {
 	if (mRecomputeWorldTransform)
 	{
-		mRecomputeWorldTransform = false;
+		//mRecomputeWorldTransform = false;
 		// Scale, then rotate, then translate
 		glm::mat4 ScaleMat = glm::scale(glm::mat4(1.0f), glm::vec3(mScale, mScale, mScale));
 		glm::mat4 TranslateMat = glm::translate(glm::mat4(1.0f), mPosition);

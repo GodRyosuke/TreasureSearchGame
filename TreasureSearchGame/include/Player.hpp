@@ -6,18 +6,20 @@ class Player : public Actor
 {
 public:
 	Player(class Game* game);
-	glm::vec3 GetForward();
-	void Update(float deltatime);
-	float GetPlayerRot() { return mPlayerRot; }
+
+	void ActorInput(const uint8_t* keys) override;
+	void UpdateActor(float deltaTime) override;
+
+
+	//glm::vec3 GetForward();
+	//void Update(float deltatime);
+	//float GetPlayerRot() { return mPlayerRot; }
+	//class Game* GetGame() { return mGame; }
 	void SetPlayerRot(float rotate);
-	class Game* GetGame() { return mGame; }
 
 private:
 	class FollowCamera* mFollowCamera;
 	class SkinMesh* mMesh;
 
 	float mPlayerRot;
-	class Game* mGame;
-	glm::vec3 mPos;
-	float mScale;
 };

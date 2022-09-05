@@ -1,14 +1,14 @@
 #pragma once
 
 #include "glm.hpp"
-#include "Player.hpp"
+#include "Component.hpp"
 
-class FollowCamera
+class FollowCamera : public Component
 {
 public:
-	FollowCamera(Player* owner);
+	FollowCamera(class Actor* owner);
 
-	void Update(float deltaTime);
+	void Update(float deltaTime) override;
 
 	void SnapToIdeal();
 
@@ -19,8 +19,6 @@ public:
 private:
 	glm::vec3 ComputeCameraPos() const;
 	void SetViewMatrix(glm::mat4 view, glm::vec3 cameraPos);
-
-	Player* mOwner;
 
 	// Actual position of camera
 	glm::vec3 mActualPos;

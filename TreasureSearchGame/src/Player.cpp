@@ -7,17 +7,17 @@
 #include "gtx/vector_angle.hpp"
 
 Player::Player(Game* game)
-	:mGame(game)
+	:Actor(game)
 {
-	mPos = glm::vec3(29.0f, 1.0f, 0.0f);
+	SetPosition(glm::vec3(29.0f, 1.0f, 0.0f));
 	mFollowCamera = new FollowCamera(this);
 	mFollowCamera->SnapToIdeal();
 }
 
-glm::vec3 Player::GetForward()
-{
-	return glm::rotate(glm::vec3(-1.0f, 0.f, 0.f), (float)M_PI * mPlayerRot / 180, glm::vec3(0.0f, 0.f, 1.0f));
-}
+//glm::vec3 Player::GetForward()
+//{
+//	return glm::rotate(glm::vec3(-1.0f, 0.f, 0.f), (float)M_PI * mPlayerRot / 180, glm::vec3(0.0f, 0.f, 1.0f));
+//}
 
 void Player::SetPlayerRot(float rotate)
 {
@@ -28,10 +28,9 @@ void Player::SetPlayerRot(float rotate)
 		rotate += 360;
 	}
 	mPlayerRot = rotate;
-	mMeshRotate = glm::rotate(glm::mat4(1.0f), (float)M_PI * rotate / 180, glm::vec3(0.f, 0.f, 1.f));
 }
 
-void Player::Update(float deltatime)
+void Player::UpdateActor(float deltatime)
 {
-	mFollowCamera->Update(deltatime);
+	SetRotation(glm::rotate(glm::mat4(1.0f), (float)M_PI * mPlayerRot / 180, glm::vec3(0.f, 0.f, 1.f)));
 }

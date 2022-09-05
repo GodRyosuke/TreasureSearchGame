@@ -2,9 +2,10 @@
 #include "Mesh.hpp"
 #include "Shader.hpp"
 #include "Game.hpp"
+#include "Actor.hpp"
 
-FollowCamera::FollowCamera(Player* owner)
-	:mOwner(owner)
+FollowCamera::FollowCamera(Actor* owner)
+	:Component(owner)
 	,mHorzDist(3.0f)
 	,mVertDist(2.0f)
 	,mTargetDist(5.0f)
@@ -31,7 +32,7 @@ void FollowCamera::Update(float deltaTime)
 	// Update actual camera position
 	mActualPos += mVelocity * deltaTime;
 	// Target is target dist in front of owning actor
-	glm::vec3 target = mOwner->GetPos() +
+	glm::vec3 target = mOwner->GetPosition() +
 		mOwner->GetForward() * mTargetDist;
 	// Use actual position here, not ideal
 	glm::mat4 view = glm::lookAt(mActualPos, target,
@@ -46,7 +47,7 @@ void FollowCamera::SnapToIdeal()
 	// Zero velocity
 	mVelocity = glm::vec3(0.f);
 	// Compute target and view
-	glm::vec3 target = mOwner->GetPos() +
+	glm::vec3 target = mOwner->GetPosition() +
 		mOwner->GetForward() * mTargetDist;
 	// Use actual position here, not ideal
 	glm::mat4 view = glm::lookAt(mActualPos, target,
@@ -57,7 +58,7 @@ void FollowCamera::SnapToIdeal()
 glm::vec3 FollowCamera::ComputeCameraPos() const
 {
 	// Set camera position behind and above owner
-	glm::vec3 cameraPos = mOwner->GetPos();
+	glm::vec3 cameraPos = mOwner->GetPosition();
 	cameraPos -= mOwner->GetForward() * mHorzDist;
 	cameraPos += glm::vec3(0.0f, 0.0f, 1.0f) * mVertDist;
 	return cameraPos;
