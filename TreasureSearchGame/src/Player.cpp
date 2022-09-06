@@ -19,6 +19,11 @@ Player::Player(Game* game)
 //	return glm::rotate(glm::vec3(-1.0f, 0.f, 0.f), (float)M_PI * mPlayerRot / 180, glm::vec3(0.0f, 0.f, 1.0f));
 //}
 
+void Player::ActorInput(const uint8_t* keys)
+{
+
+}
+
 void Player::SetPlayerRot(float rotate)
 {
 	if (rotate > 360) {

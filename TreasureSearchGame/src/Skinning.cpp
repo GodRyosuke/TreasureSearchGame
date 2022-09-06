@@ -3,7 +3,7 @@
 #include <GLUtil.hpp>
 #include "Shader.hpp"
 #include "Actor.hpp"
-#include "Game.hpp"s
+#include "Game.hpp"
 
 
 SkinMesh::SkinMesh(Actor* owner)
