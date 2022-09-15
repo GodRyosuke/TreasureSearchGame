@@ -1,10 +1,10 @@
 #include "Text.hpp"
 #include <iostream>
 #include "Shader.hpp"
+#include "Actor.hpp"
 
-
-Text::Text()
-	:Sprite()
+Text::Text(Actor* owner)
+	:Sprite(owner)
 {
 	// TTF“Ç‚Ýž‚Ý
 	FT_Library library;
@@ -26,8 +26,6 @@ Text::Text()
 			mJapanTexChars.insert(std::make_pair(str[i], tc));
 		}
 	}
-
-
 
 	// Vertex Array ì¬
 	glGenVertexArrays(1, &mVertexArray);
@@ -82,9 +80,10 @@ Text::TexChar Text::LoadUTFChar(char16_t c)
 void Text::SetUniforms(Shader* shader)
 {
 	// translate rotate alpha colorÝ’è
-	glm::mat4 translate = glm::translate(glm::mat4(1.0f), mPos);
+
+	glm::mat4 translate = glm::translate(glm::mat4(1.0f), mOwner->GetPosition());
 	shader->SetMatrixUniform("gTranslate", translate);
-	shader->SetMatrixUniform("gRotate", mRotate);
+	shader->SetMatrixUniform("gRotate", mOwner->GetRotation());
 	shader->SetFloatUniform("gSpriteAlpha", mAlpha);
 	shader->SetVectorUniform("textColor", mTextColor);
 }
@@ -94,10 +93,11 @@ void Text::Draw(Shader* shader)
 	shader->UseProgram();
 	glBindVertexArray(mVertexArray);
 
+	float scale = mOwner->GetScale();
 	glm::vec3 FontCenter = glm::vec3(0.0f);
 	// •¶Žš‚Ìtexchar‚Ì‘å‚«‚³‚ðŽæ“¾
 	{
-		int width = (mJapanTexChars.begin()->second.Advance >> 6) * mScale;
+		int width = (mJapanTexChars.begin()->second.Advance >> 6) * scale;
 		FontCenter.x = (width * mText.length()) / 2.0f;
 		FontCenter.y = width / 2.0f;
 	}
@@ -120,10 +120,10 @@ void Text::Draw(Shader* shader)
 			ch = itr->second;
 		}
 
-		float xpos = x2 + ch.Bearing.x * mScale;
-		float ypos = y2 - (ch.Size.y - ch.Bearing.y) * mScale;
-		float w = ch.Size.x * mScale;
-		float h = ch.Size.y * mScale;
+		float xpos = x2 + ch.Bearing.x * scale;
+		float ypos = y2 - (ch.Size.y - ch.Bearing.y) * scale;
+		float w = ch.Size.x * scale;
+		float h = ch.Size.y * scale;
 
 
 		float textVertices[6][4] = {
@@ -144,7 +144,7 @@ void Text::Draw(Shader* shader)
 
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 		// now advance cursors for next glyph (note that advance is number of 1/64 pixels)
-		x2 += (ch.Advance >> 6) * mScale;
+		x2 += (ch.Advance >> 6) * scale;
 	}
 
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -155,7 +155,7 @@ void Text::StartDrawing()
 	glm::vec3 FontCenter = glm::vec3(0.0f);
 	// •¶Žš‚Ìtexchar‚Ì‘å‚«‚³‚ðŽæ“¾
 	{
-		int width = (mJapanTexChars.begin()->second.Advance >> 6) * mScale;
+		int width = (mJapanTexChars.begin()->second.Advance >> 6) * mOwner->GetScale();
 		FontCenter.x = (width * mText.length()) / 2.0f;
 		FontCenter.y = width / 2.0f;
 	}
@@ -167,11 +167,12 @@ void Text::DrawTalkText(Shader* shader)
 	shader->UseProgram();
 	glBindVertexArray(mVertexArray);
 
+	float scale = mOwner->GetScale();
 	glm::vec3 FontCenter = glm::vec3(0.0f);
 	// •¶Žš‚Ìtexchar‚Ì‘å‚«‚³‚ðŽæ“¾
 	int FontWidth = 0;
 	{
-		FontWidth = (mJapanTexChars.begin()->second.Advance >> 6) * mScale;
+		FontWidth = (mJapanTexChars.begin()->second.Advance >> 6) * scale;
 		FontCenter.x = FontWidth * 20 / 2.0f; // •¶Žš”‚Í20•¶Žš
 		FontCenter.y = FontWidth / 2.0f;
 	}
@@ -203,10 +204,10 @@ void Text::DrawTalkText(Shader* shader)
 			ch = itr->second;
 		}
 
-		float xpos = x2 + ch.Bearing.x * mScale;
-		float ypos = y2 - (ch.Size.y - ch.Bearing.y) * mScale;
-		float w = ch.Size.x * mScale;
-		float h = ch.Size.y * mScale;
+		float xpos = x2 + ch.Bearing.x * scale;
+		float ypos = y2 - (ch.Size.y - ch.Bearing.y) * scale;
+		float w = ch.Size.x * scale;
+		float h = ch.Size.y * scale;
 
 
 		float textVertices[6][4] = {
@@ -227,7 +228,7 @@ void Text::DrawTalkText(Shader* shader)
 
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 		// now advance cursors for next glyph (note that advance is number of 1/64 pixels)
-		x2 += (ch.Advance >> 6) * mScale;
+		x2 += (ch.Advance >> 6) * scale;
 	}
 
 	glBindTexture(GL_TEXTURE_2D, 0);

@@ -2,9 +2,7 @@
 
 
 // Uniforms for world transform and view-proj
-uniform mat4 gTranslate;
-uniform mat4 gRotate;
-uniform mat4 gScaling;
+uniform mat4 ModelTransform;
 uniform mat4 gSpriteViewProj;
 
 // Attribute 0 is position, 1 is normal, 2 is tex coords.
@@ -19,6 +17,6 @@ void main()
 {
 	// Convert position to homogeneous coordinates
 	vec4 pos = vec4(inPosition, 1.0);
-	gl_Position = gSpriteViewProj * gTranslate * gRotate * gScaling * pos;
+	gl_Position = gSpriteViewProj * ModelTransform * pos;
 	fragTexCoord = inTexCoord;
 }

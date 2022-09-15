@@ -6,7 +6,7 @@ namespace nl = nlohmann;
 class TalkText : public Text
 {
 public:
-	TalkText();
+	TalkText(class Actor* owner);
 	void Input(const uint8_t* keyState);
 	void Draw(Shader* shader) override;
 	void ShowTalkText(Shader* shader);

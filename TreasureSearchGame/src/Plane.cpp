@@ -1,45 +1,25 @@
 #include "Plane.hpp"
 #include <iostream>
-#include "Texture.hpp"
+#include "Game.hpp"
+#include "MeshComponent.hpp"
 
-Plane::Plane()
-	:Mesh()
+Plane::Plane(Game* game)
+	:Actor(game)
 {
-
+	mMeshComp = new MeshComponent(this);
+	mMeshComp->SetMesh(game->GetMesh("Plane", "obj"));
 }
 
-void Plane::BindTexture(int materialIndex)
+void Plane::UpdateActor(float deltatime)
 {
-	switch (mType)
-	{
-	case CONCRETE:
-		mConcreteTex->BindTexture();
-		break;
-	case BRICK:
-		mBrickTex->BindTexture();
-		break;
+	if (mType == CONCRETE) {
+		mMeshComp->SetTexture("./resources/Textures/concrete_brick_wall_001_diffuse_4k.jpg");
 	}
-}
-
-bool Plane::LoadBrickTex(std::string filePath)
-{
-	Texture* tex = new Texture(filePath);
-	if (!tex) {
-		std::cout << "error: failed to load texture" << filePath << std::endl;
-		return false;
+	else if (mType == BRICK) {
+		mMeshComp->SetTexture("./resources/Textures/Bricks077_4K_Color.jpg");
 	}
-	mBrickTex = tex;
-	return true;
-}
-
-bool Plane::LoadConcreteTex(std::string filePath)
-{
-	Texture* tex = new Texture(filePath);
-	if (!tex) {
-		std::cout << "error: failed to load texture" << filePath << std::endl;
-		return false;
+	else {
+		mMeshComp->SetTexture("");
 	}
-	mConcreteTex = tex;
-	return true;
 }
 

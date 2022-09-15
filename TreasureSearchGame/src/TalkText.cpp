@@ -1,11 +1,12 @@
 #include "TalkText.hpp"
 #include "Shader.hpp"
+#include "Actor.hpp"
 #include <fstream>
 #include <codecvt>
 
 
-TalkText::TalkText()
-	:Text()
+TalkText::TalkText(Actor* owner)
+	:Text(owner)
 {
 	// ‰ï˜b‚ÉŽg‚¤•¶Žš—ñ“Ç‚Ýž‚Ý
 	{
@@ -33,7 +34,7 @@ void TalkText::Draw(Shader* shader)
 	// •¶Žš‚Ìtexchar‚Ì‘å‚«‚³‚ðŽæ“¾
 	int FontWidth = 0;
 	{
-		FontWidth = (mJapanTexChars.begin()->second.Advance >> 6) * mScale;
+		FontWidth = (mJapanTexChars.begin()->second.Advance >> 6) * mOwner->GetScale();
 		FontCenter.x = FontWidth * 20 / 2.0f; // •¶Žš”‚Í20•¶Žš
 		FontCenter.y = FontWidth / 2.0f;
 	}
@@ -65,10 +66,10 @@ void TalkText::Draw(Shader* shader)
 			ch = itr->second;
 		}
 
-		float xpos = x2 + ch.Bearing.x * mScale;
-		float ypos = y2 - (ch.Size.y - ch.Bearing.y) * mScale;
-		float w = ch.Size.x * mScale;
-		float h = ch.Size.y * mScale;
+		float xpos = x2 + ch.Bearing.x * mOwner->GetScale();
+		float ypos = y2 - (ch.Size.y - ch.Bearing.y) * mOwner->GetScale();
+		float w = ch.Size.x * mOwner->GetScale();
+		float h = ch.Size.y * mOwner->GetScale();
 
 
 		float textVertices[6][4] = {
@@ -89,7 +90,7 @@ void TalkText::Draw(Shader* shader)
 
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 		// now advance cursors for next glyph (note that advance is number of 1/64 pixels)
-		x2 += (ch.Advance >> 6) * mScale;
+		x2 += (ch.Advance >> 6) * mOwner->GetScale();
 	}
 
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -106,7 +107,7 @@ std::u16string TalkText::GetText(nl::json data)
 void TalkText::ShowTalkText(Shader* shader)
 {
 	SetText(GetText(mData["TalkCostomer"]["Welcome"]["Talk2"]));
-	SetPos(glm::vec3(0.0f, -150.0f, 0.f));
+	mOwner->SetPosition(glm::vec3(0.0f, -150.0f, 0.f));
 	SetTextColor(glm::vec3(0.f, 0.f, 0.2f));
 	DrawTalkText(shader);
 }

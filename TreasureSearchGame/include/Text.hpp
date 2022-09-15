@@ -3,13 +3,14 @@
 #include "Sprite.hpp"
 #include <map>
 #include "ft2build.h"
+#include "glew.h"
 
 #include FT_FREETYPE_H
 
 
 class Text : public Sprite {
 public:
-	Text();
+	Text(class Actor* owner);
 	virtual void Draw(Shader* shader) override;
 	void DrawTalkText(Shader* shader);
 	void Update(float deltaTime);
@@ -33,13 +34,9 @@ protected:
 	unsigned int mVertexBuffer;
 
 private:
-
-
-
 	FT_Face mFontFace;
 	glm::vec3 mTextColor;
 	std::u16string mText;
 	float mDrawSpeed;
 	glm::vec3 mCurrentTextPos;
-
 };

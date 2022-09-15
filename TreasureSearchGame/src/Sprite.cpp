@@ -1,5 +1,7 @@
+#include "Actor.hpp"
 #include "Sprite.hpp"
 #include "Shader.hpp"
+#include "Texture.hpp"
 
 static float SpriteVertices[] =
 { //     COORDINATES     /        Normals      /   TexCoord  //
@@ -15,6 +17,11 @@ static unsigned int SpriteIndices[] =
 	2, 3, 0
 };
 
+Sprite::Sprite(Actor* owner)
+	:Component(owner)
+{
+
+}
 
 bool Sprite::Load(std::string filePath, float alpha)
 {
@@ -55,12 +62,10 @@ bool Sprite::Load(std::string filePath, float alpha)
 
 void Sprite::SetUniforms(Shader* shader)
 {
-	glm::mat4 translate = glm::translate(glm::mat4(1.0f), mPos);
-	shader->SetMatrixUniform("gTranslate", translate);
-	shader->SetMatrixUniform("gRotate", mRotate);
+	glm::mat4 texScalingMat = glm::scale(glm::mat4(1.0f), glm::vec3(mTexture->getWidth(), mTexture->getHeight(), 1.f));
+	glm::mat4 world = mOwner->GetWorldTransform() * texScalingMat;
+	shader->SetMatrixUniform("ModelTransform", world);
 	shader->SetFloatUniform("gSpriteAlpha", mAlpha);
-	glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(mTexture->getWidth() * mScale, mTexture->getHeight() * mScale, mScale));
-	shader->SetMatrixUniform("gScaling", scale);
 }
 
 void Sprite::Draw(Shader* shader)

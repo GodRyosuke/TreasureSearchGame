@@ -1,12 +1,11 @@
 #pragma once
 
-#include "Mesh.hpp"
+#include "Actor.hpp"
 
-class MazeBox : public Mesh
+class MazeBox : public Actor
 {
 public:
-	MazeBox(std::string fileRoot, std::string meshFileName, 
-		std::string blackFileName, std::string whiteFileName);
+	MazeBox(class Game* game);
 	enum BoxType {
 		WHITE,
 		BLACK,
@@ -20,7 +19,7 @@ public:
 		GROW_DOWN_STATE,
 		NUM_STATE
 	};
-	void BindTexture(int materialIndex) override;
+	void UpdateActor(float deltatime) override;
 	void SetBoxType(BoxType type) { mType = type; }
 	void GrowUp();	// óßÇøè„Ç™ÇÈ
 	void GrowDown(); // â∫Ç™ÇÈ
@@ -33,6 +32,8 @@ public:
 private:
 	BoxType mType;
 	MazeBoxState mState;
+	
+	class MeshComponent* mMeshComp;
 
 	class Texture* mBlackTex;
 	class Texture* mWhiteTex;

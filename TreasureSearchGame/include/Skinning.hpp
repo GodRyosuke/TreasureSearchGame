@@ -4,9 +4,10 @@
 
 class SkinMesh : public Mesh {
 public:
-    SkinMesh(class Actor* owner);
+    SkinMesh();
     ~SkinMesh() {}
-    void Update(float deltaTime) override;
+    //void Update(float deltaTime) override;
+    void GetBoneTransform(float TimeInSeconds, std::vector<glm::mat4>& Transforms);
 
 
 protected:
@@ -63,18 +64,14 @@ private:
 
 
     // 時刻が変化するにしたがってBoneの行列を更新する
-    void UpdateBoneTransform(float TimeInSeconds);
     // 時刻TimeInSecondsにおける各ボーンのTransformを求める
-    void GetBoneTransform(float TimeInSeconds, std::vector<glm::mat4>& Transforms);
     // Nodeの階層構造を読みだす
     // AnimationTimeTicks時刻におけるAnimationを求める
     void CalcInterpolatedRotation(aiQuaternion& Out, float AnimationTimeTicks, const aiNodeAnim* pNodeAnim);
     void CalcInterpolatedScaling(aiVector3D& Out, float AnimationTimeTicks, const aiNodeAnim* pNodeAnim);
     void CalcInterpolatedPosition(aiVector3D& Out, float AnimationTimeTicks, const aiNodeAnim* pNodeAnim);
 
-    void SetMatrixUniform(class Shader* shader) override;
 
-    std::vector<glm::mat4> mBoneMatrixPallete;
     std::map<std::string, unsigned int> m_BoneNameToIndexMap;
     std::vector<VertexBoneData> m_Bones;
 

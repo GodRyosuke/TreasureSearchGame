@@ -1,26 +1,26 @@
 #include "MazeBox.hpp"
 #include "Texture.hpp"
+#include "MeshComponent.hpp"
+#include "Game.hpp"
 
-MazeBox::MazeBox(std::string fileRoot, std::string meshFileName,
-	std::string blackFileName, std::string whiteFileName)
-	: Mesh(),
-	mGrowingSpeed(0.007f)
+MazeBox::MazeBox(Game* game)
+	:Actor(game)
+	,mGrowingSpeed(0.007f)
 {
-	mBlackTex = new Texture(fileRoot + blackFileName);
-	mWhiteTex = new Texture(fileRoot + whiteFileName);
-	Load(fileRoot, meshFileName);
+	mMeshComp = new MeshComponent(this);
+	mMeshComp->SetMesh(game->GetMesh("MazeBox", "fbx"));
 }
 
-void MazeBox::BindTexture(int materialIndex)
+void MazeBox::UpdateActor(float deltaTime)
 {
-	switch (mType)
-	{
-	case WHITE:
-		mWhiteTex->BindTexture();
-		break;
-	case BLACK:
-		mBlackTex->BindTexture();
-		break;
+	if (mType == WHITE) {
+		mMeshComp->SetTexture("./resources/MazeBox/WhiteUV.png");
+	}
+	else if (mType == BLACK) {
+		mMeshComp->SetTexture("./resources/MazeBox/BlackUV.png");
+	}
+	else {
+		mMeshComp->SetTexture("");
 	}
 }
 

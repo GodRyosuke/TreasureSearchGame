@@ -2,10 +2,6 @@
 
 #include "SDL.h"
 #include "glew.h"
-#include "TextureShadowMap.hpp"
-#include "UnityChan.hpp"
-#include "Sprite.hpp"
-#include "Text.hpp"
 #include "MazeBox.hpp"
 #include "json.hpp"
 
@@ -13,6 +9,12 @@ namespace nl = nlohmann;
 
 class Game {
 public:
+	enum PHASE {
+		PHASE_IDLE,
+		PHASE_MOVE,
+		PHASE_TALK,
+		PHASE_MAX
+	};
 	Game();
 	~Game() {}
 
@@ -24,21 +26,23 @@ public:
 	void AddActor(class Actor* actor);
 	void RemoveActor(class Actor* actor);
 
+	class Mesh* GetMesh(std::string filePath, std::string ext);
+	class SkinMesh* GetSkinMesh(std::string filePath, std::string ext);
 	void AddSprite(class Sprite* sprite) { mSprites.push_back(sprite); }
 	void RemoveSprite(class Sprite* sprite);
 
-	void AddMesh(class Mesh* mesh) { mMeshes.push_back(mesh); }
+	void SetPhase(PHASE phase) { mPhase = phase; }
+	PHASE GetPhase() { return mPhase; }
+
+	// posÇ™ï«Ç©ÅH
+	bool IsWall(glm::vec3 pos);
+
+	void AddMeshComp(class MeshComponent* meshcomp) { mMeshComponent.push_back(meshcomp); }
 	void RemoveMesh(class Mesh* mesh);
 	Uint32 GetTicksCount() { return mTicksCount; }
 
 
 private:
-	enum PHASE {
-		PHASE_IDLE,
-		PHASE_MOVE,
-		PHASE_TALK,
-		PHASE_MAX
-	};
 	struct BaseLight {
 		glm::vec3 Color;
 		float AmbientIntensity;
@@ -76,14 +80,13 @@ private:
 	std::vector<SpotLight> mSpotLights;
 
 
-	Sprite* mTextBox;
-	Mesh* mConcretePlane;
-	Mesh* mRoof;
+	class Sprite* mTextBox;
+	class Mesh* mConcretePlane;
+	class Mesh* mRoof;
 	
-	Text* mText;
+	class Text* mText;
 	nl::json mTextData;
 
-	std::vector<SkinMesh*> mSkinMeshes;
 	class Player* mPlayer;
 
 	class Plane* mPlane;
@@ -92,10 +95,6 @@ private:
 	char** mLevelData;
 
 	
-	UnityChan* mAnimUnityChan;
-
-
-	TextureShadowMap* mTextureShadowMapFBO;
 
 	class Shader* mSkinningShader;
 	class Shader* mMeshShader;
@@ -108,14 +107,17 @@ private:
 	// Camera
 	glm::vec3 mCameraUP;
 	glm::vec3 mCameraOrientation;
-	float mMoveSpeed;
 	float mMoveSensitivity;
 
 	glm::vec3 mMousePos;
 
 
 	std::vector<class Sprite*> mSprites;
-	std::vector<class Mesh*> mMeshes;
+	std::unordered_map<std::string, class Mesh*> mMeshes;
+	std::vector<class MeshComponent*> mMeshComponent;
+	//std::vector<class Mesh*> mMeshes;
+	std::unordered_map<std::string, class SkinMesh*> mSkinMeshes;
+
 
 	SDL_Window* mWindow;
 	// OpenGL context

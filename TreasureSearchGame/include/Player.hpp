@@ -10,16 +10,12 @@ public:
 	void ActorInput(const uint8_t* keys) override;
 	void UpdateActor(float deltaTime) override;
 
-
-	//glm::vec3 GetForward();
-	//void Update(float deltatime);
-	//float GetPlayerRot() { return mPlayerRot; }
-	//class Game* GetGame() { return mGame; }
 	void SetPlayerRot(float rotate);
 
 private:
 	class FollowCamera* mFollowCamera;
-	class SkinMesh* mMesh;
+	class SkinMeshComponent* mSkinMeshComp;
+	float mMoveSpeed;
 
 	float mPlayerRot;
 };

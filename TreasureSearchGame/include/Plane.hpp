@@ -1,23 +1,24 @@
 #pragma once
 
-#include "Mesh.hpp"
+#include "Actor.hpp"
+#include <string>
 
-class Plane : public Mesh
+class Plane : public Actor
 {
 public:
-	Plane();
+	Plane(class Game* game);
 	enum PlaneType {
 		CONCRETE,
 		BRICK,
 		NUM_PLANETYPE
 	};
+
+	void UpdateActor(float deltatime) override;
 	bool LoadBrickTex(std::string filePath);
 	bool LoadConcreteTex(std::string filePath);
-	void BindTexture(int materialIndex) override;
 	void SetPlaneType(PlaneType type) { mType = type; }
 
 private:
-	class Texture* mConcreteTex;
-	class Texture* mBrickTex;
+	class MeshComponent* mMeshComp;
 	PlaneType mType;
 };

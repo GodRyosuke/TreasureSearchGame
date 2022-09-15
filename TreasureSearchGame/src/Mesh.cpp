@@ -6,18 +6,14 @@
 #include "Actor.hpp"
 
 
-
-Mesh::Mesh(Actor* owner)
-    :Component(owner)
+Mesh::Mesh()
+    :mTexturePath("")
 {
-    mOwner->GetGame()->AddMeshComp(this);
 }
 
-bool Mesh::Load(std::string RootPath, std::string ObjFileName)
+bool Mesh::Load(std::string fileName, std::string ext)
 {
-    this->ObjFileRoot = RootPath;
-    this->ObjFileName = ObjFileName;
-    std::string FilePath = RootPath + ObjFileName;
+    std::string FilePath = "./resources/" + fileName + "/" + fileName + "." + ext;
 
     m_pScene = m_Importer.ReadFile(FilePath.c_str(), ASSIMP_LOAD_FLAGS);
     //m_pScene = pScene;
@@ -83,7 +79,7 @@ bool Mesh::Load(std::string RootPath, std::string ObjFileName)
                 // 「/」で分解
                 glutil.Split('/', buffer, split_list);
 
-                std::string texturePath = ObjFileRoot + "Textures/" + split_list[split_list.size() - 1];
+                std::string texturePath = "./resources/" + fileName+ "/Textures/" + split_list[split_list.size() - 1];
                 m_Materials[materialIdx].DiffuseTexture = new Texture(texturePath);
             }
         }
@@ -227,27 +223,44 @@ void Mesh::PopulateBuffers()
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(m_Indices[0]) * m_Indices.size(), &m_Indices[0], GL_STATIC_DRAW);
 }
 
-
 void Mesh::BindTexture(int materialIdx)
 {
-    if (m_Materials[materialIdx].DiffuseTexture) {
-        m_Materials[materialIdx].DiffuseTexture->BindTexture(GL_TEXTURE0);
+    // mTexturePathが設定されていなければ、Meshに設定されているTextureを使用
+    if (mTexturePath.size() == 0) {
+        if (m_Materials[materialIdx].DiffuseTexture) {
+            m_Materials[materialIdx].DiffuseTexture->BindTexture(GL_TEXTURE0);
+        }
+    }
+    else {
+        // 指定されたTextureを使用
+        Texture* tex = nullptr;
+        auto iter = mTextures.find(mTexturePath);
+        if (iter == mTextures.end()) { // まだ読み込まれていなければ
+            tex = new Texture(mTexturePath);
+            mTextures.insert(std::make_pair(mTexturePath, tex));
+        }
+        else {
+            tex = iter->second;
+        }
+
+        tex->BindTexture();
     }
 }
 
-void Mesh::SetMatrixUniform(Shader* shader)
+void Mesh::BindVertexArray()
 {
-    shader->SetMatrixUniform("ModelTransform", mOwner->GetWorldTransform());
+    glBindVertexArray(mVertexArray);
 }
 
-void Mesh::Draw(Shader* shader)
+void Mesh::UnBindVertexArray()
 {
-    shader->UseProgram();
-    
-    SetMatrixUniform(shader);
+    glBindVertexArray(0);
+}
 
-    glBindVertexArray(mVertexArray);
 
+
+void Mesh::SetMaterialUniform(Shader* shader)
+{
     for (unsigned int i = 0; i < m_Meshes.size(); i++) {
         unsigned int MaterialIndex = m_Meshes[i].MaterialIndex;
         assert(MaterialIndex < m_Materials.size());
@@ -267,7 +280,6 @@ void Mesh::Draw(Shader* shader)
             (void*)(sizeof(unsigned int) * m_Meshes[i].BaseIndex),
             m_Meshes[i].BaseVertex);
     }
-
-    glBindVertexArray(0);
 }
+
 

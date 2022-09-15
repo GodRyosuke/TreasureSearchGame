@@ -9,6 +9,7 @@
 #include "Player.hpp"
 #include "Shader.hpp"
 #include "Plane.hpp"
+#include "Skinning.hpp"
 #include <fstream>
 #include <codecvt>
 #define STB_IMAGE_IMPLEMENTATION
@@ -17,7 +18,7 @@ Game::Game()
 	:mWindowWidth(1024),
 	mWindowHeight(768),
 	mIsRunning(true),
-	mMoveSpeed(0.1),
+	
 	mMoveSensitivity(100.0f)
 {
 	mCameraUP = glm::vec3(0.0f, 0.0f, 1.0f);
@@ -414,16 +415,8 @@ bool Game::LoadData()
 
 
 
-	{
-		// Player
-		Player* mesh = new Player(this);
-		if (mesh->Load("./resources/SimpleMan/", "simple_man.fbx")) {
-			mesh->SetPos(glm::vec3(29.0f, 1.0f, 0.0f));
-			mesh->SetRotate(glm::mat4(1.0f));
-			mesh->SetScale(0.002f);
-			mPlayer = mesh;
-		}
-	}
+
+
 
 
 
@@ -485,6 +478,13 @@ bool Game::LoadData()
 	return true;
 }
 
+bool Game::IsWall(glm::vec3 pos)
+{
+	if (mLevelData[static_cast<int>(pos.y / 2) - 5][static_cast<int>(pos.x / 2)] == '#') {
+		// Player‚Ì‚¢‚éêŠ‚ª•Ç‚È‚çXV‚µ‚È‚¢
+		return true;
+	}
+}
 
 void Game::ProcessInput()
 {
@@ -654,6 +654,55 @@ void Game::UpdateGame()
 
 }
 
+Mesh* Game::GetMesh(std::string fileName, std::string ext)
+{
+	Mesh* m = nullptr;
+	auto iter = mMeshes.find(fileName);
+	if (iter != mMeshes.end())
+	{
+		m = iter->second;
+	}
+	else
+	{
+		m = new Mesh();
+		if (m->Load(fileName, ext))
+		{
+			mMeshes.emplace(fileName, m);
+		}
+		else
+		{
+			delete m;
+			m = nullptr;
+		}
+	}
+	return m;
+}
+
+SkinMesh* Game::GetSkinMesh(std::string filePath, std::string ext)
+{
+	SkinMesh* m = nullptr;
+	auto iter = mSkinMeshes.find(filePath);
+	if (iter != mSkinMeshes.end())
+	{
+		m = iter->second;
+	}
+	else
+	{
+		m = new SkinMesh();
+		if (m->Load(filePath, ext))
+		{
+			mSkinMeshes.emplace(filePath, m);
+		}
+		else
+		{
+			delete m;
+			m = nullptr;
+		}
+	}
+	return m;
+
+}
+
 std::u16string Game::GetText(nl::json data)
 {
 	std::string str;
@@ -685,6 +734,15 @@ void Game::Draw()
 	glDisable(GL_BLEND);
 
 	mMeshShader->UseProgram();
+	for (auto mc : mMeshes)
+	{
+		mc->Draw(mMeshShader);
+	}
+
+	mSkinningShader->UseProgram();
+	for (auto sc : mSkinMeshes) {
+		sc->Draw(mSkinningShader);
+	}
 	//for (auto mesh : mMeshes) {
 	//	if (mesh.meshName == "TreasureChest") {
 	//		mesh.mesh->SetPos(glm::vec3(4.0f, 5.0f / 2.0f, 0.0f));

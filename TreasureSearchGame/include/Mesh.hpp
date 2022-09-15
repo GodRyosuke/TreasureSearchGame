@@ -8,17 +8,22 @@
 #include <assimp/scene.h>       // Output data structure
 #include <assimp/postprocess.h> // Post processing flags
 #include "Component.hpp"
+#include <unordered_map>
 
 #define MAX_NUM_BONES_PER_VERTEX 4
 #define ASSIMP_LOAD_FLAGS (aiProcess_Triangulate | aiProcess_GenSmoothNormals |  aiProcess_JoinIdenticalVertices )
 #define INVALID_MATERIAL 0xFFFFFFFF
 
-class Mesh : public Component{
+class Mesh{
 public:
-    Mesh(class Actor* owner);
+    Mesh();
     ~Mesh() {}
-    bool Load(std::string FilePath, std::string ObjFileName);
-    void Draw(class Shader* shader);
+    bool Load(std::string fileName, std::string ext = "fbx");
+    // Texture, Diffuse, Ambient, Specular�Ȃǂ̐ݒ�
+    void SetTexture(std::string filePath) { mTexturePath = filePath; }
+    void SetMaterialUniform(class Shader* shader);
+    void BindVertexArray();
+    void UnBindVertexArray();
 
 
 protected:
@@ -42,7 +47,6 @@ protected:
     virtual void LoadMesh(const aiMesh* pMesh, unsigned int meshIdx);
     virtual void GetGlobalInvTrans() {}
     virtual void BindTexture(int materialIdx);
-    virtual void SetMatrixUniform(class Shader* shaser);
 
 
     const aiScene* m_pScene;
@@ -76,8 +80,6 @@ private:
     std::vector<glm::vec3> m_Normals;
     std::vector<glm::vec2> m_TexCoords;
     std::vector<unsigned int> m_Indices;
-
-
-    std::string ObjFileRoot;
-    std::string ObjFileName;
+    std::unordered_map<std::string, class Texture*> mTextures;
+    std::string mTexturePath;
 };
