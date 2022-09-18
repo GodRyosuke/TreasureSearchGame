@@ -27,6 +27,7 @@ Text::Text(Actor* owner)
 		}
 	}
 
+
 	// Vertex Array ì¬
 	glGenVertexArrays(1, &mVertexArray);
 	glBindVertexArray(mVertexArray);

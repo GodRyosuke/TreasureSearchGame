@@ -23,13 +23,15 @@ public:
 	void Shutdown();
 	void SetViewMatrix(glm::mat4 view, glm::vec3 cameraPos);	// View MatrixÇÃê›íËÇÇ∑ÇÈÅB
 
-	void AddActor(class Actor* actor);
+	void AddActor(class Actor* actor) { mActors.push_back(actor); }
 	void RemoveActor(class Actor* actor);
 
 	class Mesh* GetMesh(std::string filePath, std::string ext);
 	class SkinMesh* GetSkinMesh(std::string filePath, std::string ext);
 	void AddSprite(class Sprite* sprite) { mSprites.push_back(sprite); }
 	void RemoveSprite(class Sprite* sprite);
+
+	Player* GetPlayer() { return mPlayer; }
 
 	void SetPhase(PHASE phase) { mPhase = phase; }
 	PHASE GetPhase() { return mPhase; }
@@ -112,12 +114,13 @@ private:
 	glm::vec3 mMousePos;
 
 
+	std::vector<class Actor*> mActors;
 	std::vector<class Sprite*> mSprites;
 	std::unordered_map<std::string, class Mesh*> mMeshes;
-	std::vector<class MeshComponent*> mMeshComponent;
+	std::vector<class MeshComponent*> mMeshComps;
 	//std::vector<class Mesh*> mMeshes;
 	std::unordered_map<std::string, class SkinMesh*> mSkinMeshes;
-
+	std::vector<class SkinMeshComponent*> mSkinMeshComps;
 
 	SDL_Window* mWindow;
 	// OpenGL context

@@ -10,6 +10,11 @@
 #include "Shader.hpp"
 #include "Plane.hpp"
 #include "Skinning.hpp"
+#include "Sprite.hpp"
+#include "MeshComponent.hpp"
+#include "SkinMeshComponent.hpp"
+#include "Roof.hpp"
+#include "TextBox.hpp"
 #include <fstream>
 #include <codecvt>
 #define STB_IMAGE_IMPLEMENTATION
@@ -363,18 +368,82 @@ bool Game::LoadData()
 	//		mConcretePlane = mesh;
 	//	}
 	//}
-	{
-		Plane* plane = new Plane();
-		if (plane->Load("./resources/Plane/", "Plane.obj")) {
-			plane->LoadConcreteTex("./resources/Plane/Textures/concrete_brick_wall_001_diffuse_4k.jpg");
-			plane->LoadBrickTex("./resources/Plane/Textures/Bricks077_4K_Color.jpg");
-			plane->SetPos(glm::vec3(0.f));
+	//{
+	//	Plane* plane = new Plane();
+	//	if (plane->Load("./resources/Plane/", "Plane.obj")) {
+	//		plane->LoadConcreteTex("./resources/Plane/Textures/concrete_brick_wall_001_diffuse_4k.jpg");
+	//		plane->LoadBrickTex("./resources/Plane/Textures/Bricks077_4K_Color.jpg");
+	//		plane->SetPos(glm::vec3(0.f));
+	//		glm::mat4 rotate = glm::rotate(glm::mat4(1.0f), (float)M_PI / 2.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	//		plane->SetRotate(rotate);
+	//		plane->SetScale(1.f);
+	//		mPlane = plane;
+	//	}
+	//}
+
+	Plane* plane = nullptr;
+	// 床を読み込む
+	plane->SetPlaneType(Plane::CONCRETE);
+	for (int y = 0; y < 5; y++) {
+		for (int x = 0; x < 15; x++) {
+			plane = new Plane(this);
 			glm::mat4 rotate = glm::rotate(glm::mat4(1.0f), (float)M_PI / 2.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-			plane->SetRotate(rotate);
-			plane->SetScale(1.f);
-			mPlane = plane;
+			plane->SetPosition(glm::vec3(1.f + 2.f * x, 1.f + 2.f * y, 0.f));
+			plane->SetRotation(rotate);
 		}
 	}
+
+	// 壁を読み込む
+	plane->SetPlaneType(Plane::BRICK);
+	for (int x = 0; x < 15; x++) {
+		for (float z = 1.f; z <= 3.f; z += 2.f) {
+			float x_pos = 1.0f + 2.0f * x;
+			float y_pos = 0.f;
+			plane = new Plane(this);
+			plane->SetPosition(glm::vec3(x_pos, y_pos, z));
+			plane->SetRotation(glm::mat4(1.f));
+			y_pos = 30.f;
+			plane->SetPosition(glm::vec3(x_pos, y_pos, z));
+			plane->SetRotation(glm::mat4(1.f));
+			y_pos = 0.f;
+			plane->SetPosition(glm::vec3(y_pos, x_pos, z));
+			glm::mat4 rotate = glm::rotate(glm::mat4(1.0f), (float)M_PI / 2.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+			mPlane->SetRotation(rotate);
+			y_pos = 30.f;
+			mPlane->SetPosition(glm::vec3(y_pos, x_pos, z));
+			mPlane->SetRotation(rotate);
+		}
+	}
+
+	// 屋根を読み込む
+	Actor* a = new Roof(this);
+	a->SetPosition(glm::vec3(15.f, 15.f, 4.0f));
+	a->SetRotation(glm::mat4(1.f));
+
+	// Player
+	mPlayer = new Player(this);
+	mPlayer->SetPosition(glm::vec3(29.f, 1.f, 0.f));
+
+	// 迷路の箱読み込み
+	MazeBox* mazebox = nullptr;
+	for (int y = 5; y < 15; y++) {
+		for (int x = 0; x < 15; x++) {
+			mazebox = new MazeBox(this);
+			mazebox->SetBoxType((y * 15 + x) % 2 ? MazeBox::BLACK : MazeBox::WHITE);
+			float x_pos = 1.0f + 2.0f * x;
+			float y_pos = 1.0f + 2.0f * y;
+			mazebox->SetPosition(glm::vec3(x_pos, y_pos, 0.f));
+		}
+	}
+
+	// TextBoxの読み込み
+	a = new TextBox(this);
+	a->SetPosition(glm::vec3(0.0f, -mWindowHeight / 4.0f, 0.0f));
+	a->SetRotation(glm::mat4(1.0f));
+	a->SetScale(1.5f);
+
+
+
 	{
 		// Treasure Box
 		Mesh* mesh = new Mesh();
@@ -473,8 +542,6 @@ bool Game::LoadData()
 	}
 
 
-
-
 	return true;
 }
 
@@ -538,75 +605,10 @@ void Game::ProcessInput()
 	{
 		mIsRunning = false;
 	}
-	glm::vec3 playerNewPos = mPlayer->GetPos();
-	if (keyState[SDL_SCANCODE_W]) {
-		playerNewPos = mPlayer->GetPos() + mPlayer->GetForward() * (float)mMoveSpeed;
-	}
-	if (keyState[SDL_SCANCODE_S]) {
-		playerNewPos = mPlayer->GetPos() - mPlayer->GetForward() * (float)mMoveSpeed;
-	}
-	if (keyState[SDL_SCANCODE_A]) {
-		mPlayer->SetPlayerRot(mPlayer->GetPlayerRot() + 1.f);
-	}
-	if (keyState[SDL_SCANCODE_D]) {
-		mPlayer->SetPlayerRot(mPlayer->GetPlayerRot() - 1.f);
-	}
 
-	// 受付と話す
-	if (mPhase != PHASE_TALK) {
-		if (
-			(2.0f < mPlayer->GetPos().x) && (mPlayer->GetPos().x < 3.0f) &&
-			(1.0f < mPlayer->GetPos().y) && (mPlayer->GetPos().y < 2.0f)
-			) {
-			if (keyState[SDL_SCANCODE_RETURN]) {
-				mPhase = PHASE_TALK;
-			}
-		}
-	}
-
-
-
-	// Playerの行動範囲制限
-	bool IsUpdatePlayerPos = false;
-	// 壁の外には行けない
-	if ((playerNewPos.x < 0.25f) || (playerNewPos.x > 29.75f) ||
-		(playerNewPos.y < 0.25f) || (playerNewPos.y > 29.75f)
-		) {
-		IsUpdatePlayerPos = false;
-	}
-	else if (
-		// カウンターの中には入れない
-		(0.f < playerNewPos.x) && (playerNewPos.x < 2.f) &&
-		(0.f < playerNewPos.y) && (playerNewPos.y < 3.5f)
-		) {
-		IsUpdatePlayerPos = false;
-	}
-	else if (mPhase == PHASE_TALK) {
-		// 話し中なら動かない
-		IsUpdatePlayerPos = false;
-	}
-	else {
-		IsUpdatePlayerPos = true;
-	}
-	// PlayerがMazeの領域にあるか？
-	if (
-		(0.f < playerNewPos.x) && (playerNewPos.x < 30.f) &&
-		(10.f < playerNewPos.y) && (playerNewPos.y < 30.f)
-		) {
-		if (mLevelData[static_cast<int>(playerNewPos.y / 2) - 5][static_cast<int>(playerNewPos.x / 2)] == '#') {
-			// Playerのいる場所が壁なら更新しない
-			IsUpdatePlayerPos = false;
-		}
-		else {
-			IsUpdatePlayerPos = true;
-
-		}
-	}
-
-
-
-	if (IsUpdatePlayerPos) {
-		mPlayer->SetPos(playerNewPos);
+	for (auto actor : mActors)
+	{
+		actor->ProcessInput(keyState);
 	}
 }
 
@@ -711,6 +713,18 @@ std::u16string Game::GetText(nl::json data)
 	return convert.from_bytes(str);
 }
 
+void Game::RemoveActor(Actor* actor)
+{
+	// Is it in actors?
+	auto iter = std::find(mActors.begin(), mActors.end(), actor);
+	if (iter != mActors.end())
+	{
+		// Swap to end of vector and pop off (avoid erase copies)
+		std::iter_swap(iter, mActors.end() - 1);
+		mActors.pop_back();
+	}
+}
+
 void Game::RemoveSprite(Sprite* sprite)
 {
 	auto iter = std::find(mSprites.begin(), mSprites.end(), sprite);
@@ -734,15 +748,12 @@ void Game::Draw()
 	glDisable(GL_BLEND);
 
 	mMeshShader->UseProgram();
-	for (auto mc : mMeshes)
-	{
+	for (auto mc : mMeshComps) {
 		mc->Draw(mMeshShader);
 	}
 
+
 	mSkinningShader->UseProgram();
-	for (auto sc : mSkinMeshes) {
-		sc->Draw(mSkinningShader);
-	}
 	//for (auto mesh : mMeshes) {
 	//	if (mesh.meshName == "TreasureChest") {
 	//		mesh.mesh->SetPos(glm::vec3(4.0f, 5.0f / 2.0f, 0.0f));
@@ -753,103 +764,107 @@ void Game::Draw()
 	//}
 
 	// 床描画
-	mPlane->SetPlaneType(Plane::CONCRETE);
-	for (int y = 0; y < 5; y++) {
-		for (int x = 0; x < 15; x++) {
-			float x_pos = 1.0f + 2.0f * x;
-			float y_pos = 1.0f + 2.0f * y;
-			glm::mat4 rotate = glm::rotate(glm::mat4(1.0f), (float)M_PI / 2.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-			mPlane->SetRotate(rotate);
-			mPlane->SetPos(glm::vec3(x_pos, y_pos, 0.0f));
-			mPlane->Draw(mMeshShader, mTicksCount / 1000.0f);
-		}
-	}
+	//mPlane->SetPlaneType(Plane::CONCRETE);
+	//for (int y = 0; y < 5; y++) {
+	//	for (int x = 0; x < 15; x++) {
+	//		float x_pos = 1.0f + 2.0f * x;
+	//		float y_pos = 1.0f + 2.0f * y;
+	//		glm::mat4 rotate = glm::rotate(glm::mat4(1.0f), (float)M_PI / 2.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	//		mPlane->SetRotate(rotate);
+	//		mPlane->SetPos(glm::vec3(x_pos, y_pos, 0.0f));
+	//		mPlane->Draw(mMeshShader, mTicksCount / 1000.0f);
+	//	}
+	//}
 
-	// 壁描画
-	mPlane->SetPlaneType(Plane::BRICK);
-	for (int x = 0; x < 15; x++) {
-		for (float z = 1.f; z <= 3.f; z += 2.f) {
-			float x_pos = 1.0f + 2.0f * x;
-			float y_pos = 0.f;
-			mPlane->SetPos(glm::vec3(x_pos, y_pos, z));
-			mPlane->SetRotate(glm::mat4(1.f));
-			mPlane->Draw(mMeshShader, mTicksCount / 1000.0f);
-			y_pos = 30.f;
-			mPlane->SetPos(glm::vec3(x_pos, y_pos, z));
-			mPlane->SetRotate(glm::mat4(1.f));
-			mPlane->Draw(mMeshShader, mTicksCount / 1000.0f);
-			y_pos = 0.f;
-			mPlane->SetPos(glm::vec3(y_pos, x_pos, z));
-			glm::mat4 rotate = glm::rotate(glm::mat4(1.0f), (float)M_PI / 2.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-			mPlane->SetRotate(rotate);
-			mPlane->Draw(mMeshShader, mTicksCount / 1000.0f);
-			y_pos = 30.f;
-			mPlane->SetPos(glm::vec3(y_pos, x_pos, z));
-			mPlane->SetRotate(rotate);
-			mPlane->Draw(mMeshShader, mTicksCount / 1000.0f);
-		}
-	}
+	//// 壁描画
+	//mPlane->SetPlaneType(Plane::BRICK);
+	//for (int x = 0; x < 15; x++) {
+	//	for (float z = 1.f; z <= 3.f; z += 2.f) {
+	//		float x_pos = 1.0f + 2.0f * x;
+	//		float y_pos = 0.f;
+	//		mPlane->SetPos(glm::vec3(x_pos, y_pos, z));
+	//		mPlane->SetRotate(glm::mat4(1.f));
+	//		mPlane->Draw(mMeshShader, mTicksCount / 1000.0f);
+	//		y_pos = 30.f;
+	//		mPlane->SetPos(glm::vec3(x_pos, y_pos, z));
+	//		mPlane->SetRotate(glm::mat4(1.f));
+	//		mPlane->Draw(mMeshShader, mTicksCount / 1000.0f);
+	//		y_pos = 0.f;
+	//		mPlane->SetPos(glm::vec3(y_pos, x_pos, z));
+	//		glm::mat4 rotate = glm::rotate(glm::mat4(1.0f), (float)M_PI / 2.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+	//		mPlane->SetRotate(rotate);
+	//		mPlane->Draw(mMeshShader, mTicksCount / 1000.0f);
+	//		y_pos = 30.f;
+	//		mPlane->SetPos(glm::vec3(y_pos, x_pos, z));
+	//		mPlane->SetRotate(rotate);
+	//		mPlane->Draw(mMeshShader, mTicksCount / 1000.0f);
+	//	}
+	//}
 
-	// 屋根描画
-	mRoof->SetPos(glm::vec3(15.f, 15.f, 4.f));
-	mRoof->SetRotate(glm::mat4(1.f));
-	mRoof->SetScale(15.f);
-	mRoof->Draw(mMeshShader, mTicksCount / 1000.f);
+	//// 屋根描画
+	//mRoof->SetPos(glm::vec3(15.f, 15.f, 4.f));
+	//mRoof->SetRotate(glm::mat4(1.f));
+	//mRoof->SetScale(15.f);
+	//mRoof->Draw(mMeshShader, mTicksCount / 1000.f);
 
-	// 受付カウンター描画
-	mMazeBox->SetScale(0.25f);
-	for (int z = 0; z < 2; z++) {
-		for (int y = 0; y < 7; y++) {
-			mMazeBox->SetBoxType((z * 7 + y) % 2 ? MazeBox::BLACK : MazeBox::WHITE);
-			mMazeBox->SetPos(glm::vec3(1.75f, 0.5f * y + 0.25, 0.5f * z + 0.5f));
-			mMazeBox->Draw(mMeshShader, mTicksCount / 1000.0f);
-		}
-		for (int x = 0; x < 3; x++) {
-			mMazeBox->SetBoxType((z * 3 + x) % 2 ? MazeBox::WHITE : MazeBox::BLACK);
-			mMazeBox->SetPos(glm::vec3(0.5f * x + 0.25, 3.25f, 0.5f * z + 0.5f));
-			mMazeBox->Draw(mMeshShader, mTicksCount / 1000.0f);
-		}
-	}
+	//// 受付カウンター描画
+	//mMazeBox->SetScale(0.25f);
+	//for (int z = 0; z < 2; z++) {
+	//	for (int y = 0; y < 7; y++) {
+	//		mMazeBox->SetBoxType((z * 7 + y) % 2 ? MazeBox::BLACK : MazeBox::WHITE);
+	//		mMazeBox->SetPos(glm::vec3(1.75f, 0.5f * y + 0.25, 0.5f * z + 0.5f));
+	//		mMazeBox->Draw(mMeshShader, mTicksCount / 1000.0f);
+	//	}
+	//	for (int x = 0; x < 3; x++) {
+	//		mMazeBox->SetBoxType((z * 3 + x) % 2 ? MazeBox::WHITE : MazeBox::BLACK);
+	//		mMazeBox->SetPos(glm::vec3(0.5f * x + 0.25, 3.25f, 0.5f * z + 0.5f));
+	//		mMazeBox->Draw(mMeshShader, mTicksCount / 1000.0f);
+	//	}
+	//}
 
-	// Mazeの床描画
-	mMazeBox->SetScale(1.0f);
-	for (int y = 5; y < 15; y++) {
-		for (int x = 0; x < 15; x++) {
-			mMazeBox->SetBoxType((y * 15 + x) % 2 ? MazeBox::BLACK : MazeBox::WHITE);
-			float x_pos = 1.0f + 2.0f * x;
-			float y_pos = 1.0f + 2.0f * y;
+	//// Mazeの床描画
+	//mMazeBox->SetScale(1.0f);
+	//for (int y = 5; y < 15; y++) {
+	//	for (int x = 0; x < 15; x++) {
+	//		mMazeBox->SetBoxType((y * 15 + x) % 2 ? MazeBox::BLACK : MazeBox::WHITE);
+	//		float x_pos = 1.0f + 2.0f * x;
+	//		float y_pos = 1.0f + 2.0f * y;
 
-			if (mLevelData[y - 5][x] == '-') {
-				// 通路
-				mMazeBox->SetPos(glm::vec3(x_pos, y_pos, 0.f));
-			}
-			else {
-				// 通れない
-				glm::vec3 playerPos = mPlayer->GetPos();
-				if (
-					(x_pos - 1.5 <= playerPos.x) && (playerPos.x <= x_pos + 1.5) &&
-					(y_pos - 1.5 <= playerPos.y) && (playerPos.y <= y_pos + 1.5)
-					) {
-					if (mMazeData[y - 5][x] <= 2.0f) {
-						mMazeData[y - 5][x] += 0.01;
-					}
-				}
-				else {
-					if (mMazeData[y - 5][x] >= 0.f) {
-						mMazeData[y - 5][x] -= 0.01;
-					}
-				}
-				mMazeBox->SetPos(glm::vec3(x_pos, y_pos, mMazeData[y - 5][x]));
-			}
+	//		if (mLevelData[y - 5][x] == '-') {
+	//			// 通路
+	//			mMazeBox->SetPos(glm::vec3(x_pos, y_pos, 0.f));
+	//		}
+	//		else {
+	//			// 通れない
+	//			glm::vec3 playerPos = mPlayer->GetPos();
+	//			if (
+	//				(x_pos - 1.5 <= playerPos.x) && (playerPos.x <= x_pos + 1.5) &&
+	//				(y_pos - 1.5 <= playerPos.y) && (playerPos.y <= y_pos + 1.5)
+	//				) {
+	//				if (mMazeData[y - 5][x] <= 2.0f) {
+	//					mMazeData[y - 5][x] += 0.01;
+	//				}
+	//			}
+	//			else {
+	//				if (mMazeData[y - 5][x] >= 0.f) {
+	//					mMazeData[y - 5][x] -= 0.01;
+	//				}
+	//			}
+	//			mMazeBox->SetPos(glm::vec3(x_pos, y_pos, mMazeData[y - 5][x]));
+	//		}
 
-			mMazeBox->Draw(mMeshShader, mTicksCount / 1000.0f);
-		}
-	}
+	//		mMazeBox->Draw(mMeshShader, mTicksCount / 1000.0f);
+	//	}
+	//}
 
 
 	// Draw Skin Mesh
 	mSkinningShader->UseProgram();
-	mPlayer->Draw(mSkinningShader, mTicksCount / 1000.0f);
+	for (auto skinmesh : mSkinMeshComps) {
+		skinmesh->Draw(mSkinningShader);
+	}
+
+	//mPlayer->Draw(mSkinningShader, mTicksCount / 1000.0f);
 
 	// Draw Sprites
 	glDisable(GL_DEPTH_TEST);
@@ -858,25 +873,29 @@ void Game::Draw()
 	glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
 	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ZERO);
 
+	mSpriteShader->UseProgram();
+	for (auto sprite : mSprites) {
+		sprite->Draw(mSpriteShader);
+	}
 
 	// 文字描画
 	// エンターキーではなす
-	if (mPhase != PHASE_TALK) {
-		if (
-			(2.0f < mPlayer->GetPos().x) && (mPlayer->GetPos().x < 3.0f) &&
-			(1.0f < mPlayer->GetPos().y) && (mPlayer->GetPos().y < 2.0f)
-			) {
-			mText->SetPos(glm::vec3(0.0f, 300.f, 0.f));
-			mText->SetText(u"エンターキーで話す");
-			mText->SetTextColor(glm::vec3(0.f, 0.f, 0.2f));
-			mText->Draw(mTextShader);
-		}
-	}
+	//if (mPhase != PHASE_TALK) {
+	//	if (
+	//		(2.0f < mPlayer->GetPos().x) && (mPlayer->GetPos().x < 3.0f) &&
+	//		(1.0f < mPlayer->GetPos().y) && (mPlayer->GetPos().y < 2.0f)
+	//		) {
+	//		mText->SetPos(glm::vec3(0.0f, 300.f, 0.f));
+	//		mText->SetText(u"エンターキーで話す");
+	//		mText->SetTextColor(glm::vec3(0.f, 0.f, 0.2f));
+	//		mText->Draw(mTextShader);
+	//	}
+	//}
 
-	// 話し中ならトーク画面描画
-	if (mPhase == PHASE_TALK) {
-	}
-	mTextBox->Draw(mSpriteShader);
+	//// 話し中ならトーク画面描画
+	//if (mPhase == PHASE_TALK) {
+	//}
+	//mTextBox->Draw(mSpriteShader);
 
 
 

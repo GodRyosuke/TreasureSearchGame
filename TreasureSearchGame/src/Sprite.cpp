@@ -1,6 +1,7 @@
 #include "Actor.hpp"
 #include "Sprite.hpp"
 #include "Shader.hpp"
+#include "Game.hpp"
 #include "Texture.hpp"
 
 static float SpriteVertices[] =
@@ -20,7 +21,7 @@ static unsigned int SpriteIndices[] =
 Sprite::Sprite(Actor* owner)
 	:Component(owner)
 {
-
+	mOwner->GetGame()->AddSprite(this);
 }
 
 bool Sprite::Load(std::string filePath, float alpha)

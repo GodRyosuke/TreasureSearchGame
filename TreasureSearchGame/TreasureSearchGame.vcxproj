@@ -171,12 +171,14 @@ XCOPY "$(SolutionDir)TreasureSearchGame\resources" %OUTPUT_DIRECTORY% /e /y</Com
     <ClInclude Include="include\MeshComponent.hpp" />
     <ClInclude Include="include\Plane.hpp" />
     <ClInclude Include="include\Player.hpp" />
+    <ClInclude Include="include\Roof.hpp" />
     <ClInclude Include="include\Shader.hpp" />
     <ClInclude Include="include\SkinMeshComponent.hpp" />
     <ClInclude Include="include\Skinning.hpp" />
     <ClInclude Include="include\Sprite.hpp" />
     <ClInclude Include="include\TalkText.hpp" />
     <ClInclude Include="include\Text.hpp" />
+    <ClInclude Include="include\TextBox.hpp" />
     <ClInclude Include="include\Texture.hpp" />
     <ClInclude Include="include\TextureShadowMap.hpp" />
   </ItemGroup>
@@ -191,12 +193,14 @@ XCOPY "$(SolutionDir)TreasureSearchGame\resources" %OUTPUT_DIRECTORY% /e /y</Com
     <ClCompile Include="src\MeshComponent.cpp" />
     <ClCompile Include="src\Plane.cpp" />
     <ClCompile Include="src\Player.cpp" />
+    <ClCompile Include="src\Roof.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\SkinMeshComponent.cpp" />
     <ClCompile Include="src\Skinning.cpp" />
     <ClCompile Include="src\Sprite.cpp" />
     <ClCompile Include="src\TalkText.cpp" />
     <ClCompile Include="src\Text.cpp" />
+    <ClCompile Include="src\TextBox.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\TextureShadowMap.cpp" />
   </ItemGroup>
