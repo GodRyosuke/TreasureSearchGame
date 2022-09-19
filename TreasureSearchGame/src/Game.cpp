@@ -10,11 +10,13 @@
 #include "Shader.hpp"
 #include "Plane.hpp"
 #include "Skinning.hpp"
-#include "Sprite.hpp"
+#include "SpriteComponent.hpp"
 #include "MeshComponent.hpp"
 #include "SkinMeshComponent.hpp"
 #include "Roof.hpp"
 #include "TextBox.hpp"
+#include "TextComponent.hpp"
+#include "TalkTextComponent.hpp"
 #include <fstream>
 #include <codecvt>
 #define STB_IMAGE_IMPLEMENTATION
@@ -442,69 +444,42 @@ bool Game::LoadData()
 	a->SetRotation(glm::mat4(1.0f));
 	a->SetScale(1.5f);
 
-
-
-	{
-		// Treasure Box
-		Mesh* mesh = new Mesh();
-		if (mesh->Load("./resources/TreasureBox/", "scene.gltf")) {
-			mesh->SetPos(glm::vec3(4.0f, 5.0f / 2.0f, 0.0f));
-			mesh->SetRotate(glm::mat4(1.0f));
-			mesh->SetScale(0.01f / 2.0f);
-			mMeshes.push_back(MeshData(mesh, "TreasureChest"));
-		}
-	}
-	{
-		// Maze Box
-		MazeBox* mazeBox = new MazeBox("./resources/MazeBox/", 
-			"MazeBox.fbx", "BlackUV.png", "WhiteUV.png");
-		mazeBox->SetPos(glm::vec3(4.0f, 5.0f, 0.0f));
-		mazeBox->SetRotate(glm::mat4(1.0f));
-		mazeBox->SetScale(1.0f);
-		mazeBox->SetBoxType(MazeBox::BLACK);
-		mMazeBox = mazeBox;
-		mMazeData = new float* [10];
-		for (int y = 0; y < 10; y++) {
-			mMazeData[y] = new float[15];
-			for (int x = 0; x < 15; x++) {
-				mMazeData[y][x] = 0.f;
-			}
-		}
-	}
-	{
-		// ‰®ª
-		Mesh* mesh = new Mesh();
-		if (mesh->Load("./resources/Roof/", "Roof.obj")) {
-			mesh->SetPos(glm::vec3(15.f, 15.f, 4.0f));
-			mesh->SetRotate(glm::mat4(1.0f));
-			mesh->SetScale(1.f);
-		}
-		mRoof = mesh;
-	}
+	// Load Text
+	
 
 
 
+	//{
+	//	// Treasure Box
+	//	Mesh* mesh = new Mesh();
+	//	if (mesh->Load("./resources/TreasureBox/", "scene.gltf")) {
+	//		mesh->SetPos(glm::vec3(4.0f, 5.0f / 2.0f, 0.0f));
+	//		mesh->SetRotate(glm::mat4(1.0f));
+	//		mesh->SetScale(0.01f / 2.0f);
+	//		mMeshes.push_back(MeshData(mesh, "TreasureChest"));
+	//	}
+	//}
+	//{
+	//	// Maze Box
+	//	MazeBox* mazeBox = new MazeBox("./resources/MazeBox/", 
+	//		"MazeBox.fbx", "BlackUV.png", "WhiteUV.png");
+	//	mazeBox->SetPos(glm::vec3(4.0f, 5.0f, 0.0f));
+	//	mazeBox->SetRotate(glm::mat4(1.0f));
+	//	mazeBox->SetScale(1.0f);
+	//	mazeBox->SetBoxType(MazeBox::BLACK);
+	//	mMazeBox = mazeBox;
+	//	mMazeData = new float* [10];
+	//	for (int y = 0; y < 10; y++) {
+	//		mMazeData[y] = new float[15];
+	//		for (int x = 0; x < 15; x++) {
+	//			mMazeData[y][x] = 0.f;
+	//		}
+	//	}
+	//}
 
-
-
-
-
-
-	// Load Sprites
-	{
-		Sprite* sprite = new Sprite();
-		if (sprite->Load("./resources/TextBox.png")) {
-			sprite->SetPos(glm::vec3(0.0f, -mWindowHeight / 4.0f, 0.0f));
-			sprite->SetRotate(glm::mat4(1.0f));
-			sprite->SetScale(1.5f);
-			sprite->SetAlpha(0.7f);
-			mTextBox = sprite;;
-			mSprites.push_back(SpriteData(sprite, "TextBox"));
-		}
-	}
 
 	// Load Text
-	mText = new Text();
+	mText = new TextComponent();
 	mText->SetPos(glm::vec3(0.0f));
 	mText->SetRotate(glm::mat4(1.0f));
 	mText->SetScale(1.0f);
@@ -725,16 +700,22 @@ void Game::RemoveActor(Actor* actor)
 	}
 }
 
-void Game::RemoveSprite(Sprite* sprite)
+void Game::RemoveSpriteComp(SpriteComponent* sprite)
 {
-	auto iter = std::find(mSprites.begin(), mSprites.end(), sprite);
-	mSprites.erase(iter);
+	auto iter = std::find(mSpriteComps.begin(), mSpriteComps.end(), sprite);
+	mSpriteComps.erase(iter);
 }
 
 void Game::RemoveMesh(Mesh* mesh)
 {
 	auto iter = std::find(mMeshes.begin(), mMeshes.end(), mesh);
 	mMeshes.erase(iter);
+}
+
+void Game::RemoveTextComp(class TextComponent* text)
+{
+	auto iter = std::find(mTextComps.begin(), mTextComps.end(), text);
+	mTextComps.erase(iter);
 }
 
 void Game::Draw()
@@ -874,8 +855,14 @@ void Game::Draw()
 	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ZERO);
 
 	mSpriteShader->UseProgram();
-	for (auto sprite : mSprites) {
+	for (auto sprite : mSpriteComps) {
 		sprite->Draw(mSpriteShader);
+	}
+
+	// Draw Text
+	mTextShader->UseProgram();
+	for (auto text : mTextComps) {
+		text->Draw(mTextShader);
 	}
 
 	// •¶Žš•`‰æ

@@ -28,10 +28,12 @@ public:
 
 	class Mesh* GetMesh(std::string filePath, std::string ext);
 	class SkinMesh* GetSkinMesh(std::string filePath, std::string ext);
-	void AddSprite(class Sprite* sprite) { mSprites.push_back(sprite); }
-	void RemoveSprite(class Sprite* sprite);
+	void AddSpriteComp(class SpriteComponent* sprite) { mSpriteComps.push_back(sprite); }
+	void RemoveSpriteComp(class SpriteComponent* sprite);
+	void AddTextComp(class TextComponent* text) { mTextComps.push_back(text); }
+	void RemoveTextComp(class TextComponent* text);
 
-	Player* GetPlayer() { return mPlayer; }
+	class Player* GetPlayer() { return mPlayer; }
 
 	void SetPhase(PHASE phase) { mPhase = phase; }
 	PHASE GetPhase() { return mPhase; }
@@ -39,7 +41,7 @@ public:
 	// posÇ™ï«Ç©ÅH
 	bool IsWall(glm::vec3 pos);
 
-	void AddMeshComp(class MeshComponent* meshcomp) { mMeshComponent.push_back(meshcomp); }
+	void AddMeshComp(class MeshComponent* meshcomp) { mMeshComps.push_back(meshcomp); }
 	void RemoveMesh(class Mesh* mesh);
 	Uint32 GetTicksCount() { return mTicksCount; }
 
@@ -82,11 +84,11 @@ private:
 	std::vector<SpotLight> mSpotLights;
 
 
-	class Sprite* mTextBox;
+	class SpriteComponent* mTextBox;
 	class Mesh* mConcretePlane;
 	class Mesh* mRoof;
 	
-	class Text* mText;
+	class TextComponent* mText;
 	nl::json mTextData;
 
 	class Player* mPlayer;
@@ -115,7 +117,8 @@ private:
 
 
 	std::vector<class Actor*> mActors;
-	std::vector<class Sprite*> mSprites;
+	std::vector<class SpriteComponent*> mSpriteComps;
+	std::vector<class TextComponent*> mTextComps;
 	std::unordered_map<std::string, class Mesh*> mMeshes;
 	std::vector<class MeshComponent*> mMeshComps;
 	//std::vector<class Mesh*> mMeshes;

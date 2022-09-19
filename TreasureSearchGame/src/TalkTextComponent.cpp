@@ -1,12 +1,12 @@
-#include "TalkText.hpp"
+#include "TalkTextComponent.hpp"
 #include "Shader.hpp"
 #include "Actor.hpp"
 #include <fstream>
 #include <codecvt>
 
 
-TalkText::TalkText(Actor* owner)
-	:Text(owner)
+TalkTextComponent::TalkTextComponent(Actor* owner)
+	:TextComponent(owner)
 {
 	// ‰ï˜b‚ÉŽg‚¤•¶Žš—ñ“Ç‚Ýž‚Ý
 	{
@@ -20,12 +20,12 @@ TalkText::TalkText(Actor* owner)
 	}
 }
 
-void TalkText::Input(const uint8_t* keyState)
+void TalkTextComponent::Input(const uint8_t* keyState)
 {
 
 }
 
-void TalkText::Draw(Shader* shader)
+void TalkTextComponent::Draw(Shader* shader)
 {
 	shader->UseProgram();
 	glBindVertexArray(mVertexArray);
@@ -96,7 +96,7 @@ void TalkText::Draw(Shader* shader)
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-std::u16string TalkText::GetText(nl::json data)
+std::u16string TalkTextComponent::GetText(nl::json data)
 {
 	std::string str;
 	data.get_to(str);
@@ -104,7 +104,7 @@ std::u16string TalkText::GetText(nl::json data)
 	return convert.from_bytes(str);
 }
 
-void TalkText::ShowTalkText(Shader* shader)
+void TalkTextComponent::ShowTalkText(Shader* shader)
 {
 	SetText(GetText(mData["TalkCostomer"]["Welcome"]["Talk2"]));
 	mOwner->SetPosition(glm::vec3(0.0f, -150.0f, 0.f));

@@ -1,5 +1,5 @@
 #include "Actor.hpp"
-#include "Sprite.hpp"
+#include "SpriteComponent.hpp"
 #include "Shader.hpp"
 #include "Game.hpp"
 #include "Texture.hpp"
@@ -18,13 +18,14 @@ static unsigned int SpriteIndices[] =
 	2, 3, 0
 };
 
-Sprite::Sprite(Actor* owner)
+SpriteComponent::SpriteComponent(Actor* owner)
 	:Component(owner)
+	,mIsDraw(true)
 {
-	mOwner->GetGame()->AddSprite(this);
+	mOwner->GetGame()->AddSpriteComp(this);
 }
 
-bool Sprite::Load(std::string filePath, float alpha)
+bool SpriteComponent::Load(std::string filePath, float alpha)
 {
 	mAlpha = alpha;
 	// Texture“Ç‚Ýž‚Ý
@@ -61,7 +62,7 @@ bool Sprite::Load(std::string filePath, float alpha)
 }
 
 
-void Sprite::SetUniforms(Shader* shader)
+void SpriteComponent::SetUniforms(Shader* shader)
 {
 	glm::mat4 texScalingMat = glm::scale(glm::mat4(1.0f), glm::vec3(mTexture->getWidth(), mTexture->getHeight(), 1.f));
 	glm::mat4 world = mOwner->GetWorldTransform() * texScalingMat;
@@ -69,8 +70,11 @@ void Sprite::SetUniforms(Shader* shader)
 	shader->SetFloatUniform("gSpriteAlpha", mAlpha);
 }
 
-void Sprite::Draw(Shader* shader)
+void SpriteComponent::Draw(Shader* shader)
 {
+	if (!mIsDraw) {
+		return;
+	}
 	shader->UseProgram();
 	glBindVertexArray(mVertexArray);
 

@@ -1,12 +1,12 @@
-#include "Text.hpp"
+#include "TextComponent.hpp"
 #include "json.hpp"
 
 namespace nl = nlohmann;
 
-class TalkText : public Text
+class TalkTextComponent : public TextComponent
 {
 public:
-	TalkText(class Actor* owner);
+	TalkTextComponent(class Actor* owner);
 	void Input(const uint8_t* keyState);
 	void Draw(Shader* shader) override;
 	void ShowTalkText(Shader* shader);

@@ -4,13 +4,16 @@
 #include "glm.hpp"
 #include "Component.hpp"
 
-class Sprite : public Component {
+class SpriteComponent : public Component {
 public:
-	Sprite(class Actor* owner);
+	SpriteComponent(class Actor* owner);
 	bool Load(std::string filePath, float alpha = 1.0f);
 	virtual void Draw(class Shader* shader);
 
 	void SetAlpha(float alpha) { mAlpha = alpha; }
+	void SetIsDraw(bool isdraw) { mIsDraw = isdraw; }
+	bool GetIsDraw() { return mIsDraw; }
+
 protected:
 	virtual void SetUniforms(class Shader* shader);
 
@@ -19,4 +22,5 @@ protected:
 
 private:
 	class Texture* mTexture;
+	bool mIsDraw;
 };

@@ -36,10 +36,10 @@
     <ClInclude Include="include\TextureShadowMap.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="include\Sprite.hpp">
+    <ClInclude Include="include\SpriteComponent.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="include\Text.hpp">
+    <ClInclude Include="include\TextComponent.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="include\MazeBox.hpp">
@@ -54,7 +54,7 @@
     <ClInclude Include="include\Plane.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="include\TalkText.hpp">
+    <ClInclude Include="include\TalkTextComponent.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="include\Actor.hpp">
@@ -73,6 +73,9 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="include\TextBox.hpp">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Text.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
@@ -98,10 +101,10 @@
     <ClCompile Include="src\TextureShadowMap.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="src\Sprite.cpp">
+    <ClCompile Include="src\SpriteComponent.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="src\Text.cpp">
+    <ClCompile Include="src\TextComponent.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="src\MazeBox.cpp">
@@ -116,7 +119,7 @@
     <ClCompile Include="src\Plane.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="src\TalkText.cpp">
+    <ClCompile Include="src\TalkTextComponent.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="src\Actor.cpp">
@@ -135,6 +138,9 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="src\TextBox.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Text.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
