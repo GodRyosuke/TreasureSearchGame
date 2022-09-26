@@ -20,6 +20,7 @@
 #include "Text.hpp"
 #include "TalkText.hpp"
 #include "Counter.hpp"
+#include "Clerk.hpp"
 #include <fstream>
 #include <codecvt>
 #define STB_IMAGE_IMPLEMENTATION
@@ -355,6 +356,9 @@ bool Game::LoadData()
 	a->SetPosition(glm::vec3(0.0f, -mWindowHeight / 4.0f, 0.0f));
 	a->SetRotation(glm::mat4(1.0f));
 	a->SetScale(1.5f);
+
+	// “Xˆõ
+	a = new Clerk(this);
 
 
 

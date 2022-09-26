@@ -49,6 +49,7 @@ void Player::ActorInput(const uint8_t* keys)
 			) {
 			if (keys[SDL_SCANCODE_RETURN]) {
 				GetGame()->SetPhase(Game::PHASE_TALK);
+				mState = TALK;
 			}
 		}
 	}
@@ -120,13 +121,13 @@ void Player::UpdateActor(float deltatime)
 	case Player::WALK:
 	{
 		mDebugText->SetText(u"walk");
-		mSkinMeshComp->SetAnimIdx(9);
+		mSkinMeshComp->SetAnimIdx(8);
 		break;
 	}
 	case Player::IDLE:
 	{
 		mDebugText->SetText(u"idle");
-		mSkinMeshComp->SetAnimIdx(5);
+		mSkinMeshComp->SetAnimIdx(4);
 		break;
 	}
 	case Player::TALK:
