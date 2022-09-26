@@ -10,7 +10,7 @@
 
 class TextComponent : public SpriteComponent {
 public:
-	TextComponent(class Actor* owner);
+	TextComponent(class Actor* owner, Type type = TEXT);
 	virtual void Draw(class Shader* shader) override;
 	void DrawTalkText(class Shader* shader);
 	void Update(float deltaTime);
@@ -34,7 +34,6 @@ protected:
 	unsigned int mVertexBuffer;
 
 private:
-	virtual void InitType() override { mType = TEXT; }
 
 	FT_Face mFontFace;
 	glm::vec3 mTextColor;

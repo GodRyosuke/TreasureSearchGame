@@ -18,11 +18,11 @@ static unsigned int SpriteIndices[] =
 	2, 3, 0
 };
 
-SpriteComponent::SpriteComponent(Actor* owner)
+SpriteComponent::SpriteComponent(Actor* owner, Type type)
 	:Component(owner)
 	,mIsDraw(true)
+	,mType(type)
 {
-	InitType();
 	mOwner->GetGame()->AddSpriteComp(this);
 }
 

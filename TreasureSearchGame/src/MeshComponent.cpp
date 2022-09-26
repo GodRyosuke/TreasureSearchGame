@@ -11,21 +11,11 @@ MeshComponent::MeshComponent(Actor* owner, bool isSkeletal)
     mOwner->GetGame()->AddMeshComp(this);
 }
 
-void MeshComponent::SetMatrixUniform(Shader* shader)
-{
-    shader->SetMatrixUniform("ModelTransform", mOwner->GetWorldTransform());
-}
-
-void MeshComponent::SetTexture(std::string filePath)
-{
-    mMesh->SetTexture(filePath);
-}
-
 void MeshComponent::Draw(Shader* shader)
 {
     shader->UseProgram();
-
-    SetMatrixUniform(shader);
+    mMesh->SetTexture(mTexturePath);
+    shader->SetMatrixUniform("ModelTransform", mOwner->GetWorldTransform());
 
     mMesh->BindVertexArray();
     mMesh->SetMaterialUniform(shader);  // Material, Texture‚È‚Ç‚ğİ’è

@@ -13,7 +13,7 @@ public:
 		NUM_TYPE
 	};
 
-	SpriteComponent(class Actor* owner);
+	SpriteComponent(class Actor* owner, Type type = SPRITE);
 	bool Load(std::string filePath, float alpha = 1.0f);
 	virtual void Draw(class Shader* shader);
 
@@ -31,7 +31,6 @@ protected:
 	Type mType;
 
 private:
-	virtual void InitType() { mType = SPRITE; }
 
 	class Texture* mTexture;
 	bool mIsDraw;

@@ -4,8 +4,8 @@
 #include "Actor.hpp"
 #include "Game.hpp"
 
-TextComponent::TextComponent(Actor* owner)
-	:SpriteComponent(owner)
+TextComponent::TextComponent(Actor* owner, Type type)
+	:SpriteComponent(owner, type)
 {
 	// TTFì«Ç›çûÇ›
 	FT_Library library;

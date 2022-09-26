@@ -11,6 +11,5 @@ public:
 
 
 private:
-	virtual void InitType() override { mType = TALK_TEXT; }
 	std::u16string mText;
 };

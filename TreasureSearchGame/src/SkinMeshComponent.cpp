@@ -11,14 +11,20 @@ SkinMeshComponent::SkinMeshComponent(Actor* owner)
 
 void SkinMeshComponent::Update(float deltatime)
 {
-	mSkinMesh->GetBoneTransform(mOwner->GetGame()->GetTicksCount(), mBoneMatrixPallete);
+	mSkinMesh->GetBoneTransform(mOwner->GetGame()->GetTicksCount() / 1000.f, mBoneMatrixPallete);
 }
 
-void SkinMeshComponent::SetMatrixUniform(Shader* shader)
+void SkinMeshComponent::Draw(Shader* shader)
 {
-	MeshComponent::SetMatrixUniform(shader); // world trans‚ÌÝ’è
+	mSkinMesh->SetAnimIdx(mAnimIdx);
+	shader->UseProgram();
+	shader->SetMatrixUniform("ModelTransform", mOwner->GetWorldTransform());
 	for (int i = 0; i < mBoneMatrixPallete.size(); i++) {
 		std::string uniformName = "uMatrixPalette[" + std::to_string(i) + ']';
 		shader->SetMatrixUniform(uniformName, mBoneMatrixPallete[i]);
 	}
+	mSkinMesh->BindVertexArray();
+	mSkinMesh->SetMaterialUniform(shader);  // Material, Texture‚È‚Ç‚ðÝ’è
+	mSkinMesh->UnBindVertexArray();
 }
+

@@ -13,10 +13,10 @@ Plane::Plane(Game* game)
 void Plane::UpdateActor(float deltatime)
 {
 	if (mType == CONCRETE) {
-		mMeshComp->SetTexture("./resources/Textures/concrete_brick_wall_001_diffuse_4k.jpg");
+		mMeshComp->SetTexture("./resources/Plane/Textures/concrete_brick_wall_001_diffuse_4k.jpg");
 	}
 	else if (mType == BRICK) {
-		mMeshComp->SetTexture("./resources/Textures/Bricks077_4K_Color.jpg");
+		mMeshComp->SetTexture("./resources/Plane/Textures/Bricks077_4K_Color.jpg");
 	}
 	else {
 		mMeshComp->SetTexture("");

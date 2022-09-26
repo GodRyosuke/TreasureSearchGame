@@ -74,7 +74,7 @@ void Actor::ActorInput(const uint8_t* keyState)
 
 glm::vec3 Actor::GetForward() const
 {
-	glm::vec3 trans = mRotation * glm::vec4(1.f, 0.f, 0.f, 1.f);
+	glm::vec3 trans = mRotation * glm::vec4(  1.f, 0.f, 0.f, 1.f);
 	return trans;
 }
 
@@ -117,7 +117,7 @@ void Actor::ComputeWorldTransform()
 		// Scale, then rotate, then translate
 		glm::mat4 ScaleMat = glm::scale(glm::mat4(1.0f), glm::vec3(mScale, mScale, mScale));
 		glm::mat4 TranslateMat = glm::translate(glm::mat4(1.0f), mPosition);
-		glm::mat4 TransformMat = TranslateMat * mRotation * ScaleMat;
+		mWorldTransform = TranslateMat * mRotation * ScaleMat;
 
 		// Inform components world transform updated
 		for (auto comp : mComponents)

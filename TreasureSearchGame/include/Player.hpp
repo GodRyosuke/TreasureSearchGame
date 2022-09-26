@@ -5,6 +5,14 @@
 class Player : public Actor
 {
 public:
+	enum State {
+		WALK,
+		IDLE,
+		TALK,
+		OPEN_CHEST,
+		NUM_STATE
+	};
+
 	Player(class Game* game);
 
 	void ActorInput(const uint8_t* keys) override;
@@ -15,7 +23,9 @@ public:
 private:
 	class FollowCamera* mFollowCamera;
 	class SkinMeshComponent* mSkinMeshComp;
+	class TextComponent* mDebugText;
 	float mMoveSpeed;
 
 	float mPlayerRot;
+	State mState;
 };

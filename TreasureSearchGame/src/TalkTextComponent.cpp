@@ -5,7 +5,7 @@
 
 
 TalkTextComponent::TalkTextComponent(Actor* owner)
-	:TextComponent(owner)
+	:TextComponent(owner, TALK_TEXT)
 {
 
 }

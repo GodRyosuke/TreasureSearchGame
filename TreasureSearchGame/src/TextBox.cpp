@@ -9,7 +9,7 @@ TextBox::TextBox(Game* game)
 {
 	mSprite = new SpriteComponent(this);
 	mSprite->Load("./resources/TextBox.png", 0.7f);
-	mSprite->SetIsDraw(false);	// デフォルトでは描画しない
+	mSprite->SetIsDraw(true);	// デフォルトでは描画しない
 }
 
 void TextBox::UpdateActor(float deltatime)

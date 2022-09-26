@@ -8,6 +8,7 @@
 
 SkinMesh::SkinMesh()
     :Mesh()
+    ,mAnimIdx(0)
 {
 
 }
@@ -196,7 +197,7 @@ void SkinMesh::CalcInterpolatedPosition(aiVector3D& Out, float AnimationTimeTick
 
 const aiAnimation* SkinMesh::SetAnimPointer()
 {
-    return m_pScene->mAnimations[0];
+    return m_pScene->mAnimations[mAnimIdx];
 }
 
 
@@ -274,10 +275,10 @@ void SkinMesh::GetBoneTransform(float TimeInSeconds, std::vector<glm::mat4>& Tra
         return;
     }
 
-    float TicksPerSecond = (float)(m_pScene->mAnimations[0]->mTicksPerSecond != NULL ? m_pScene->mAnimations[0]->mTicksPerSecond : 25.0f);
+    float TicksPerSecond = (float)(m_pScene->mAnimations[mAnimIdx]->mTicksPerSecond != NULL ? m_pScene->mAnimations[0]->mTicksPerSecond : 25.0f);
     float TimeInTicks = TimeInSeconds * TicksPerSecond;
     float Duration = 0.0f;  // Animation‚ÌDuration‚Ì®”•”•ª‚ª“ü‚é
-    float fraction = modf((float)m_pScene->mAnimations[0]->mDuration, &Duration);
+    float fraction = modf((float)m_pScene->mAnimations[mAnimIdx]->mDuration, &Duration);
     float AnimationTimeTicks = fmod(TimeInTicks, Duration);
 
 

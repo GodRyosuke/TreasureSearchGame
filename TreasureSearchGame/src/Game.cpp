@@ -18,6 +18,8 @@
 #include "TextComponent.hpp"
 #include "TalkTextComponent.hpp"
 #include "Text.hpp"
+#include "TalkText.hpp"
+#include "Counter.hpp"
 #include <fstream>
 #include <codecvt>
 #define STB_IMAGE_IMPLEMENTATION
@@ -327,8 +329,7 @@ bool Game::LoadData()
 
 	// 屋根を読み込む
 	Actor* a = new Roof(this);
-	a->SetPosition(glm::vec3(15.f, 15.f, 4.0f));
-	a->SetRotation(glm::mat4(1.f));
+
 
 	// Player
 	mPlayer = new Player(this);
@@ -346,14 +347,15 @@ bool Game::LoadData()
 		}
 	}
 
+	// 受付カウンター読み込み
+	a = new Counter(this);
+
 	// TextBoxの読み込み
 	a = new TextBox(this);
 	a->SetPosition(glm::vec3(0.0f, -mWindowHeight / 4.0f, 0.0f));
 	a->SetRotation(glm::mat4(1.0f));
 	a->SetScale(1.5f);
 
-	// Load Text
-	
 
 
 
@@ -388,6 +390,9 @@ bool Game::LoadData()
 
 	// Load Text
 	a = new UserAssistText(this);
+
+	// Talk Text の読み込み
+	a = new TalkText(this);
 
 	//mText = new TextComponent();
 	//mText->SetPos(glm::vec3(0.0f));
@@ -536,9 +541,11 @@ void Game::UpdateGame()
 		}
 	}
 
-	mPlayer->Update(deltaTime);
+	for (auto actor : mActors) {
+		actor->Update(deltaTime);
+	}
 
-
+	//mPlayer->Update(deltaTime);
 }
 
 Mesh* Game::GetMesh(std::string fileName, std::string ext)
@@ -635,7 +642,7 @@ void Game::AddSpriteComp(SpriteComponent* sprite)
 	case SpriteComponent::TALK_TEXT:
 	{
 		TalkTextComponent* text = static_cast<TalkTextComponent*>(sprite);
-		mTextComps.push_back(text);
+		mTalkTextComps.push_back(text);
 		break;
 	}
 	}
@@ -728,20 +735,7 @@ void Game::Draw()
 	//mRoof->SetScale(15.f);
 	//mRoof->Draw(mMeshShader, mTicksCount / 1000.f);
 
-	//// 受付カウンター描画
-	//mMazeBox->SetScale(0.25f);
-	//for (int z = 0; z < 2; z++) {
-	//	for (int y = 0; y < 7; y++) {
-	//		mMazeBox->SetBoxType((z * 7 + y) % 2 ? MazeBox::BLACK : MazeBox::WHITE);
-	//		mMazeBox->SetPos(glm::vec3(1.75f, 0.5f * y + 0.25, 0.5f * z + 0.5f));
-	//		mMazeBox->Draw(mMeshShader, mTicksCount / 1000.0f);
-	//	}
-	//	for (int x = 0; x < 3; x++) {
-	//		mMazeBox->SetBoxType((z * 3 + x) % 2 ? MazeBox::WHITE : MazeBox::BLACK);
-	//		mMazeBox->SetPos(glm::vec3(0.5f * x + 0.25, 3.25f, 0.5f * z + 0.5f));
-	//		mMazeBox->Draw(mMeshShader, mTicksCount / 1000.0f);
-	//	}
-	//}
+
 
 	//// Mazeの床描画
 	//mMazeBox->SetScale(1.0f);
@@ -803,6 +797,9 @@ void Game::Draw()
 	mTextShader->UseProgram();
 	for (auto text : mTextComps) {
 		text->Draw(mTextShader);
+	}
+	for (auto talktext : mTalkTextComps) {
+		talktext->Draw(mTextShader);
 	}
 
 	// 文字描画

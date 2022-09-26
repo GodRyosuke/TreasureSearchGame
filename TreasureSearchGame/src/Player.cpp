@@ -7,23 +7,23 @@
 #include "gtx/rotate_vector.hpp"
 #include "gtx/vector_angle.hpp"
 
+#include "TextComponent.hpp"
+
 Player::Player(Game* game)
-	:Actor(game),
-	mMoveSpeed(0.1)
+	:Actor(game)
+	,mMoveSpeed(0.1)
 {
 	mSkinMeshComp = new SkinMeshComponent(this);
 	mSkinMeshComp->SetSkinMesh(game->GetSkinMesh("SimpleMan", "fbx"));
 	SetPosition(glm::vec3(29.0f, 1.0f, 0.0f));
 	SetScale(0.002f);
+
+	Actor* a = new Actor(game);
+	mDebugText = new TextComponent(a);
 	
 	mFollowCamera = new FollowCamera(this);
 	mFollowCamera->SnapToIdeal();
 }
-
-//glm::vec3 Player::GetForward()
-//{
-//	return glm::rotate(glm::vec3(-1.0f, 0.f, 0.f), (float)M_PI * mPlayerRot / 180, glm::vec3(0.0f, 0.f, 1.0f));
-//}
 
 void Player::ActorInput(const uint8_t* keys)
 {
@@ -91,8 +91,12 @@ void Player::ActorInput(const uint8_t* keys)
 	}
 
 
-	if (IsUpdatePlayerPos) {
+	if (IsUpdatePlayerPos && (playerNewPos != GetPosition())) {
+		mState = WALK;
 		SetPosition(playerNewPos);
+	}
+	else {
+		mState = IDLE;
 	}
 }
 
@@ -110,4 +114,25 @@ void Player::SetPlayerRot(float rotate)
 void Player::UpdateActor(float deltatime)
 {
 	SetRotation(glm::rotate(glm::mat4(1.0f), (float)M_PI * mPlayerRot / 180, glm::vec3(0.f, 0.f, 1.f)));
+
+	switch (mState)
+	{
+	case Player::WALK:
+	{
+		mDebugText->SetText(u"walk");
+		mSkinMeshComp->SetAnimIdx(9);
+		break;
+	}
+	case Player::IDLE:
+	{
+		mDebugText->SetText(u"idle");
+		mSkinMeshComp->SetAnimIdx(5);
+		break;
+	}
+	case Player::TALK:
+		break;
+	case Player::OPEN_CHEST:
+		mDebugText->SetText(u"Open ");
+		break;
+	}
 }

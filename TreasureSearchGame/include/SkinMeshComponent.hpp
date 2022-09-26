@@ -9,12 +9,15 @@ class SkinMeshComponent : public MeshComponent
 public:
 	SkinMeshComponent(class Actor* owner);
 	void Update(float deltatime) override;
+	void Draw(class Shader* shader) override;
 	void SetSkinMesh(class SkinMesh* mesh) { mSkinMesh = mesh; }
+	void SetAnimIdx(int idx) { mAnimIdx = idx; }
+
 
 private:
-	void SetMatrixUniform(class Shader* shader) override;
+	//void SetMatrixUniform(class Shader* shader) override;
 
-
+	int mAnimIdx;
 	class SkinMesh* mSkinMesh;
 	std::vector<glm::mat4> mBoneMatrixPallete;
 };

@@ -163,6 +163,7 @@ XCOPY "$(SolutionDir)TreasureSearchGame\resources" %OUTPUT_DIRECTORY% /e /y</Com
   <ItemGroup>
     <ClInclude Include="include\Actor.hpp" />
     <ClInclude Include="include\Component.hpp" />
+    <ClInclude Include="include\Counter.hpp" />
     <ClInclude Include="include\FollowCamera.hpp" />
     <ClInclude Include="include\Game.hpp" />
     <ClInclude Include="include\GLUtil.hpp" />
@@ -187,6 +188,7 @@ XCOPY "$(SolutionDir)TreasureSearchGame\resources" %OUTPUT_DIRECTORY% /e /y</Com
   <ItemGroup>
     <ClCompile Include="src\Actor.cpp" />
     <ClCompile Include="src\Component.cpp" />
+    <ClCompile Include="src\Counter.cpp" />
     <ClCompile Include="src\FollowCamera.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\Main.cpp" />

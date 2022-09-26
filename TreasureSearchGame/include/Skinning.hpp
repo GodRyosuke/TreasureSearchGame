@@ -8,6 +8,7 @@ public:
     ~SkinMesh() {}
     //void Update(float deltaTime) override;
     void GetBoneTransform(float TimeInSeconds, std::vector<glm::mat4>& Transforms);
+    void SetAnimIdx(int idx) { mAnimIdx = idx; }
 
 
 protected:
@@ -76,4 +77,5 @@ private:
     std::vector<VertexBoneData> m_Bones;
 
     glm::mat4 m_GlobalInverseTransform;
+    int mAnimIdx;
 };
