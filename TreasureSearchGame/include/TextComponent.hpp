@@ -34,6 +34,8 @@ protected:
 	unsigned int mVertexBuffer;
 
 private:
+	virtual void InitType() override { mType = TEXT; }
+
 	FT_Face mFontFace;
 	glm::vec3 mTextColor;
 	std::u16string mText;

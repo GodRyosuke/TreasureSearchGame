@@ -17,6 +17,7 @@
 #include "TextBox.hpp"
 #include "TextComponent.hpp"
 #include "TalkTextComponent.hpp"
+#include "Text.hpp"
 #include <fstream>
 #include <codecvt>
 #define STB_IMAGE_IMPLEMENTATION
@@ -278,117 +279,18 @@ bool Game::LoadData()
 		mTextShader->SetMatrixUniform("gSpriteViewProj", spriteViewProj);
 	}
 
-	//{
-	//	// Shadow Map
-	//	std::string vert_file = "./Shaders/ShadowMap.vert";
-	//	std::string frag_file = "./Shaders/ShadowMap.frag";
-	//	mShadowMapShader = new Shader();
-	//	if (!mShadowMapShader->CreateShaderProgram(vert_file, frag_file)) {
-	//		return false;
-	//	}
-	//}
-	//mShadowMapShader->UseProgram();
-	//mShadowMapShader->SetMatrixUniform("LightView", SpotLightView);
-	//mShadowMapShader->SetMatrixUniform("CameraProj", CameraProj);
-	//mShadowMapShader->SetSamplerUniform("gShadowMap", 1);
-
-	//{
-	//	// Shadow Lighting
-	//	std::string vert_file = "./Shaders/ShadowLighting.vert";
-	//	std::string frag_file = "./Shaders/ShadowLighting.frag";
-	//	mShadowLightingShader = new Shader();
-	//	if (!mShadowLightingShader->CreateShaderProgram(vert_file, frag_file)) {
-	//		return false;
-	//	}
-	//}
-	//mShadowLightingShader->UseProgram();
-	//mShadowLightingShader->SetMatrixUniform("CameraView", CameraView);
-	//mShadowLightingShader->SetMatrixUniform("CameraProj", CameraProj);
-	//mShadowLightingShader->SetMatrixUniform("LightView", SpotLightView);
-	//mShadowLightingShader->SetSamplerUniform("gShadowMap", 1);
-
-	//// SkinMesh
-	//{
-	//	// Shadow Map
-	//	std::string vert_file = "./Shaders/SkinningShadowMap.vert";
-	//	std::string frag_file = "./Shaders/ShadowMap.frag";
-	//	mSkinShadowMapShader = new Shader();
-	//	if (!mSkinShadowMapShader->CreateShaderProgram(vert_file, frag_file)) {
-	//		return false;
-	//	}
-	//}
-	//mSkinShadowMapShader->UseProgram();
-	//mSkinShadowMapShader->SetMatrixUniform("LightView", SpotLightView);
-	//mSkinShadowMapShader->SetMatrixUniform("CameraProj", CameraProj);
-	//mSkinShadowMapShader->SetSamplerUniform("gShadowMap", 1);
-
-	//{
-	//	// Shadow Lighting
-	//	std::string vert_file = "./Shaders/SkinningShadowLighting.vert";
-	//	std::string frag_file = "./Shaders/ShadowLighting.frag";
-	//	mSkinShadowLightingShader = new Shader();
-	//	if (!mSkinShadowLightingShader->CreateShaderProgram(vert_file, frag_file)) {
-	//		return false;
-	//	}
-	//}
-	//mSkinShadowLightingShader->UseProgram();
-	//mSkinShadowLightingShader->SetMatrixUniform("CameraView", CameraView);
-	//mSkinShadowLightingShader->SetMatrixUniform("CameraProj", CameraProj);
-	//mSkinShadowLightingShader->SetMatrixUniform("LightView", SpotLightView);
-	//mSkinShadowLightingShader->SetSamplerUniform("gShadowMap", 1);
-
-	//// Unity Chan Shadow Lighting 
-	//{
-	//	// Shadow Lighting
-	//	std::string vert_file = "./Shaders/SkinningShadowLighting.vert";
-	//	std::string frag_file = "./Shaders/UnityChan.frag";
-	//	mUnityChanShader = new Shader();
-	//	if (!mUnityChanShader->CreateShaderProgram(vert_file, frag_file)) {
-	//		return false;
-	//	}
-	//}
-	//mUnityChanShader->UseProgram();
-	//mUnityChanShader->SetMatrixUniform("CameraView", CameraView);
-	//mUnityChanShader->SetMatrixUniform("CameraProj", CameraProj);
-	//mUnityChanShader->SetMatrixUniform("LightView", SpotLightView);
-	//mUnityChanShader->SetSamplerUniform("gShadowMap", 1);
 
 	// light setting
 	SetLighting();
 
 
-	// Model“Ç‚Ýž‚Ýˆ—
-	//{
-	//	// Concrete Plane“Ç‚Ýž‚Ý
-	//	Mesh* mesh = new Mesh();
-	//	if (mesh->Load("./resources/ConcretePlane/", "ConcretePlane.obj")) {
-	//		mesh->SetPos(glm::vec3(0.0f));
-	//		glm::mat4 rotate = glm::rotate(glm::mat4(1.0f), (float)M_PI / 2.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-	//		mesh->SetRotate(rotate);
-	//		//mesh->SetMeshRotate(glm::mat4(1.0f));
-	//		mesh->SetScale(1.0f);
-	//		mConcretePlane = mesh;
-	//	}
-	//}
-	//{
-	//	Plane* plane = new Plane();
-	//	if (plane->Load("./resources/Plane/", "Plane.obj")) {
-	//		plane->LoadConcreteTex("./resources/Plane/Textures/concrete_brick_wall_001_diffuse_4k.jpg");
-	//		plane->LoadBrickTex("./resources/Plane/Textures/Bricks077_4K_Color.jpg");
-	//		plane->SetPos(glm::vec3(0.f));
-	//		glm::mat4 rotate = glm::rotate(glm::mat4(1.0f), (float)M_PI / 2.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-	//		plane->SetRotate(rotate);
-	//		plane->SetScale(1.f);
-	//		mPlane = plane;
-	//	}
-	//}
-
+	// Model‚ð“Ç‚Ýž‚Þ
 	Plane* plane = nullptr;
 	// °‚ð“Ç‚Ýž‚Þ
-	plane->SetPlaneType(Plane::CONCRETE);
 	for (int y = 0; y < 5; y++) {
 		for (int x = 0; x < 15; x++) {
 			plane = new Plane(this);
+			plane->SetPlaneType(Plane::CONCRETE);
 			glm::mat4 rotate = glm::rotate(glm::mat4(1.0f), (float)M_PI / 2.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 			plane->SetPosition(glm::vec3(1.f + 2.f * x, 1.f + 2.f * y, 0.f));
 			plane->SetRotation(rotate);
@@ -396,24 +298,30 @@ bool Game::LoadData()
 	}
 
 	// •Ç‚ð“Ç‚Ýž‚Þ
-	plane->SetPlaneType(Plane::BRICK);
 	for (int x = 0; x < 15; x++) {
 		for (float z = 1.f; z <= 3.f; z += 2.f) {
 			float x_pos = 1.0f + 2.0f * x;
 			float y_pos = 0.f;
 			plane = new Plane(this);
+			plane->SetPlaneType(Plane::BRICK);
 			plane->SetPosition(glm::vec3(x_pos, y_pos, z));
 			plane->SetRotation(glm::mat4(1.f));
 			y_pos = 30.f;
+			plane = new Plane(this);
+			plane->SetPlaneType(Plane::BRICK);
 			plane->SetPosition(glm::vec3(x_pos, y_pos, z));
 			plane->SetRotation(glm::mat4(1.f));
 			y_pos = 0.f;
+			plane = new Plane(this);
+			plane->SetPlaneType(Plane::BRICK);
 			plane->SetPosition(glm::vec3(y_pos, x_pos, z));
 			glm::mat4 rotate = glm::rotate(glm::mat4(1.0f), (float)M_PI / 2.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-			mPlane->SetRotation(rotate);
+			plane->SetRotation(rotate);
 			y_pos = 30.f;
-			mPlane->SetPosition(glm::vec3(y_pos, x_pos, z));
-			mPlane->SetRotation(rotate);
+			plane = new Plane(this);
+			plane->SetPlaneType(Plane::BRICK);
+			plane->SetPosition(glm::vec3(y_pos, x_pos, z));
+			plane->SetRotation(rotate);
 		}
 	}
 
@@ -479,12 +387,14 @@ bool Game::LoadData()
 
 
 	// Load Text
-	mText = new TextComponent();
-	mText->SetPos(glm::vec3(0.0f));
-	mText->SetRotate(glm::mat4(1.0f));
-	mText->SetScale(1.0f);
-	mText->SetAlpha(1.0f);
-	mText->SetTextColor(glm::vec3(0.0f, 0.0f, 0.2f));
+	a = new UserAssistText(this);
+
+	//mText = new TextComponent();
+	//mText->SetPos(glm::vec3(0.0f));
+	//mText->SetRotate(glm::mat4(1.0f));
+	//mText->SetScale(1.0f);
+	//mText->SetAlpha(1.0f);
+	//mText->SetTextColor(glm::vec3(0.0f, 0.0f, 0.2f));
 
 	// Load Level Data
 	mLevelData = new char* [10];
@@ -680,13 +590,6 @@ SkinMesh* Game::GetSkinMesh(std::string filePath, std::string ext)
 
 }
 
-std::u16string Game::GetText(nl::json data)
-{
-	std::string str;
-	data.get_to(str);
-	std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> convert;
-	return convert.from_bytes(str);
-}
 
 void Game::RemoveActor(Actor* actor)
 {
@@ -706,10 +609,48 @@ void Game::RemoveSpriteComp(SpriteComponent* sprite)
 	mSpriteComps.erase(iter);
 }
 
-void Game::RemoveMesh(Mesh* mesh)
+void Game::AddMeshComp(MeshComponent* mesh)
 {
-	auto iter = std::find(mMeshes.begin(), mMeshes.end(), mesh);
-	mMeshes.erase(iter);
+	if (mesh->GetIsSkeltal()) {
+		SkinMeshComponent* skin = static_cast<SkinMeshComponent*>(mesh);
+		mSkinMeshComps.push_back(skin);
+	}
+	else {
+		mMeshComps.push_back(mesh);
+	}
+}
+
+void Game::AddSpriteComp(SpriteComponent* sprite)
+{
+	switch (sprite->GetType()) {
+	case SpriteComponent::SPRITE:
+		mSpriteComps.push_back(sprite);
+		break;
+	case SpriteComponent::TEXT:
+	{
+		TextComponent* text = static_cast<TextComponent*>(sprite);
+		mTextComps.push_back(text);
+		break;
+	}	
+	case SpriteComponent::TALK_TEXT:
+	{
+		TalkTextComponent* text = static_cast<TalkTextComponent*>(sprite);
+		mTextComps.push_back(text);
+		break;
+	}
+	}
+}
+
+void Game::RemoveMeshComp(MeshComponent* mesh)
+{
+	auto iter = std::find(mMeshComps.begin(), mMeshComps.end(), mesh);
+	mMeshComps.erase(iter);
+}
+
+void Game::RemoveMeshComp(SkinMeshComponent* mesh)
+{
+	auto iter = std::find(mSkinMeshComps.begin(), mSkinMeshComps.end(), mesh);
+	mSkinMeshComps.erase(iter);
 }
 
 void Game::RemoveTextComp(class TextComponent* text)
@@ -734,7 +675,6 @@ void Game::Draw()
 	}
 
 
-	mSkinningShader->UseProgram();
 	//for (auto mesh : mMeshes) {
 	//	if (mesh.meshName == "TreasureChest") {
 	//		mesh.mesh->SetPos(glm::vec3(4.0f, 5.0f / 2.0f, 0.0f));

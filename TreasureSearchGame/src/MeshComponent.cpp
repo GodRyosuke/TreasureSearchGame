@@ -4,8 +4,9 @@
 #include "Actor.hpp"
 #include "Game.hpp"
 
-MeshComponent::MeshComponent(Actor* owner)
+MeshComponent::MeshComponent(Actor* owner, bool isSkeletal)
 	:Component(owner)
+    ,mIsSkeletal(isSkeletal)
 {
     mOwner->GetGame()->AddMeshComp(this);
 }

@@ -14,6 +14,7 @@ public:
 private:
 	void SetMatrixUniform(class Shader* shader) override;
 
+
 	class SkinMesh* mSkinMesh;
 	std::vector<glm::mat4> mBoneMatrixPallete;
 };

@@ -1,20 +1,16 @@
 #include "TextComponent.hpp"
-#include "json.hpp"
-
-namespace nl = nlohmann;
 
 class TalkTextComponent : public TextComponent
 {
 public:
 	TalkTextComponent(class Actor* owner);
 	void Input(const uint8_t* keyState);
-	void Draw(Shader* shader) override;
-	void ShowTalkText(Shader* shader);
+	void Draw(class Shader* shader) override;
+	//void ShowTalkText(class Shader* shader);
+	void SetText(std::u16string text) { mText = text; }
 
 
 private:
-	std::u16string GetText(nl::json data);
-
-	nl::json mData;
+	virtual void InitType() override { mType = TALK_TEXT; }
 	std::u16string mText;
 };

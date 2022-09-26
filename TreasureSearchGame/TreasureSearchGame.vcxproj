@@ -176,6 +176,7 @@ XCOPY "$(SolutionDir)TreasureSearchGame\resources" %OUTPUT_DIRECTORY% /e /y</Com
     <ClInclude Include="include\SkinMeshComponent.hpp" />
     <ClInclude Include="include\Skinning.hpp" />
     <ClInclude Include="include\SpriteComponent.hpp" />
+    <ClInclude Include="include\TalkText.hpp" />
     <ClInclude Include="include\TalkTextComponent.hpp" />
     <ClInclude Include="include\Text.hpp" />
     <ClInclude Include="include\TextComponent.hpp" />
@@ -199,6 +200,7 @@ XCOPY "$(SolutionDir)TreasureSearchGame\resources" %OUTPUT_DIRECTORY% /e /y</Com
     <ClCompile Include="src\SkinMeshComponent.cpp" />
     <ClCompile Include="src\Skinning.cpp" />
     <ClCompile Include="src\SpriteComponent.cpp" />
+    <ClCompile Include="src\TalkText.cpp" />
     <ClCompile Include="src\TalkTextComponent.cpp" />
     <ClCompile Include="src\Text.cpp" />
     <ClCompile Include="src\TextComponent.cpp" />

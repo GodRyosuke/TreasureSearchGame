@@ -5,9 +5,8 @@
 #include "Shader.hpp"
 
 SkinMeshComponent::SkinMeshComponent(Actor* owner)
-	:MeshComponent(owner)
+	:MeshComponent(owner, true)
 {
-
 }
 
 void SkinMeshComponent::Update(float deltatime)

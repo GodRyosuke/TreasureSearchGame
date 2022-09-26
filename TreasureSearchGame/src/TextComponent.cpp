@@ -7,8 +7,6 @@
 TextComponent::TextComponent(Actor* owner)
 	:SpriteComponent(owner)
 {
-	mOwner->GetGame()->AddTextComp(this);
-
 	// TTFì«Ç›çûÇ›
 	FT_Library library;
 	//FT_Face face;

@@ -22,6 +22,7 @@ SpriteComponent::SpriteComponent(Actor* owner)
 	:Component(owner)
 	,mIsDraw(true)
 {
+	InitType();
 	mOwner->GetGame()->AddSpriteComp(this);
 }
 

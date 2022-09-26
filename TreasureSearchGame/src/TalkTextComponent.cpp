@@ -2,22 +2,12 @@
 #include "Shader.hpp"
 #include "Actor.hpp"
 #include <fstream>
-#include <codecvt>
 
 
 TalkTextComponent::TalkTextComponent(Actor* owner)
 	:TextComponent(owner)
 {
-	// ‰ï˜b‚ÉŽg‚¤•¶Žš—ñ“Ç‚Ýž‚Ý
-	{
-		std::string filePath = "./resources/TextData.json";
-		std::ifstream ifs(filePath.c_str());
-		if (ifs.good())
-		{
-			ifs >> mData;
-		}
-		ifs.close();
-	}
+
 }
 
 void TalkTextComponent::Input(const uint8_t* keyState)
@@ -96,20 +86,14 @@ void TalkTextComponent::Draw(Shader* shader)
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-std::u16string TalkTextComponent::GetText(nl::json data)
-{
-	std::string str;
-	data.get_to(str);
-	std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> convert;
-	return convert.from_bytes(str);
-}
 
-void TalkTextComponent::ShowTalkText(Shader* shader)
-{
-	SetText(GetText(mData["TalkCostomer"]["Welcome"]["Talk2"]));
-	mOwner->SetPosition(glm::vec3(0.0f, -150.0f, 0.f));
-	SetTextColor(glm::vec3(0.f, 0.f, 0.2f));
-	DrawTalkText(shader);
-}
+
+//void TalkTextComponent::ShowTalkText(Shader* shader)
+//{
+//	SetText(GetText(mData["TalkCostomer"]["Welcome"]["Talk2"]));
+//	mOwner->SetPosition(glm::vec3(0.0f, -150.0f, 0.f));
+//	SetTextColor(glm::vec3(0.f, 0.f, 0.2f));
+//	DrawTalkText(shader);
+//}
 
 

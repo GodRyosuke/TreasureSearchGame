@@ -3,9 +3,10 @@
 #include "SDL.h"
 #include "glew.h"
 #include "MazeBox.hpp"
-#include "json.hpp"
+#include <string>
+#include <unordered_map>
 
-namespace nl = nlohmann;
+#define STB_IMAGE_IMPLEMENTATION
 
 class Game {
 public:
@@ -28,9 +29,8 @@ public:
 
 	class Mesh* GetMesh(std::string filePath, std::string ext);
 	class SkinMesh* GetSkinMesh(std::string filePath, std::string ext);
-	void AddSpriteComp(class SpriteComponent* sprite) { mSpriteComps.push_back(sprite); }
+	void AddSpriteComp(class SpriteComponent* sprite);
 	void RemoveSpriteComp(class SpriteComponent* sprite);
-	void AddTextComp(class TextComponent* text) { mTextComps.push_back(text); }
 	void RemoveTextComp(class TextComponent* text);
 
 	class Player* GetPlayer() { return mPlayer; }
@@ -41,8 +41,9 @@ public:
 	// posÇ™ï«Ç©ÅH
 	bool IsWall(glm::vec3 pos);
 
-	void AddMeshComp(class MeshComponent* meshcomp) { mMeshComps.push_back(meshcomp); }
-	void RemoveMesh(class Mesh* mesh);
+	void AddMeshComp(class MeshComponent* meshcomp);
+	void RemoveMeshComp(class MeshComponent* mesh);
+	void RemoveMeshComp(class SkinMeshComponent* mesh);
 	Uint32 GetTicksCount() { return mTicksCount; }
 
 
@@ -75,7 +76,6 @@ private:
 
 	bool LoadData();
 	void SetLighting();
-	std::u16string GetText(nl::json data);
 
 	const int mWindowWidth;
 	const int mWindowHeight;
@@ -88,8 +88,8 @@ private:
 	class Mesh* mConcretePlane;
 	class Mesh* mRoof;
 	
-	class TextComponent* mText;
-	nl::json mTextData;
+	class Text* mText;
+	//nl::json mTextData;
 
 	class Player* mPlayer;
 
@@ -119,6 +119,7 @@ private:
 	std::vector<class Actor*> mActors;
 	std::vector<class SpriteComponent*> mSpriteComps;
 	std::vector<class TextComponent*> mTextComps;
+	std::vector<class TalkTextComponent*> mTalkTextComps;
 	std::unordered_map<std::string, class Mesh*> mMeshes;
 	std::vector<class MeshComponent*> mMeshComps;
 	//std::vector<class Mesh*> mMeshes;

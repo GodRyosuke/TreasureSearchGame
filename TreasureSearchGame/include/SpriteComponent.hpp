@@ -6,6 +6,13 @@
 
 class SpriteComponent : public Component {
 public:
+	enum Type {
+		SPRITE,
+		TEXT,
+		TALK_TEXT,
+		NUM_TYPE
+	};
+
 	SpriteComponent(class Actor* owner);
 	bool Load(std::string filePath, float alpha = 1.0f);
 	virtual void Draw(class Shader* shader);
@@ -13,14 +20,19 @@ public:
 	void SetAlpha(float alpha) { mAlpha = alpha; }
 	void SetIsDraw(bool isdraw) { mIsDraw = isdraw; }
 	bool GetIsDraw() { return mIsDraw; }
+	Type GetType() { return mType; }
 
 protected:
+
 	virtual void SetUniforms(class Shader* shader);
 
 	float mAlpha;
 	unsigned int mVertexArray;
+	Type mType;
 
 private:
+	virtual void InitType() { mType = SPRITE; }
+
 	class Texture* mTexture;
 	bool mIsDraw;
 };
