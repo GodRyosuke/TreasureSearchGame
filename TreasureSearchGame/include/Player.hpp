@@ -10,6 +10,7 @@ public:
 		IDLE,
 		TALK,
 		OPEN_CHEST,
+		BOW,
 		NUM_STATE
 	};
 
@@ -17,6 +18,7 @@ public:
 
 	void ActorInput(const uint8_t* keys) override;
 	void UpdateActor(float deltaTime) override;
+	State GetPlayerState() { return mState; }
 
 	void SetPlayerRot(float rotate);
 
