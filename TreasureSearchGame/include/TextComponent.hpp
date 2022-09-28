@@ -13,7 +13,7 @@ public:
 	TextComponent(class Actor* owner, Type type = TEXT);
 	virtual void Draw(class Shader* shader) override;
 	void DrawTalkText(class Shader* shader);
-	void Update(float deltaTime);
+	virtual void Update(float deltaTime) override;
 	void StartDrawing();
 	void SetTextColor(glm::vec3 textColor) { mTextColor = textColor; }
 	void SetText(std::u16string text) { mText = text; }

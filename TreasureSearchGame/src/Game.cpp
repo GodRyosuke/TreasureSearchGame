@@ -66,7 +66,7 @@ bool Game::Initialize()
 	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 
 
-	mWindow = SDL_CreateWindow("Wander OpenGL Tutorial", 100, 100,
+	mWindow = SDL_CreateWindow("Treasure Search Game", 100, 100,
 		mWindowWidth, mWindowHeight, SDL_WINDOW_OPENGL);
 	if (!mWindow)
 	{
@@ -334,7 +334,6 @@ bool Game::LoadData()
 
 	// Player
 	mPlayer = new Player(this);
-	mPlayer->SetPosition(glm::vec3(29.f, 1.f, 0.f));
 
 	// –À˜H‚Ì” “Ç‚İ‚İ
 	MazeBox* mazebox = nullptr;

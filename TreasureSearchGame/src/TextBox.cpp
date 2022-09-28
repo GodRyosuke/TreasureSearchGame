@@ -9,7 +9,7 @@ TextBox::TextBox(Game* game)
 {
 	mSprite = new SpriteComponent(this);
 	mSprite->Load("./resources/TextBox.png", 0.7f);
-	mSprite->SetIsDraw(true);	// デフォルトでは描画しない
+	mSprite->SetIsDraw(false);	// デフォルトでは描画しない
 }
 
 void TextBox::UpdateActor(float deltatime)
@@ -29,12 +29,9 @@ void TextBox::UpdateActor(float deltatime)
 
 void TextBox::ActorInput(const uint8_t* keyState)
 {
-	if ((mIsFrontCounter == true) && (GetGame()->GetPhase() != Game::PHASE_TALK)) {
-		if (keyState[SDL_SCANCODE_RETURN]) {
-			// カウンターの前でエンターキーが押されたら、TalkPhaseに変わる
-			GetGame()->SetPhase(Game::PHASE_TALK);
-
-		}
+	Player::State playerState = GetGame()->GetPlayer()->GetState();
+	if (playerState == Player::TALK) {
+		mSprite->SetIsDraw(true);
 	}
 }
 

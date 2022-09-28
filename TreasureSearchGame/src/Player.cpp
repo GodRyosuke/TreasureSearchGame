@@ -13,10 +13,12 @@ Player::Player(Game* game)
 	:Actor(game)
 	,mMoveSpeed(0.1)
 {
+	SetPosition(glm::vec3(10.0f, 3.0f, 0.0f));
+	mPlayerRot = 180;
+	SetScale(0.002f);
 	mSkinMeshComp = new SkinMeshComponent(this);
 	mSkinMeshComp->SetSkinMesh(game->GetSkinMesh("SimpleMan", "fbx"));
-	SetPosition(glm::vec3(29.0f, 1.0f, 0.0f));
-	SetScale(0.002f);
+	mSkinMeshComp->SetAnimIdx(4);
 
 	Actor* a = new Actor(game);
 	mDebugText = new TextComponent(a);
@@ -42,7 +44,7 @@ void Player::ActorInput(const uint8_t* keys)
 	}
 
 	// Žó•t‚Æ˜b‚·
-	if (GetGame()->GetPhase() != Game::PHASE_TALK) {
+	if (mState != TALK) {
 		if (
 			(2.0f < GetPosition().x) && (GetPosition().x < 3.0f) &&
 			(1.0f < GetPosition().y) && (GetPosition().y < 2.0f)
@@ -70,7 +72,7 @@ void Player::ActorInput(const uint8_t* keys)
 		) {
 		IsUpdatePlayerPos = false;
 	}
-	else if (GetGame()->GetPhase() == Game::PHASE_TALK) {
+	else if (mState == TALK) {
 		// ˜b‚µ’†‚È‚ç“®‚©‚È‚¢
 		IsUpdatePlayerPos = false;
 	}
@@ -95,6 +97,9 @@ void Player::ActorInput(const uint8_t* keys)
 	if (IsUpdatePlayerPos && (playerNewPos != GetPosition())) {
 		mState = WALK;
 		SetPosition(playerNewPos);
+	}
+	else if (mState == TALK) {
+
 	}
 	else {
 		mState = IDLE;

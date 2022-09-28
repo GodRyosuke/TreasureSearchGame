@@ -17,7 +17,7 @@ Clerk::Clerk(Game* game)
 
 void Clerk::UpdateActor(float deltatime)
 {
-	Player::State playerState = GetGame()->GetPlayer()->GetPlayerState();
+	Player::State playerState = GetGame()->GetPlayer()->GetState();
 	if (playerState == Player::TALK) {
 		mState = TALK;
 		mSkinMeshComp->SetAnimIdx(7);

@@ -12,10 +12,12 @@ UserAssistText::UserAssistText(Game* game)
 void UserAssistText::UpdateActor(float deltatime)
 {
 	glm::vec3 playerPos = GetGame()->GetPlayer()->GetPosition();
+	Player::State playerState = GetGame()->GetPlayer()->GetState();
 	// playerがカウンターの前に来たら
 	if (
 		(2.0f < playerPos.x) && (playerPos.x < 3.0f) &&
-		(1.0f < playerPos.y) && (playerPos.y < 2.0f)
+		(1.0f < playerPos.y) && (playerPos.y < 2.0f) &&
+		(playerState != Player::TALK)
 		) {
 		SetPosition(glm::vec3(0.0f, 300.f, 0.f));
 		mTextComp->SetText(u"エンターキーで話す");

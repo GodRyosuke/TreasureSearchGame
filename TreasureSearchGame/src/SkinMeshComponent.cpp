@@ -11,6 +11,7 @@ SkinMeshComponent::SkinMeshComponent(Actor* owner)
 
 void SkinMeshComponent::Update(float deltatime)
 {
+	mSkinMesh->SetAnimIdx(mAnimIdx);
 	mSkinMesh->GetBoneTransform(mOwner->GetGame()->GetTicksCount() / 1000.f, mBoneMatrixPallete);
 }
 

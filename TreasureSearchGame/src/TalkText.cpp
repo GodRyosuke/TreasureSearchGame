@@ -1,6 +1,7 @@
 #include "TalkText.hpp"
 #include "TalkTextComponent.hpp"
 #include "Game.hpp"
+#include "Player.hpp"
 #include <fstream>
 #include <codecvt>
 
@@ -25,7 +26,8 @@ TalkText::TalkText(Game* game)
 
 void TalkText::UpdateActor(float deltatime)
 {
-	if (GetGame()->GetPhase() == Game::PHASE_TALK) {
+	Player::State playerState = GetGame()->GetPlayer()->GetState();
+	if (playerState == Player::TALK) {
 		mTalkTextComp->SetIsDraw(true);
 		SetPosition(glm::vec3(0.0f, -150.0f, 0.f));
 		mTalkTextComp->SetTextColor(glm::vec3(0.f, 0.f, 0.2f));

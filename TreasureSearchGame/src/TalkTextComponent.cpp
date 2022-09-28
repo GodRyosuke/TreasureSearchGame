@@ -6,13 +6,20 @@
 
 TalkTextComponent::TalkTextComponent(Actor* owner)
 	:TextComponent(owner, TALK_TEXT)
+	,mDrawSpeed(0.5)
 {
-
+	int FontWidth = (mJapanTexChars.begin()->second.Advance >> 6) * mOwner->GetScale();
+	
 }
 
 void TalkTextComponent::Input(const uint8_t* keyState)
 {
 
+}
+
+void TalkTextComponent::Update(float deltatime)
+{
+	mCurrentCursorPos += mDrawSpeed * deltatime;
 }
 
 void TalkTextComponent::Draw(Shader* shader)
@@ -22,12 +29,9 @@ void TalkTextComponent::Draw(Shader* shader)
 
 	glm::vec3 FontCenter = glm::vec3(0.0f);
 	// •¶š‚Ìtexchar‚Ì‘å‚«‚³‚ğæ“¾
-	int FontWidth = 0;
-	{
-		FontWidth = (mJapanTexChars.begin()->second.Advance >> 6) * mOwner->GetScale();
-		FontCenter.x = FontWidth * 20 / 2.0f; // •¶š”‚Í20•¶š
-		FontCenter.y = FontWidth / 2.0f;
-	}
+	int FontWidth = (mJapanTexChars.begin()->second.Advance >> 6) * mOwner->GetScale();
+	FontCenter.x = FontWidth * 20 / 2.0f; // •¶š”‚Í20•¶š
+	FontCenter.y = FontWidth / 2.0f;
 	SetUniforms(shader);
 
 	glActiveTexture(GL_TEXTURE0);

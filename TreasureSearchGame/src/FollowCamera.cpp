@@ -30,11 +30,28 @@ void FollowCamera::Update(float deltaTime)
 	// Update velocity
 	mVelocity += acel * deltaTime;
 	// Update actual camera position
-	mActualPos += mVelocity * deltaTime;
+	glm::vec3 newCameraPos = mActualPos;
+	newCameraPos += mVelocity * deltaTime;
 	// Target is target dist in front of owning actor
 	glm::vec3 target = mOwner->GetPosition() +
 		mOwner->GetForward() * mTargetDist;
+
+	bool isUpdateCameraPos = false;
+	// 壁の中にあればカメラの位置更新
+	if ((newCameraPos.x < 0.25f) || (newCameraPos.x > 29.75f) ||
+		(newCameraPos.y < 0.25f) || (newCameraPos.y > 29.75f)
+		) {
+
+	}
+	else {
+		isUpdateCameraPos = true;
+	}
+
+	
 	// Use actual position here, not ideal
+	if (isUpdateCameraPos) {
+		mActualPos = newCameraPos;
+	}
 	glm::mat4 view = glm::lookAt(mActualPos, target,
 		glm::vec3(0.0f, 0.0f, 1.0f));
 	SetViewMatrix(view, mActualPos);
