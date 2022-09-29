@@ -92,6 +92,9 @@ void TextComponent::SetUniforms(Shader* shader)
 
 void TextComponent::Draw(Shader* shader)
 {
+	if (GetIsDraw() == false) {
+		return;
+	}
 	shader->UseProgram();
 	glBindVertexArray(mVertexArray);
 

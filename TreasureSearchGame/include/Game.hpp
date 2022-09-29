@@ -34,6 +34,7 @@ public:
 	void RemoveTextComp(class TextComponent* text);
 
 	class Player* GetPlayer() { return mPlayer; }
+	class TalkText* GetTalkText() { return mTalkText; }
 
 	void SetPhase(PHASE phase) { mPhase = phase; }
 	PHASE GetPhase() { return mPhase; }
@@ -92,6 +93,7 @@ private:
 	//nl::json mTextData;
 
 	class Player* mPlayer;
+	class TalkText* mTalkText;
 
 	class Plane* mPlane;
 	MazeBox* mMazeBox;

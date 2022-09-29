@@ -6,7 +6,9 @@
 
 TalkTextComponent::TalkTextComponent(Actor* owner)
 	:TextComponent(owner, TALK_TEXT)
-	,mDrawSpeed(0.5)
+	,mDrawSpeed(9)
+	,mCurrentTextIdx(0)
+	,mIsFnishDraw(false)
 {
 	int FontWidth = (mJapanTexChars.begin()->second.Advance >> 6) * mOwner->GetScale();
 	
@@ -17,13 +19,34 @@ void TalkTextComponent::Input(const uint8_t* keyState)
 
 }
 
+void TalkTextComponent::InittextPos()
+{
+	const char16_t* str = mText.c_str();
+	for (int i = 0; str[i] != '\0'; i++) {
+		if ((str[i] != u'Å@') && (str[i] != '\n') && (str[i] != ' ')) {
+			mCurrentTextIdx = i;
+			break;
+		}
+	}
+	mCurrentCursorPos = mCurrentTextIdx;
+	mIsFnishDraw = false;
+}
+
 void TalkTextComponent::Update(float deltatime)
 {
+	if (mCurrentTextIdx == (mText.size() - 1)) {
+		mIsFnishDraw = true;
+		return;
+	}
 	mCurrentCursorPos += mDrawSpeed * deltatime;
+	mCurrentTextIdx = static_cast<int>(mCurrentCursorPos);
 }
 
 void TalkTextComponent::Draw(Shader* shader)
 {
+	if (GetIsDraw() == false) {
+		return;
+	}
 	shader->UseProgram();
 	glBindVertexArray(mVertexArray);
 
@@ -42,6 +65,9 @@ void TalkTextComponent::Draw(Shader* shader)
 	//float scale = 1.0f;
 	const char16_t* str = mText.c_str();
 	for (int i = 0; str[i] != '\0'; i++) {
+		if (mCurrentTextIdx < i) {
+			break;
+		}
 		// 3çsà»ì‡Ç…é˚ÇﬂÇÈ
 		if ((rowCount < 3) && (str[i] == '\n')) {
 			x2 = -FontCenter.x;

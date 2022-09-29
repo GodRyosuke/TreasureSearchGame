@@ -395,7 +395,7 @@ bool Game::LoadData()
 	a = new UserAssistText(this);
 
 	// Talk Text ‚Ì“Ç‚Ýž‚Ý
-	a = new TalkText(this);
+	mTalkText = new TalkText(this);
 
 	//mText = new TextComponent();
 	//mText->SetPos(glm::vec3(0.0f));

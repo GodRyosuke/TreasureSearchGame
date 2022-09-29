@@ -1,13 +1,13 @@
 #include "TalkText.hpp"
 #include "TalkTextComponent.hpp"
 #include "Game.hpp"
-#include "Player.hpp"
 #include <fstream>
 #include <codecvt>
 
 
 TalkText::TalkText(Game* game)
 	:Actor(game)
+	,mTalkIdx(0)
 {
 	mTalkTextComp = new TalkTextComponent(this);
 	mTalkTextComp->SetIsDraw(false);
@@ -22,20 +22,55 @@ TalkText::TalkText(Game* game)
 		}
 		ifs.close();
 	}
+
+	mTalkData = std::vector<nl::json>{
+		mData["TalkCostomer"]["Welcome"]["Talk1"],
+		mData["TalkCostomer"]["Welcome"]["Talk2"],
+		mData["TalkCostomer"]["Welcome"]["Talk3"],
+		mData["Bye"]["Talk1"],
+		mData["Explain"]["Talk1"],
+		mData["Explain"]["Talk2"],
+		mData["Explain"]["Talk3"],
+	};
 }
 
 void TalkText::UpdateActor(float deltatime)
 {
 	Player::State playerState = GetGame()->GetPlayer()->GetState();
-	if (playerState == Player::TALK) {
+
+	if ((playerState == Player::TALK) && (mPreviousPlayerState != Player::TALK)) {
+		mTalkTextComp->SetText(JsonToString(mData["TalkCostomer"]["Welcome"]["Talk1"]));
+		mTalkTextComp->InittextPos();
 		mTalkTextComp->SetIsDraw(true);
 		SetPosition(glm::vec3(0.0f, -150.0f, 0.f));
 		mTalkTextComp->SetTextColor(glm::vec3(0.f, 0.f, 0.2f));
-		mTalkTextComp->SetText(JsonToString(mData["TalkCostomer"]["Welcome"]["Talk1"]));
+	}
+
+	if (playerState == Player::TALK) {
+		mTalkTextComp->SetIsDraw(true);
+		if (mTalkTextComp->GetIsFinishDraw() == true) {
+			mTalkTextComp->SetText(JsonToString(mTalkData[mTalkIdx]));
+			mTalkTextComp->InittextPos();
+		}
 	}
 	else {
 		mTalkTextComp->SetIsDraw(false);
 	}
+
+	mPreviousPlayerState = playerState;
+}
+
+void TalkText::ActorInput(const uint8_t* keyState)
+{
+	// 描画が終わってからエンターキーが押下されたら
+	if ((mTalkTextComp->GetIsFinishDraw() == true) && (keyState[SDL_SCANCODE_RETURN])) {
+		mTalkIdx++;
+	}
+}
+
+bool TalkText::GetIsFinishDraw()
+{
+	return mTalkTextComp->GetIsFinishDraw();
 }
 
 std::u16string TalkText::JsonToString(nl::json data)
