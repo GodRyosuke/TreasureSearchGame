@@ -27,10 +27,10 @@ TalkText::TalkText(Game* game)
 		mData["TalkCostomer"]["Welcome"]["Talk1"],
 		mData["TalkCostomer"]["Welcome"]["Talk2"],
 		mData["TalkCostomer"]["Welcome"]["Talk3"],
-		mData["Bye"]["Talk1"],
-		mData["Explain"]["Talk1"],
-		mData["Explain"]["Talk2"],
-		mData["Explain"]["Talk3"],
+		mData["TalkCostomer"]["Bye"]["Talk1"],
+		mData["TalkCostomer"]["Explain"]["Talk1"],
+		mData["TalkCostomer"]["Explain"]["Talk2"],
+		mData["TalkCostomer"]["Explain"]["Talk3"],
 	};
 }
 
@@ -48,10 +48,6 @@ void TalkText::UpdateActor(float deltatime)
 
 	if (playerState == Player::TALK) {
 		mTalkTextComp->SetIsDraw(true);
-		if (mTalkTextComp->GetIsFinishDraw() == true) {
-			mTalkTextComp->SetText(JsonToString(mTalkData[mTalkIdx]));
-			mTalkTextComp->InittextPos();
-		}
 	}
 	else {
 		mTalkTextComp->SetIsDraw(false);
@@ -65,6 +61,8 @@ void TalkText::ActorInput(const uint8_t* keyState)
 	// 描画が終わってからエンターキーが押下されたら
 	if ((mTalkTextComp->GetIsFinishDraw() == true) && (keyState[SDL_SCANCODE_RETURN])) {
 		mTalkIdx++;
+		mTalkTextComp->SetText(JsonToString(mTalkData[mTalkIdx]));
+		mTalkTextComp->InittextPos();
 	}
 }
 

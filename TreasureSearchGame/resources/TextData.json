@@ -3,7 +3,7 @@
     "Welcome": {
       "Talk1": "\n　　　　　　いらっしゃーい。　　　　　　\n",
       "Talk2": "　　ここは宝箱屋です。楽しいですよ。　　\n　　　　　あそんでいかれますか？　　　　\n",
-      "Talk3": "1: Yes\n2: No\n"
+      "Talk3": "Enter: Yes\n2: No\n"
     },
     "Bye": {
       "Talk1": "\n　　　　　　　またきてね　　　　　　　　\n"
