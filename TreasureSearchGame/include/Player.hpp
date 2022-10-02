@@ -19,6 +19,7 @@ public:
 	void ActorInput(const uint8_t* keys) override;
 	void UpdateActor(float deltaTime) override;
 	State GetState() { return mState; }
+	void SetState(State state) { mState = state; }
 
 	void SetPlayerRot(float rotate);
 

@@ -136,6 +136,9 @@ void Player::UpdateActor(float deltatime)
 		break;
 	}
 	case Player::TALK:
+	{
+		mDebugText->SetText(u"Talk");
+	}
 		break;
 	case Player::OPEN_CHEST:
 		mDebugText->SetText(u"Open ");

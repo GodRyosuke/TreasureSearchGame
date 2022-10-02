@@ -52,7 +52,8 @@ void TalkTextComponent::Draw(Shader* shader)
 
 	glm::vec3 FontCenter = glm::vec3(0.0f);
 	// •¶š‚Ìtexchar‚Ì‘å‚«‚³‚ğæ“¾
-	int FontWidth = (mJapanTexChars.begin()->second.Advance >> 6) * mOwner->GetScale();
+	//int FontWidth = (mJapanTexChars.begin()->second.Advance >> 6) * mOwner->GetScale();
+	const int FontWidth = 48;
 	FontCenter.x = FontWidth * 20 / 2.0f; // •¶š”‚Í20•¶š
 	FontCenter.y = FontWidth / 2.0f;
 	SetUniforms(shader);

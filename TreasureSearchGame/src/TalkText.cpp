@@ -59,6 +59,19 @@ void TalkText::UpdateActor(float deltatime)
 void TalkText::ActorInput(const uint8_t* keyState)
 {
 	// 描画が終わってからエンターキーが押下されたら
+	if (mTalkTextComp->GetIsFinishDraw()) {
+		if ((mTalkIdx == 2)&&(keyState[SDL_SCANCODE_2])) {
+			// またきてね描画
+			mTalkIdx = 3;
+			mTalkTextComp->SetText(JsonToString(mTalkData[mTalkIdx]));
+			mTalkTextComp->InittextPos();
+		}
+		else if ((mTalkIdx == 3) && (keyState[SDL_SCANCODE_RETURN])) {
+			// またきてね描画終了
+			// playerをTalkからIdleに移行
+			GetGame()->GetPlayer()->SetState(Player::IDLE);
+		}
+	}
 	if ((mTalkTextComp->GetIsFinishDraw() == true) && (keyState[SDL_SCANCODE_RETURN])) {
 		mTalkIdx++;
 		mTalkTextComp->SetText(JsonToString(mTalkData[mTalkIdx]));

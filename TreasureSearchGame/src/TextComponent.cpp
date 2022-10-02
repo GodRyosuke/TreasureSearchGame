@@ -102,7 +102,8 @@ void TextComponent::Draw(Shader* shader)
 	glm::vec3 FontCenter = glm::vec3(0.0f);
 	// •¶Žš‚Ìtexchar‚Ì‘å‚«‚³‚ðŽæ“¾
 	{
-		int width = (mJapanTexChars.begin()->second.Advance >> 6) * scale;
+		//int width = (mJapanTexChars.begin()->second.Advance >> 6) * scale;
+		int width = 48;
 		FontCenter.x = (width * mText.length()) / 2.0f;
 		FontCenter.y = width / 2.0f;
 	}
