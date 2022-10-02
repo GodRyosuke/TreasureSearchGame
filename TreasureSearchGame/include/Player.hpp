@@ -30,5 +30,6 @@ private:
 	float mMoveSpeed;
 
 	float mPlayerRot;
+	State mPreviousState;
 	State mState;
 };

@@ -44,7 +44,7 @@ void Player::ActorInput(const uint8_t* keys)
 	}
 
 	// Žó•t‚Æ˜b‚·
-	if (mState != TALK) {
+	if ((mState != TALK) && (mPreviousState != TALK)) {
 		if (
 			(2.0f < GetPosition().x) && (GetPosition().x < 3.0f) &&
 			(1.0f < GetPosition().y) && (GetPosition().y < 2.0f)
@@ -144,4 +144,6 @@ void Player::UpdateActor(float deltatime)
 		mDebugText->SetText(u"Open ");
 		break;
 	}
+
+	mPreviousState = mState;
 }
