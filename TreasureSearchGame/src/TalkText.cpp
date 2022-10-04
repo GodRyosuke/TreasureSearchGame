@@ -39,7 +39,8 @@ void TalkText::UpdateActor(float deltatime)
 	Player::State playerState = GetGame()->GetPlayer()->GetState();
 
 	if ((playerState == Player::TALK) && (mPreviousPlayerState != Player::TALK)) {
-		mTalkTextComp->SetText(JsonToString(mData["TalkCostomer"]["Welcome"]["Talk1"]));
+		mTalkIdx = 0;
+		mTalkTextComp->SetText(JsonToString(mTalkData[mTalkIdx]));
 		mTalkTextComp->InittextPos();
 		mTalkTextComp->SetIsDraw(true);
 		SetPosition(glm::vec3(0.0f, -150.0f, 0.f));
@@ -70,6 +71,7 @@ void TalkText::ActorInput(const uint8_t* keyState)
 			// ‚Ü‚½‚«‚Ä‚Ë•`‰æI—¹
 			// player‚ðTalk‚©‚çIdle‚ÉˆÚs
 			GetGame()->GetPlayer()->SetState(Player::IDLE);
+			GetGame()->GetPlayer()->WaitSeconds();
 		}
 	}
 	if ((mTalkTextComp->GetIsFinishDraw() == true) && (keyState[SDL_SCANCODE_RETURN])) {

@@ -22,5 +22,8 @@ void Clerk::UpdateActor(float deltatime)
 		mState = TALK;
 		mSkinMeshComp->SetAnimIdx(7);
 	}
+	else {
+		mSkinMeshComp->SetAnimIdx(6);
+	}
 
 }

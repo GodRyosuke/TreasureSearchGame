@@ -12,6 +12,7 @@
 Player::Player(Game* game)
 	:Actor(game)
 	,mMoveSpeed(0.1)
+	,mWaitSeconds(false)
 {
 	SetPosition(glm::vec3(10.0f, 3.0f, 0.0f));
 	mPlayerRot = 180;
@@ -27,8 +28,19 @@ Player::Player(Game* game)
 	mFollowCamera->SnapToIdeal();
 }
 
+void Player::WaitSeconds()
+{
+	mWaitSeconds = true;
+	mStopTime = GetGame()->GetTicksCount() + 1000;
+}
+
 void Player::ActorInput(const uint8_t* keys)
 {
+	// 3s‘Ò‚Âê‡‚ÍA‚ ‚ç‚ä‚é“ü—Í‚ğó‚¯•t‚¯‚È‚¢
+	if (mWaitSeconds) {
+		return;
+	}
+
 	glm::vec3 playerNewPos = GetPosition();
 	if (keys[SDL_SCANCODE_W]) {
 		playerNewPos = GetPosition() + GetForward() * mMoveSpeed;
@@ -104,6 +116,8 @@ void Player::ActorInput(const uint8_t* keys)
 	else {
 		mState = IDLE;
 	}
+
+	mPreviousState = mState;
 }
 
 void Player::SetPlayerRot(float rotate)
@@ -120,6 +134,12 @@ void Player::SetPlayerRot(float rotate)
 void Player::UpdateActor(float deltatime)
 {
 	SetRotation(glm::rotate(glm::mat4(1.0f), (float)M_PI * mPlayerRot / 180, glm::vec3(0.f, 0.f, 1.f)));
+
+	if (mWaitSeconds) {
+		if (mStopTime < GetGame()->GetTicksCount()) {
+			mWaitSeconds = false;
+		}
+	}
 
 	switch (mState)
 	{
@@ -145,5 +165,4 @@ void Player::UpdateActor(float deltatime)
 		break;
 	}
 
-	mPreviousState = mState;
 }

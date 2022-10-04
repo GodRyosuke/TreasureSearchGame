@@ -1,7 +1,6 @@
 #pragma once
 #include "Actor.hpp"
 
-
 class Player : public Actor
 {
 public:
@@ -20,6 +19,7 @@ public:
 	void UpdateActor(float deltaTime) override;
 	State GetState() { return mState; }
 	void SetState(State state) { mState = state; }
+	void WaitSeconds();
 
 	void SetPlayerRot(float rotate);
 
@@ -32,4 +32,6 @@ private:
 	float mPlayerRot;
 	State mPreviousState;
 	State mState;
+	bool mWaitSeconds;
+	uint32_t mStopTime;
 };

@@ -33,5 +33,8 @@ void TextBox::ActorInput(const uint8_t* keyState)
 	if (playerState == Player::TALK) {
 		mSprite->SetIsDraw(true);
 	}
+	else {
+		mSprite->SetIsDraw(false);
+	}
 }
 
