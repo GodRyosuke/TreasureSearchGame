@@ -37,6 +37,3 @@ void UserAssistText::UpdateActor(float deltatime)
 	}
 
 }
-
-
-
