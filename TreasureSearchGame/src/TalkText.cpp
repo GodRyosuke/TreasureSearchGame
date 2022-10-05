@@ -67,17 +67,23 @@ void TalkText::ActorInput(const uint8_t* keyState)
 			mTalkTextComp->SetText(JsonToString(mTalkData[mTalkIdx]));
 			mTalkTextComp->InittextPos();
 		}
+		else if ((mTalkIdx == 2) && (keyState[SDL_SCANCODE_1])) {
+			// ƒQ[ƒ€‚ð‚·‚é‚Æ‘I‘ð
+			mTalkIdx = 4;
+			mTalkTextComp->SetText(JsonToString(mTalkData[mTalkIdx]));
+			mTalkTextComp->InittextPos();
+		}
 		else if ((mTalkIdx == 3) && (keyState[SDL_SCANCODE_RETURN])) {
 			// ‚Ü‚½‚«‚Ä‚Ë•`‰æI—¹
 			// player‚ðTalk‚©‚çIdle‚ÉˆÚs
 			GetGame()->GetPlayer()->SetState(Player::IDLE);
 			GetGame()->GetPlayer()->WaitSeconds();
 		}
-	}
-	if ((mTalkTextComp->GetIsFinishDraw() == true) && (keyState[SDL_SCANCODE_RETURN])) {
-		mTalkIdx++;
-		mTalkTextComp->SetText(JsonToString(mTalkData[mTalkIdx]));
-		mTalkTextComp->InittextPos();
+		else if(keyState[SDL_SCANCODE_RETURN]) {
+			mTalkIdx++;
+			mTalkTextComp->SetText(JsonToString(mTalkData[mTalkIdx]));
+			mTalkTextComp->InittextPos();
+		}
 	}
 }
 
