@@ -8,6 +8,7 @@
 TalkText::TalkText(Game* game)
 	:Actor(game)
 	,mTalkIdx(0)
+	,mIsSelectText(false)
 {
 	mTalkTextComp = new TalkTextComponent(this);
 	mTalkTextComp->SetIsDraw(false);
@@ -38,6 +39,7 @@ void TalkText::UpdateActor(float deltatime)
 {
 	Player::State playerState = GetGame()->GetPlayer()->GetState();
 
+	// プレイヤーが話しかけたら
 	if ((playerState == Player::TALK) && (mPreviousPlayerState != Player::TALK)) {
 		mTalkIdx = 0;
 		mTalkTextComp->SetText(JsonToString(mTalkData[mTalkIdx]));
@@ -45,6 +47,14 @@ void TalkText::UpdateActor(float deltatime)
 		mTalkTextComp->SetIsDraw(true);
 		SetPosition(glm::vec3(0.0f, -150.0f, 0.f));
 		mTalkTextComp->SetTextColor(glm::vec3(0.f, 0.f, 0.2f));
+	}
+
+	// 選択画面なら
+	if (mTalkIdx == 2) {
+		mIsSelectText = true;
+	}
+	else {
+		mIsSelectText = false;
 	}
 
 	if (playerState == Player::TALK) {
@@ -59,8 +69,9 @@ void TalkText::UpdateActor(float deltatime)
 
 void TalkText::ActorInput(const uint8_t* keyState)
 {
+	Player::State playerState = GetGame()->GetPlayer()->GetState();
 	// 描画が終わってからエンターキーが押下されたら
-	if (mTalkTextComp->GetIsFinishDraw()) {
+	if ((playerState == Player::TALK) && (mTalkTextComp->GetIsFinishDraw())) {
 		if ((mTalkIdx == 2)&&(keyState[SDL_SCANCODE_2])) {
 			// またきてね描画
 			mTalkIdx = 3;
@@ -76,10 +87,16 @@ void TalkText::ActorInput(const uint8_t* keyState)
 		else if ((mTalkIdx == 3) && (keyState[SDL_SCANCODE_RETURN])) {
 			// またきてね描画終了
 			// playerをTalkからIdleに移行
+			mTalkIdx = 0;
 			GetGame()->GetPlayer()->SetState(Player::IDLE);
 			GetGame()->GetPlayer()->WaitSeconds();
 		}
-		else if(keyState[SDL_SCANCODE_RETURN]) {
+		else if ((mTalkIdx == 6) && (keyState[SDL_SCANCODE_RETURN])) {
+			// ゲーム開始のため、TALK終わり
+			GetGame()->GetPlayer()->SetState(Player::IDLE);
+			GetGame()->GetPlayer()->WaitSeconds();
+		}
+		else if ((mTalkIdx != 2) &&(keyState[SDL_SCANCODE_RETURN])) {
 			mTalkIdx++;
 			mTalkTextComp->SetText(JsonToString(mTalkData[mTalkIdx]));
 			mTalkTextComp->InittextPos();

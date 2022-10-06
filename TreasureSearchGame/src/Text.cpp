@@ -32,7 +32,12 @@ void UserAssistText::UpdateActor(float deltatime)
 	if ((playerState == Player::TALK) && (GetGame()->GetTalkText()->GetIsFinishDraw() == true)) {
 		SetPosition(glm::vec3(300.f, -300.f, 0.f));
 		SetScale(0.5f);
-		mTextComp->SetText(u"エンターキーで進む");
+		if (GetGame()->GetTalkText()->GetIsSelectText()) {
+			mTextComp->SetText(u"好きなほうを選択");
+		}
+		else {
+			mTextComp->SetText(u"エンターキーで進む");
+		}
 		mTextComp->SetTextColor(glm::vec3(0.f, 0.f, 0.2f));
 	}
 

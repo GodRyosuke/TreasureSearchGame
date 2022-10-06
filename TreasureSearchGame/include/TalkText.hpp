@@ -12,6 +12,7 @@ public:
 	void UpdateActor(float deltaTime) override;
 	void ActorInput(const uint8_t* keyState) override;
 	bool GetIsFinishDraw();	// •¶š‚ğ•`‰æ‚µI‚í‚Á‚½‚©H
+	bool GetIsSelectText() { return mIsSelectText; }
 
 private:
 
@@ -21,5 +22,6 @@ private:
 	Player::State mPreviousPlayerState;
 	nl::json mData;
 	std::vector<nl::json> mTalkData;
+	bool mIsSelectText;
 	int mTalkIdx;
 };
