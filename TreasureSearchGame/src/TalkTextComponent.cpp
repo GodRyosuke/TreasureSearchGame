@@ -6,7 +6,7 @@
 
 TalkTextComponent::TalkTextComponent(Actor* owner)
 	:TextComponent(owner, TALK_TEXT)
-	,mDrawSpeed(9)
+	,mDrawSpeed(11)
 	,mCurrentTextIdx(0)
 	,mIsFnishDraw(false)
 {

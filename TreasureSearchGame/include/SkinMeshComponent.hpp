@@ -12,12 +12,18 @@ public:
 	void Draw(class Shader* shader) override;
 	void SetSkinMesh(class SkinMesh* mesh) { mSkinMesh = mesh; }
 	void SetAnimIdx(int idx) { mAnimIdx = idx; }
+	void SetStopAnimation(bool stop) { mStopAnimation = stop; }
+	void SetZeroTransFrag(bool frag) { mZeroTransFrag = frag; }
+	void SetAnimTime(float time) { mAnimtime = time; }
 
 
 private:
 	//void SetMatrixUniform(class Shader* shader) override;
 
 	int mAnimIdx;
+	bool mZeroTransFrag;
+	bool mStopAnimation;
+	float mAnimtime;
 	class SkinMesh* mSkinMesh;
 	std::vector<glm::mat4> mBoneMatrixPallete;
 };

@@ -89,12 +89,14 @@ void TalkText::ActorInput(const uint8_t* keyState)
 			// playerをTalkからIdleに移行
 			mTalkIdx = 0;
 			GetGame()->GetPlayer()->SetState(Player::IDLE);
-			GetGame()->GetPlayer()->WaitSeconds();
+			GetGame()->GetPlayer()->WaitSeconds(1000);
 		}
 		else if ((mTalkIdx == 6) && (keyState[SDL_SCANCODE_RETURN])) {
 			// ゲーム開始のため、TALK終わり
+			mTalkIdx = 0;
+			GetGame()->SetPhase(Game::PHASE_GAME);	// ゲームスタート
 			GetGame()->GetPlayer()->SetState(Player::IDLE);
-			GetGame()->GetPlayer()->WaitSeconds();
+			//GetGame()->GetPlayer()->WaitSeconds(1000);
 		}
 		else if ((mTalkIdx != 2) &&(keyState[SDL_SCANCODE_RETURN])) {
 			mTalkIdx++;

@@ -12,11 +12,12 @@ public:
 	void SetMesh(class Mesh* mesh) { mMesh = mesh; }
 	void SetTexture(std::string filePath) { mTexturePath = filePath; }
 	bool GetIsSkeltal() { return mIsSkeletal; }
-
+	void SetAlpha(float alpha) { mAlpha = alpha; }
 
 protected:
 	//virtual void SetMatrixUniform(class Shader* shader);
 	bool mIsSkeletal;
+	float mAlpha;
 
 private:
 	class Mesh* mMesh;

@@ -10,6 +10,7 @@ FollowCamera::FollowCamera(Actor* owner)
 	,mVertDist(2.0f)
 	,mTargetDist(5.0f)
 	,mSpringConstant(8.0f)
+	,mIsConstCamera(false)
 {
 
 
@@ -37,7 +38,7 @@ void FollowCamera::Update(float deltaTime)
 		mOwner->GetForward() * mTargetDist;
 
 	bool isUpdateCameraPos = false;
-	// 壁の中にあればカメラの位置更新
+	// 壁の中にあればカメラの位置更新しない
 	if ((newCameraPos.x < 0.25f) || (newCameraPos.x > 29.75f) ||
 		(newCameraPos.y < 0.25f) || (newCameraPos.y > 29.75f)
 		) {
@@ -52,9 +53,19 @@ void FollowCamera::Update(float deltaTime)
 	if (isUpdateCameraPos) {
 		mActualPos = newCameraPos;
 	}
-	glm::mat4 view = glm::lookAt(mActualPos, target,
-		glm::vec3(0.0f, 0.0f, 1.0f));
-	SetViewMatrix(view, mActualPos);
+
+	if (mIsConstCamera) {
+		// 固定カメラなら更新しない
+		glm::mat4 view = glm::lookAt(mConstCameraPos, mConstCameraTarget,
+			glm::vec3(0.0f, 0.0f, 1.0f));
+		SetViewMatrix(view, mConstCameraPos);
+		mActualPos = mConstCameraPos;
+	}
+	else {
+		glm::mat4 view = glm::lookAt(mActualPos, target,
+			glm::vec3(0.0f, 0.0f, 1.0f));
+		SetViewMatrix(view, mActualPos);
+	}
 }
 
 void FollowCamera::SnapToIdeal()

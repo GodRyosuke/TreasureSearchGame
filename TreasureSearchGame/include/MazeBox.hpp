@@ -38,6 +38,8 @@ private:
 	class Texture* mBlackTex;
 	class Texture* mWhiteTex;
 
+	float mZ;
+
 	bool IsGrowing;
 	bool IsDowning;
 	float z;

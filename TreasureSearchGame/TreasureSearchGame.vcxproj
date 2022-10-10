@@ -185,6 +185,7 @@ XCOPY "$(SolutionDir)TreasureSearchGame\resources" %OUTPUT_DIRECTORY% /e /y</Com
     <ClInclude Include="include\TextBox.hpp" />
     <ClInclude Include="include\Texture.hpp" />
     <ClInclude Include="include\TextureShadowMap.hpp" />
+    <ClInclude Include="include\TreasureBox.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Actor.cpp" />
@@ -211,6 +212,7 @@ XCOPY "$(SolutionDir)TreasureSearchGame\resources" %OUTPUT_DIRECTORY% /e /y</Com
     <ClCompile Include="src\TextBox.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\TextureShadowMap.cpp" />
+    <ClCompile Include="src\TreasureBox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\1.level" />

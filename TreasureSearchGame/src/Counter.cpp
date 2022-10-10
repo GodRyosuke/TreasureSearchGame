@@ -1,23 +1,44 @@
 #include "Game.hpp"
 #include "Counter.hpp"
 #include "MazeBox.hpp"
+#include "MeshComponent.hpp"
 
 Counter::Counter(Game* game)
 	:Actor(game)
 {
-	MazeBox* box = nullptr;
+	CounterBox* cb = nullptr;
 	for (int z = 0; z < 2; z++) {
 		for (int y = 0; y < 7; y++) {
-			box = new MazeBox(game);
-			box->SetScale(0.25f);
-			box->SetBoxType((z * 7 + y) % 2 ? MazeBox::BLACK : MazeBox::WHITE);
-			box->SetPosition(glm::vec3(1.75f, 0.5f * y + 0.25, 0.5f * z + 0.5f));
+			cb = new CounterBox(game);
+			cb->SetBoxType((z * 7 + y) % 2 ? CounterBox::BLACK : CounterBox::WHITE);
+			cb->SetPosition(glm::vec3(1.75f, 0.5f * y + 0.25, 0.5f * z + 0.5f));
+			cb->SetScale(0.25f);
 		}
 		for (int x = 0; x < 3; x++) {
-			box = new MazeBox(game);
-			box->SetScale(0.25f);
-			box->SetBoxType((z * 3 + x) % 2 ? MazeBox::WHITE : MazeBox::BLACK);
-			box->SetPosition(glm::vec3(0.5f * x + 0.25, 3.25f, 0.5f * z + 0.5f));
+			cb = new CounterBox(game);
+			cb->SetScale(0.25f);
+			cb->SetBoxType((z * 3 + x) % 2 ? CounterBox::WHITE : CounterBox::BLACK);
+			cb->SetPosition(glm::vec3(0.5f * x + 0.25, 3.25f, 0.5f * z + 0.5f));
 		}
+	}
+}
+
+CounterBox::CounterBox(Game* game)
+	:Actor(game)
+{
+	mMeshComp = new MeshComponent(this);
+	mMeshComp->SetMesh(game->GetMesh("MazeBox", "fbx"));
+}
+
+void CounterBox::UpdateActor(float deltatime)
+{
+	if (mType == WHITE) {
+		mMeshComp->SetTexture("./resources/MazeBox/WhiteUV.png");
+	}
+	else if (mType == BLACK) {
+		mMeshComp->SetTexture("./resources/MazeBox/BlackUV.png");
+	}
+	else {
+		mMeshComp->SetTexture("");
 	}
 }

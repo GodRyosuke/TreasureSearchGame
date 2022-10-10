@@ -6,13 +6,14 @@
 #include "gtc/type_ptr.hpp"
 #include "gtx/rotate_vector.hpp"
 #include "gtx/vector_angle.hpp"
-
 #include "TextComponent.hpp"
+
+static Game::PHASE preGamePhase;
 
 Player::Player(Game* game)
 	:Actor(game)
 	,mMoveSpeed(0.1)
-	,mWaitSeconds(false)
+	,mIsWaitSeconds(false)
 {
 	SetPosition(glm::vec3(10.0f, 3.0f, 0.0f));
 	mPlayerRot = 180;
@@ -26,18 +27,20 @@ Player::Player(Game* game)
 	
 	mFollowCamera = new FollowCamera(this);
 	mFollowCamera->SnapToIdeal();
+
+	preGamePhase = game->GetPhase();
 }
 
-void Player::WaitSeconds()
+void Player::WaitSeconds(uint32_t second)
 {
-	mWaitSeconds = true;
-	mStopTime = GetGame()->GetTicksCount() + 1000;
+	mIsWaitSeconds = true;
+	mStopTime = GetGame()->GetTicksCount() + second;
 }
 
 void Player::ActorInput(const uint8_t* keys)
 {
 	// 3s待つ場合は、あらゆる入力を受け付けない
-	if (mWaitSeconds) {
+	if (mIsWaitSeconds) {
 		return;
 	}
 
@@ -49,10 +52,10 @@ void Player::ActorInput(const uint8_t* keys)
 		playerNewPos = GetPosition() - GetForward() * mMoveSpeed;
 	}
 	if (keys[SDL_SCANCODE_A]) {
-		SetPlayerRot(mPlayerRot + 1.f);
+		SetPlayerRot(mPlayerRot + 3.f);
 	}
 	if (keys[SDL_SCANCODE_D]) {
-		SetPlayerRot(mPlayerRot - 1.f);
+		SetPlayerRot(mPlayerRot - 3.f);
 	}
 
 	// 受付と話す
@@ -96,12 +99,14 @@ void Player::ActorInput(const uint8_t* keys)
 		(0.f < playerNewPos.x) && (playerNewPos.x < 30.f) &&
 		(10.f < playerNewPos.y) && (playerNewPos.y < 30.f)
 		) {
-		if (GetGame()->IsWall(playerNewPos)) {
-			// Playerのいる場所が壁なら更新しない
-			IsUpdatePlayerPos = false;
-		}
-		else {
-			IsUpdatePlayerPos = true;
+		if (GetGame()->GetPhase() == Game::PHASE_GAME) {
+			if (GetGame()->IsWall(playerNewPos)) {
+				// Playerのいる場所が壁なら更新しない
+				IsUpdatePlayerPos = false;
+			}
+			else {
+				IsUpdatePlayerPos = true;
+			}
 		}
 	}
 
@@ -135,12 +140,24 @@ void Player::UpdateActor(float deltatime)
 {
 	SetRotation(glm::rotate(glm::mat4(1.0f), (float)M_PI * mPlayerRot / 180, glm::vec3(0.f, 0.f, 1.f)));
 
-	if (mWaitSeconds) {
+	if (mIsWaitSeconds) {
 		if (mStopTime < GetGame()->GetTicksCount()) {
-			mWaitSeconds = false;
+			mIsWaitSeconds = false;
 		}
 	}
 
+	if ((preGamePhase != Game::PHASE_GAME) && (GetGame()->GetPhase() == Game::PHASE_GAME)) {
+		// たった今、Game Phaseになったら、
+		glm::vec3 boxPos = GetGame()->GetTreasurePos();
+		glm::vec3 cameraPos = boxPos + glm::vec3(0.f, -1.f, 0.5f) * 5.f;
+		mFollowCamera->SetConstCamera(cameraPos, boxPos);
+		WaitSeconds(3000);
+	}
+	else if (!mIsWaitSeconds) {
+		mFollowCamera->SetIsConstCamera(false);
+	}
+
+	preGamePhase = GetGame()->GetPhase();
 	switch (mState)
 	{
 	case Player::WALK:

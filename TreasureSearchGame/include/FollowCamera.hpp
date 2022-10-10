@@ -12,6 +12,11 @@ public:
 
 	void SnapToIdeal();
 
+	// å≈íËÉJÉÅÉâóp
+	void SetConstCamera(glm::vec3 pos, glm::vec3 target) { 
+		mConstCameraPos = pos; mConstCameraTarget = target; mIsConstCamera = true; }
+
+	void SetIsConstCamera(bool isConst) { mIsConstCamera = isConst; }
 	void SetHorzDist(float dist) { mHorzDist = dist; }
 	void SetVertDist(float dist) { mVertDist = dist; }
 	void SetTargetDist(float dist) { mTargetDist = dist; }
@@ -32,4 +37,8 @@ private:
 	float mTargetDist;
 	// Spring constant (higher is more stiff)
 	float mSpringConstant;
+
+	bool mIsConstCamera;
+	glm::vec3 mConstCameraPos;
+	glm::vec3 mConstCameraTarget;
 };

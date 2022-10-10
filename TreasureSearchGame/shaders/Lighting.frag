@@ -54,6 +54,7 @@ uniform sampler2D gShadowMap;
 uniform vec3 gEyeWorldPos;                                                                  
 uniform float gMatSpecularIntensity;                                                        
 uniform float gSpecularPower;                                                               
+uniform float gAlpha;                                                               
                                                                                             
 float CalcShadowFactor(vec4 LightSpacePos)                                                  
 {                                                                                           
@@ -172,5 +173,6 @@ void main()
     //    discard;
     //}
 
-    FragColor = SampledColor * TotalLight;                                                  
+    FragColor = SampledColor * TotalLight;  
+    FragColor.a = gAlpha;
 }

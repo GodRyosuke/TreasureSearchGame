@@ -14,6 +14,8 @@ public:
 		PHASE_IDLE,
 		PHASE_MOVE,
 		PHASE_TALK,
+		PHASE_NORMAL,
+		PHASE_GAME,
 		PHASE_MAX
 	};
 	Game();
@@ -41,6 +43,7 @@ public:
 
 	// posÇ™ï«Ç©ÅH
 	bool IsWall(glm::vec3 pos);
+	glm::vec3 GetTreasurePos();
 
 	void AddMeshComp(class MeshComponent* meshcomp);
 	void RemoveMeshComp(class MeshComponent* mesh);

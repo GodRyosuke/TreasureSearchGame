@@ -21,6 +21,7 @@
 #include "TalkText.hpp"
 #include "Counter.hpp"
 #include "Clerk.hpp"
+#include "TreasureBox.hpp"
 #include <fstream>
 #include <codecvt>
 #define STB_IMAGE_IMPLEMENTATION
@@ -29,7 +30,7 @@ Game::Game()
 	:mWindowWidth(1024),
 	mWindowHeight(768),
 	mIsRunning(true),
-	
+	mPhase(PHASE_NORMAL),
 	mMoveSensitivity(100.0f)
 {
 	mCameraUP = glm::vec3(0.0f, 0.0f, 1.0f);
@@ -287,6 +288,37 @@ bool Game::LoadData()
 	SetLighting();
 
 
+	// Load Level Data
+	mLevelData = new char* [10];
+	for (int y = 0; y < 10; y++) {
+		mLevelData[y] = new char[15];
+	}
+	{
+		std::string fileName = "./resources/1.level";
+		FILE* fp = fopen(fileName.c_str(), "rb");
+		char c;
+
+		//	EOFまでファイルから文字を1文字ずつ読み込む
+		int x = 0;
+		int y = 0;
+		while ((c = fgetc(fp)) != EOF)
+		{
+			//	読み込んだ1文字を画面に出力する
+			if (y == 10) {
+				break;
+			}
+			if (c == '\n') {
+				y++;
+				x = 0;
+				continue;
+			}
+			mLevelData[y][x++] = c;
+		}
+
+		fclose(fp);
+	}
+
+
 	// Modelを読み込む
 	Plane* plane = nullptr;
 	// 床を読み込む
@@ -359,6 +391,9 @@ bool Game::LoadData()
 	// 店員
 	a = new Clerk(this);
 
+	// 宝箱
+	a = new TreasureBox(this);
+
 
 
 
@@ -404,35 +439,6 @@ bool Game::LoadData()
 	//mText->SetAlpha(1.0f);
 	//mText->SetTextColor(glm::vec3(0.0f, 0.0f, 0.2f));
 
-	// Load Level Data
-	mLevelData = new char* [10];
-	for (int y = 0; y < 10; y++) {
-		mLevelData[y] = new char[15];
-	}
-	{
-		std::string fileName = "./resources/1.level";
-		FILE* fp = fopen(fileName.c_str(), "rb");
-		char c;
-
-		//	EOFまでファイルから文字を1文字ずつ読み込む
-		int x = 0;
-		int y = 0;
-		while ((c = fgetc(fp)) != EOF)
-		{
-			//	読み込んだ1文字を画面に出力する
-			if (y == 10) {
-				break;
-			}
-			if (c == '\n') {
-				y++;
-				x = 0;
-				continue;
-			}
-			mLevelData[y][x++] = c;
-		}
-
-		fclose(fp);
-	}
 
 
 	return true;
@@ -440,9 +446,38 @@ bool Game::LoadData()
 
 bool Game::IsWall(glm::vec3 pos)
 {
-	if (mLevelData[static_cast<int>(pos.y / 2) - 5][static_cast<int>(pos.x / 2)] == '#') {
-		// Playerのいる場所が壁なら更新しない
-		return true;
+	// Mazeの領域にあるか？
+	if (
+		(0.f < pos.x) && (pos.x < 30.f) &&
+		(10.f < pos.y) && (pos.y < 30.f)
+		) {
+		if (mLevelData[static_cast<int>(pos.y / 2) - 5][static_cast<int>(pos.x / 2)] == '#') {
+			// Playerのいる場所が壁なら更新しない
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	else {
+		// Maze外側は壁じゃない
+		return false;
+	}
+}
+
+glm::vec3 Game::GetTreasurePos()
+{
+	// Mazeの床描画
+	for (int y = 5; y < 15; y++) {
+		for (int x = 0; x < 15; x++) {
+			float x_pos = 1.0f + 2.0f * x;
+			float y_pos = 1.0f + 2.0f * y;
+
+			if (mLevelData[y - 5][x] == '*') {
+				// 宝箱の場所
+				return glm::vec3(x_pos, y_pos, 0.f);
+			}
+		}
 	}
 }
 
@@ -677,7 +712,11 @@ void Game::Draw()
 	// Clear the color buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	//glEnable(GL_DEPTH_TEST);
-	glDisable(GL_BLEND);
+	//glDisable(GL_BLEND);
+	glEnable(GL_BLEND);
+	glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
+	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ZERO);
+
 
 	mMeshShader->UseProgram();
 	for (auto mc : mMeshComps) {

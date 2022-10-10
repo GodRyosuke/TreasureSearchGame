@@ -19,7 +19,7 @@ public:
 	void UpdateActor(float deltaTime) override;
 	State GetState() { return mState; }
 	void SetState(State state) { mState = state; }
-	void WaitSeconds();
+	void WaitSeconds(uint32_t second);
 
 	void SetPlayerRot(float rotate);
 
@@ -32,6 +32,6 @@ private:
 	float mPlayerRot;
 	State mPreviousState;
 	State mState;
-	bool mWaitSeconds;
+	bool mIsWaitSeconds;
 	uint32_t mStopTime;
 };
