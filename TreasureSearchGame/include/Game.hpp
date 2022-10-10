@@ -16,6 +16,8 @@ public:
 		PHASE_TALK,
 		PHASE_NORMAL,
 		PHASE_GAME,
+		PHASE_FAIL_GAME,
+		PHASE_SUCCSESS_GAME,
 		PHASE_MAX
 	};
 	Game();
@@ -37,6 +39,7 @@ public:
 
 	class Player* GetPlayer() { return mPlayer; }
 	class TalkText* GetTalkText() { return mTalkText; }
+	class Sound* GetSound() { return mSound; }
 
 	void SetPhase(PHASE phase) { mPhase = phase; }
 	PHASE GetPhase() { return mPhase; }
@@ -112,6 +115,9 @@ private:
 
 
 	PHASE mPhase;
+
+	class Sound* mSound;
+
 
 	// Camera
 	glm::vec3 mCameraUP;

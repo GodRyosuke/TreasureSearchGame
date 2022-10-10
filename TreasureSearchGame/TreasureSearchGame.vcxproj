@@ -165,6 +165,8 @@ XCOPY "$(SolutionDir)TreasureSearchGame\resources" %OUTPUT_DIRECTORY% /e /y</Com
     <ClInclude Include="include\Clerk.hpp" />
     <ClInclude Include="include\Component.hpp" />
     <ClInclude Include="include\Counter.hpp" />
+    <ClInclude Include="include\FMOD\common.hpp" />
+    <ClInclude Include="include\FMOD\common_platform.hpp" />
     <ClInclude Include="include\FollowCamera.hpp" />
     <ClInclude Include="include\Game.hpp" />
     <ClInclude Include="include\GLUtil.hpp" />
@@ -177,6 +179,7 @@ XCOPY "$(SolutionDir)TreasureSearchGame\resources" %OUTPUT_DIRECTORY% /e /y</Com
     <ClInclude Include="include\Shader.hpp" />
     <ClInclude Include="include\SkinMeshComponent.hpp" />
     <ClInclude Include="include\Skinning.hpp" />
+    <ClInclude Include="include\Sound.hpp" />
     <ClInclude Include="include\SpriteComponent.hpp" />
     <ClInclude Include="include\TalkText.hpp" />
     <ClInclude Include="include\TalkTextComponent.hpp" />
@@ -192,6 +195,8 @@ XCOPY "$(SolutionDir)TreasureSearchGame\resources" %OUTPUT_DIRECTORY% /e /y</Com
     <ClCompile Include="src\Clerk.cpp" />
     <ClCompile Include="src\Component.cpp" />
     <ClCompile Include="src\Counter.cpp" />
+    <ClCompile Include="src\FMOD\common.cpp" />
+    <ClCompile Include="src\FMOD\common_platform.cpp" />
     <ClCompile Include="src\FollowCamera.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\Main.cpp" />
@@ -204,6 +209,7 @@ XCOPY "$(SolutionDir)TreasureSearchGame\resources" %OUTPUT_DIRECTORY% /e /y</Com
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\SkinMeshComponent.cpp" />
     <ClCompile Include="src\Skinning.cpp" />
+    <ClCompile Include="src\Sound.cpp" />
     <ClCompile Include="src\SpriteComponent.cpp" />
     <ClCompile Include="src\TalkText.cpp" />
     <ClCompile Include="src\TalkTextComponent.cpp" />

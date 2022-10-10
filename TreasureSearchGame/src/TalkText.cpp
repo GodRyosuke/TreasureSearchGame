@@ -1,8 +1,10 @@
 #include "TalkText.hpp"
 #include "TalkTextComponent.hpp"
 #include "Game.hpp"
+#include "Sound.hpp"
 #include <fstream>
 #include <codecvt>
+#include <random>
 
 
 TalkText::TalkText(Game* game)
@@ -32,6 +34,12 @@ TalkText::TalkText(Game* game)
 		mData["TalkCostomer"]["Explain"]["Talk1"],
 		mData["TalkCostomer"]["Explain"]["Talk2"],
 		mData["TalkCostomer"]["Explain"]["Talk3"],
+		mData["TalkCostomer"]["FailGame"]["Talk1"],
+		mData["GameResult"]["Food"]["Result1"],
+		mData["GameResult"]["Food"]["Result2"],
+		mData["GameResult"]["Food"]["Result3"],
+		mData["GameResult"]["Treasure"]["Result1"],
+		mData["GameResult"]["Treasure"]["Result2"],
 	};
 }
 
@@ -41,12 +49,26 @@ void TalkText::UpdateActor(float deltatime)
 
 	// プレイヤーが話しかけたら
 	if ((playerState == Player::TALK) && (mPreviousPlayerState != Player::TALK)) {
-		mTalkIdx = 0;
-		mTalkTextComp->SetText(JsonToString(mTalkData[mTalkIdx]));
-		mTalkTextComp->InittextPos();
-		mTalkTextComp->SetIsDraw(true);
-		SetPosition(glm::vec3(0.0f, -150.0f, 0.f));
-		mTalkTextComp->SetTextColor(glm::vec3(0.f, 0.f, 0.2f));
+		if (GetGame()->GetPhase() == Game::PHASE_FAIL_GAME) {
+			// ゲーム失敗
+			mTalkIdx = 7;
+			mTalkTextComp->SetText(JsonToString(mTalkData[mTalkIdx]));
+			mTalkTextComp->InittextPos();
+		}
+		else if (GetGame()->GetPhase() == Game::PHASE_SUCCSESS_GAME) {
+			// ゲームクリア
+			mTalkIdx = 8 + mResultIdx;
+			mTalkTextComp->SetText(JsonToString(mTalkData[mTalkIdx]));
+			mTalkTextComp->InittextPos();
+		}
+		else {
+			mTalkIdx = 0;
+			mTalkTextComp->SetText(JsonToString(mTalkData[mTalkIdx]));
+			mTalkTextComp->InittextPos();
+			mTalkTextComp->SetIsDraw(true);
+			SetPosition(glm::vec3(0.0f, -150.0f, 0.f));
+			mTalkTextComp->SetTextColor(glm::vec3(0.f, 0.f, 0.2f));
+		}
 	}
 
 	// 選択画面なら
@@ -63,6 +85,7 @@ void TalkText::UpdateActor(float deltatime)
 	else {
 		mTalkTextComp->SetIsDraw(false);
 	}
+
 
 	mPreviousPlayerState = playerState;
 }
@@ -96,14 +119,39 @@ void TalkText::ActorInput(const uint8_t* keyState)
 			mTalkIdx = 0;
 			GetGame()->SetPhase(Game::PHASE_GAME);	// ゲームスタート
 			GetGame()->GetPlayer()->SetState(Player::IDLE);
-			//GetGame()->GetPlayer()->WaitSeconds(1000);
+			// 宝箱決定
+			std::mt19937 mt(static_cast<int>(time(0)));
+			mResultIdx = mt() % 5;
+			// BGM変更
+			Sound* sound = GetGame()->GetSound();
+			sound->SetType(Sound::NORMAL);
+			sound->StopMusic();
+			sound->SetType(Sound::GAME);
+			sound->StartMusic();
+		}
+		else if (
+			((GetGame()->GetPhase() == Game::PHASE_FAIL_GAME) ||
+			(GetGame()->GetPhase() == Game::PHASE_SUCCSESS_GAME) ) &&
+			(keyState[SDL_SCANCODE_RETURN])) {
+			// ゲーム終了
+			GetGame()->SetPhase(Game::PHASE_NORMAL); // Normalに移動
+			mTalkIdx = 0;
+			GetGame()->GetPlayer()->SetState(Player::IDLE);
+			// BGM変更
+			Sound* sound = GetGame()->GetSound();
+			sound->SetType(Sound::GAME);
+			sound->StopMusic();
+			sound->SetType(Sound::NORMAL);
+			sound->StartMusic();
 		}
 		else if ((mTalkIdx != 2) &&(keyState[SDL_SCANCODE_RETURN])) {
 			mTalkIdx++;
 			mTalkTextComp->SetText(JsonToString(mTalkData[mTalkIdx]));
 			mTalkTextComp->InittextPos();
 		}
+
 	}
+
 }
 
 bool TalkText::GetIsFinishDraw()

@@ -13,3 +13,16 @@ public:
 private:
 	class TextComponent* mTextComp;
 };
+
+class TimerText : public Actor
+{
+public:
+	TimerText(class Game* game);
+	void UpdateActor(float deltatime) override;
+
+private:
+	class TextComponent* mTextComp;
+	uint32_t mStartTime;
+	int mTime;
+	int mMaxTime;
+};

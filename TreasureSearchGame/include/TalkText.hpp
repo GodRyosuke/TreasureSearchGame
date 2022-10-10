@@ -24,4 +24,5 @@ private:
 	std::vector<nl::json> mTalkData;
 	bool mIsSelectText;
 	int mTalkIdx;
+	int mResultIdx;
 };

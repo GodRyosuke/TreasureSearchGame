@@ -34,11 +34,21 @@ TreasureBox::TreasureBox(Game* game)
 
 void TreasureBox::UpdateActor(float deltatime)
 {
+	if (((GetGame()->GetPhase() == Game::PHASE_GAME)) && (preGamePhase != Game::PHASE_GAME)) {
+		// •ó” ‚Ì‚Ó‚½‚ð•Â‚¶‚é
+		mSkinMeshComp->SetAnimTime(50.0f);
+	}
 	if ((GetGame()->GetPhase() == Game::PHASE_GAME) &&
 		(mAlpha < 1.0f)) {
 		// Game Phase‚É‚È‚Á‚½‚çA•ó” •`‰æ
 		mSkinMeshComp->SetAlpha(mAlpha);
 		mAlpha += 0.05f;
+	}
+	if ((GetGame()->GetPhase() != Game::PHASE_GAME) && 
+		(GetGame()->GetPhase() != Game::PHASE_SUCCSESS_GAME)) {
+		// Game Phase‚à‚µ‚­‚ÍƒQ[ƒ€ƒNƒŠƒAŽž‚¶‚á‚È‚¢‚Æ‚«‚Í•`‰æ‚µ‚È‚¢
+		mAlpha = 0.f;
+		mSkinMeshComp->SetAlpha(mAlpha);
 	}
 
 	if (mOpenTime > 0) {
@@ -53,7 +63,6 @@ void TreasureBox::UpdateActor(float deltatime)
 
 void TreasureBox::ActorInput(const uint8_t* keys)
 {
-	// •ó” ‚Ì‘O‚ÅReturn
 	glm::vec3 playerPos = GetGame()->GetPlayer()->GetPosition();
 	glm::vec3 boxPos = GetPosition();
 	if (GetGame()->GetPhase() == Game::PHASE_GAME) {
@@ -62,7 +71,10 @@ void TreasureBox::ActorInput(const uint8_t* keys)
 			((boxPos.y - 1.f) < playerPos.y) && (playerPos.y < (boxPos.y + 1.f))
 			) {
 			if (keys[SDL_SCANCODE_RETURN]) {
+				// •ó” ‚Ì‘O‚ÅReturn
 				mOpenTime = GetGame()->GetTicksCount();
+				GetGame()->GetPlayer()->WaitSeconds(3000);
+				GetGame()->SetPhase(Game::PHASE_SUCCSESS_GAME);
 			}
 		}
 	}

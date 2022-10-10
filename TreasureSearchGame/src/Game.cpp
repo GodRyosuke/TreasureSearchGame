@@ -22,8 +22,10 @@
 #include "Counter.hpp"
 #include "Clerk.hpp"
 #include "TreasureBox.hpp"
+#include "Sound.hpp"
 #include <fstream>
 #include <codecvt>
+
 #define STB_IMAGE_IMPLEMENTATION
 
 Game::Game()
@@ -394,6 +396,10 @@ bool Game::LoadData()
 	// 宝箱
 	a = new TreasureBox(this);
 
+	// サウンド関連
+	mSound = new Sound();
+	mSound->SetType(Sound::NORMAL);	
+	mSound->StartMusic();	// 店内のBGMを流す
 
 
 
@@ -428,6 +434,7 @@ bool Game::LoadData()
 
 	// Load Text
 	a = new UserAssistText(this);
+	a = new TimerText(this);
 
 	// Talk Text の読み込み
 	mTalkText = new TalkText(this);
@@ -582,6 +589,8 @@ void Game::UpdateGame()
 	for (auto actor : mActors) {
 		actor->Update(deltaTime);
 	}
+
+	mSound->Update();
 
 	//mPlayer->Update(deltaTime);
 }

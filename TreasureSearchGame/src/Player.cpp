@@ -39,7 +39,7 @@ void Player::WaitSeconds(uint32_t second)
 
 void Player::ActorInput(const uint8_t* keys)
 {
-	// 3s待つ場合は、あらゆる入力を受け付けない
+	// 待つ場合は、あらゆる入力を受け付けない
 	if (mIsWaitSeconds) {
 		return;
 	}
@@ -100,8 +100,16 @@ void Player::ActorInput(const uint8_t* keys)
 		(10.f < playerNewPos.y) && (playerNewPos.y < 30.f)
 		) {
 		if (GetGame()->GetPhase() == Game::PHASE_GAME) {
+			glm::vec3 boxPos = GetGame()->GetTreasurePos();
 			if (GetGame()->IsWall(playerNewPos)) {
 				// Playerのいる場所が壁なら更新しない
+				IsUpdatePlayerPos = false;
+			}
+			else if (
+				((boxPos.x - 0.5f) < playerNewPos.x) && (playerNewPos.x < (boxPos.x + 0.5f)) &&
+				((boxPos.y - 0.5f) < playerNewPos.y) && (playerNewPos.y < (boxPos.y + 0.5f))
+				) {
+				// 宝箱との衝突判定
 				IsUpdatePlayerPos = false;
 			}
 			else {
@@ -142,7 +150,7 @@ void Player::UpdateActor(float deltatime)
 
 	if (mIsWaitSeconds) {
 		if (mStopTime < GetGame()->GetTicksCount()) {
-			mIsWaitSeconds = false;
+			mIsWaitSeconds = false;	// 待ち終了
 		}
 	}
 
@@ -155,6 +163,11 @@ void Player::UpdateActor(float deltatime)
 	}
 	else if (!mIsWaitSeconds) {
 		mFollowCamera->SetIsConstCamera(false);
+	}
+
+	if ((GetGame()->GetPhase() == Game::PHASE_SUCCSESS_GAME) && (!mIsWaitSeconds)) {
+		// 待ち時間終了したら
+		mState = TALK;
 	}
 
 	preGamePhase = GetGame()->GetPhase();

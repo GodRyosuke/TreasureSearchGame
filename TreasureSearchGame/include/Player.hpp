@@ -20,6 +20,7 @@ public:
 	State GetState() { return mState; }
 	void SetState(State state) { mState = state; }
 	void WaitSeconds(uint32_t second);
+	bool GetIsWaitSeconds() { return mIsWaitSeconds; }
 
 	void SetPlayerRot(float rotate);
 
