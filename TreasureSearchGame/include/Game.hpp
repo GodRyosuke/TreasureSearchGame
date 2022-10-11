@@ -37,8 +37,11 @@ public:
 	void RemoveSpriteComp(class SpriteComponent* sprite);
 	void RemoveTextComp(class TextComponent* text);
 
+	uint32_t GetRandom();
+
 	class Player* GetPlayer() { return mPlayer; }
 	class TalkText* GetTalkText() { return mTalkText; }
+	class TreasureBox* GetTreasureBox() { return mTreasureBox; }
 	class Sound* GetSound() { return mSound; }
 
 	void SetPhase(PHASE phase) { mPhase = phase; }
@@ -46,6 +49,7 @@ public:
 
 	// posÇ™ï«Ç©ÅH
 	bool IsWall(glm::vec3 pos);
+	void SetLevel();
 	glm::vec3 GetTreasurePos();
 
 	void AddMeshComp(class MeshComponent* meshcomp);
@@ -100,11 +104,14 @@ private:
 
 	class Player* mPlayer;
 	class TalkText* mTalkText;
+	class TreasureBox* mTreasureBox;
 
 	class Plane* mPlane;
 	MazeBox* mMazeBox;
 	float** mMazeData;
-	char** mLevelData;
+	//char** mLevelData;
+	std::vector<char**> mLevelArray;
+	int mLevelIdx;
 
 	
 
@@ -112,6 +119,8 @@ private:
 	class Shader* mMeshShader;
 	class Shader* mSpriteShader;
 	class Shader* mTextShader;
+
+	class Random* mRandom;
 
 
 	PHASE mPhase;

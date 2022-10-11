@@ -99,6 +99,9 @@
     <ClInclude Include="include\Sound.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="include\Random.hpp">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp">
@@ -185,13 +188,20 @@
     <ClCompile Include="src\FMOD\common_platform.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="src\Random.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\Sprite.vert" />
     <None Include="shaders\Sprite.frag" />
     <None Include="shaders\Text.vert" />
     <None Include="shaders\Text.frag" />
-    <None Include="resources\1.level" />
+    <None Include="resources\LevelData\1.level" />
     <None Include="resources\TextData.json" />
+    <None Include="resources\LevelData\2.level" />
+    <None Include="resources\LevelData\3.level" />
+    <None Include="resources\LevelData\4.level" />
+    <None Include="resources\LevelData\5.level" />
   </ItemGroup>
 </Project>

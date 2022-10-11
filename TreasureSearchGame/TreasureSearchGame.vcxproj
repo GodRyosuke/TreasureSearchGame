@@ -175,6 +175,7 @@ XCOPY "$(SolutionDir)TreasureSearchGame\resources" %OUTPUT_DIRECTORY% /e /y</Com
     <ClInclude Include="include\MeshComponent.hpp" />
     <ClInclude Include="include\Plane.hpp" />
     <ClInclude Include="include\Player.hpp" />
+    <ClInclude Include="include\Random.hpp" />
     <ClInclude Include="include\Roof.hpp" />
     <ClInclude Include="include\Shader.hpp" />
     <ClInclude Include="include\SkinMeshComponent.hpp" />
@@ -205,6 +206,7 @@ XCOPY "$(SolutionDir)TreasureSearchGame\resources" %OUTPUT_DIRECTORY% /e /y</Com
     <ClCompile Include="src\MeshComponent.cpp" />
     <ClCompile Include="src\Plane.cpp" />
     <ClCompile Include="src\Player.cpp" />
+    <ClCompile Include="src\Random.cpp" />
     <ClCompile Include="src\Roof.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\SkinMeshComponent.cpp" />
@@ -221,7 +223,11 @@ XCOPY "$(SolutionDir)TreasureSearchGame\resources" %OUTPUT_DIRECTORY% /e /y</Com
     <ClCompile Include="src\TreasureBox.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="resources\1.level" />
+    <None Include="resources\LevelData\1.level" />
+    <None Include="resources\LevelData\2.level" />
+    <None Include="resources\LevelData\3.level" />
+    <None Include="resources\LevelData\4.level" />
+    <None Include="resources\LevelData\5.level" />
     <None Include="resources\TextData.json" />
     <None Include="shaders\Sprite.frag" />
     <None Include="shaders\Sprite.vert" />

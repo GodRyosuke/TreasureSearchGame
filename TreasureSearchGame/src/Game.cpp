@@ -23,8 +23,10 @@
 #include "Clerk.hpp"
 #include "TreasureBox.hpp"
 #include "Sound.hpp"
+#include "Random.hpp"
 #include <fstream>
 #include <codecvt>
+#include <random>
 
 #define STB_IMAGE_IMPLEMENTATION
 
@@ -34,6 +36,7 @@ Game::Game()
 	mIsRunning(true),
 	mPhase(PHASE_NORMAL),
 	mMoveSensitivity(100.0f)
+	,mLevelIdx(0)
 {
 	mCameraUP = glm::vec3(0.0f, 0.0f, 1.0f);
 	mCameraOrientation = glm::vec3(0.5f, 0, 0);
@@ -289,15 +292,20 @@ bool Game::LoadData()
 	// light setting
 	SetLighting();
 
-
 	// Load Level Data
-	mLevelData = new char* [10];
-	for (int y = 0; y < 10; y++) {
-		mLevelData[y] = new char[15];
-	}
-	{
-		std::string fileName = "./resources/1.level";
-		FILE* fp = fopen(fileName.c_str(), "rb");
+	//mLevelData = new char* [10];
+	//for (int y = 0; y < 10; y++) {
+	//	mLevelData[y] = new char[15];
+	//}
+	for (int i = 1; i <= 5; i++) {
+		char** levelData = new char* [10];
+		for (int y = 0; y < 10; y++) {
+			levelData[y] = new char[15];
+		}
+		std::string fileRoot = "./resources/LevelData/";
+		std::string fileName = std::to_string(i) + ".level";
+		std::string filePath = fileRoot + fileName;
+		FILE* fp = fopen(filePath.c_str(), "rb");
 		char c;
 
 		//	EOFまでファイルから文字を1文字ずつ読み込む
@@ -314,11 +322,15 @@ bool Game::LoadData()
 				x = 0;
 				continue;
 			}
-			mLevelData[y][x++] = c;
+			levelData[y][x++] = c;
 		}
 
 		fclose(fp);
+		mLevelArray.push_back(levelData);
 	}
+
+	// 乱数
+	mRandom = new Random();
 
 
 	// Modelを読み込む
@@ -394,7 +406,7 @@ bool Game::LoadData()
 	a = new Clerk(this);
 
 	// 宝箱
-	a = new TreasureBox(this);
+	mTreasureBox = new TreasureBox(this);
 
 	// サウンド関連
 	mSound = new Sound();
@@ -453,12 +465,14 @@ bool Game::LoadData()
 
 bool Game::IsWall(glm::vec3 pos)
 {
+	char** levelData = mLevelArray[mLevelIdx];
+
 	// Mazeの領域にあるか？
 	if (
 		(0.f < pos.x) && (pos.x < 30.f) &&
 		(10.f < pos.y) && (pos.y < 30.f)
 		) {
-		if (mLevelData[static_cast<int>(pos.y / 2) - 5][static_cast<int>(pos.x / 2)] == '#') {
+		if (levelData[static_cast<int>(pos.y / 2) - 5][static_cast<int>(pos.x / 2)] == '#') {
 			// Playerのいる場所が壁なら更新しない
 			return true;
 		}
@@ -472,20 +486,32 @@ bool Game::IsWall(glm::vec3 pos)
 	}
 }
 
+void Game::SetLevel()
+{
+	mLevelIdx = mRandom->rnd() % 5;
+}
+
 glm::vec3 Game::GetTreasurePos()
 {
+	char** levelData = mLevelArray[mLevelIdx];
+
 	// Mazeの床描画
 	for (int y = 5; y < 15; y++) {
 		for (int x = 0; x < 15; x++) {
 			float x_pos = 1.0f + 2.0f * x;
 			float y_pos = 1.0f + 2.0f * y;
 
-			if (mLevelData[y - 5][x] == '*') {
+			if (levelData[y - 5][x] == '*') {
 				// 宝箱の場所
 				return glm::vec3(x_pos, y_pos, 0.f);
 			}
 		}
 	}
+}
+
+uint32_t Game::GetRandom()
+{
+	return mRandom->rnd();
 }
 
 void Game::ProcessInput()

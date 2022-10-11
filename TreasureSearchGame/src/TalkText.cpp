@@ -1,10 +1,11 @@
 #include "TalkText.hpp"
 #include "TalkTextComponent.hpp"
 #include "Game.hpp"
+#include "TreasureBox.hpp"
 #include "Sound.hpp"
 #include <fstream>
 #include <codecvt>
-#include <random>
+
 
 
 TalkText::TalkText(Game* game)
@@ -119,9 +120,12 @@ void TalkText::ActorInput(const uint8_t* keyState)
 			mTalkIdx = 0;
 			GetGame()->SetPhase(Game::PHASE_GAME);	// ゲームスタート
 			GetGame()->GetPlayer()->SetState(Player::IDLE);
-			// 宝箱決定
-			std::mt19937 mt(static_cast<int>(time(0)));
-			mResultIdx = mt() % 5;
+			// 迷路を決定
+			GetGame()->SetLevel();
+			// 宝箱の位置など設定
+			GetGame()->GetTreasureBox()->Init();
+			// 宝箱の中身決定
+			mResultIdx = GetGame()->GetRandom() % 5;
 			// BGM変更
 			Sound* sound = GetGame()->GetSound();
 			sound->SetType(Sound::NORMAL);

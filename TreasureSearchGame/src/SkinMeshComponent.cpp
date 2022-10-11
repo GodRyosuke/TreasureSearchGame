@@ -12,25 +12,36 @@ SkinMeshComponent::SkinMeshComponent(Actor* owner)
 {
 }
 
+void SkinMeshComponent::SetIsOneAnim(bool isOne)
+{
+	mIsOneAnim = isOne;
+	if (isOne) {
+		mAnimStartClock = mOwner->GetGame()->GetTicksCount();
+	}
+}
+
 void SkinMeshComponent::Update(float deltatime)
 {
 	mSkinMesh->SetAnimIdx(mAnimIdx);
 
 	float timeInTicks = 0;
-	if (mAnimtime >= 0) {
-		timeInTicks = mAnimtime;
+	//if (mAnimtime >= 0) {
+	//	timeInTicks = mAnimtime;
+	//}
+	//else {
+	//	timeInTicks = mOwner->GetGame()->GetTicksCount();
+	//}
+
+	if (mIsOneAnim) {
+		// 一度きりのアニメーションなら
+		timeInTicks = mOwner->GetGame()->GetTicksCount() - mAnimStartClock;
 	}
 	else {
 		timeInTicks = mOwner->GetGame()->GetTicksCount();
 	}
 
-	//if (!mZeroTransFrag) {
-	//	timeInTicks = mOwner->GetGame()->GetTicksCount();
-	//}
 
 	mSkinMesh->GetBoneTransform(timeInTicks / 1000.f, mBoneMatrixPallete);
-	if (!mStopAnimation) {
-	}
 }
 
 void SkinMeshComponent::Draw(Shader* shader)

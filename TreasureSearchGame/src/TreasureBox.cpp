@@ -18,18 +18,23 @@ TreasureBox::TreasureBox(Game* game)
 	mSkinMeshComp = new SkinMeshComponent(this);
 	mSkinMeshComp->SetSkinMesh(game->GetSkinMesh("TreasureBox", "gltf"));
 	mSkinMeshComp->SetAnimIdx(0);
-	mSkinMeshComp->SetAnimTime(50.f);
-	mSkinMeshComp->SetAlpha(0.f);
 
-	SetPosition(game->GetTreasurePos());
 	{
 		glm::mat4 rotate_x = glm::rotate(glm::mat4(1.0f), (float)M_PI, glm::vec3(1.0f, 0.0f, 0.0f));
 		glm::mat4 rotate_z = glm::rotate(glm::mat4(1.0f), (float)M_PI, glm::vec3(0.0f, 0.0f, 1.0f));
 		SetRotation(rotate_x * rotate_z);
 	}
 	SetScale(0.01f / 2.f);
+	Init();
 
 	preGamePhase = game->GetPhase();
+}
+
+void TreasureBox::Init()
+{
+	SetPosition(GetGame()->GetTreasurePos());
+	mSkinMeshComp->SetAnimTime(50.f);
+	mSkinMeshComp->SetAlpha(0.f);
 }
 
 void TreasureBox::UpdateActor(float deltatime)

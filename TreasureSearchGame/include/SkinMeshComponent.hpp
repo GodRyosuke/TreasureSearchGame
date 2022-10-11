@@ -15,6 +15,7 @@ public:
 	void SetStopAnimation(bool stop) { mStopAnimation = stop; }
 	void SetZeroTransFrag(bool frag) { mZeroTransFrag = frag; }
 	void SetAnimTime(float time) { mAnimtime = time; }
+	void SetIsOneAnim(bool one);
 
 
 private:
@@ -26,4 +27,6 @@ private:
 	float mAnimtime;
 	class SkinMesh* mSkinMesh;
 	std::vector<glm::mat4> mBoneMatrixPallete;
+	bool mIsOneAnim;
+	uint32_t mAnimStartClock;
 };
