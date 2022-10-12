@@ -48,7 +48,6 @@ void TalkText::UpdateActor(float deltatime)
 {
 	Player::State playerState = GetGame()->GetPlayer()->GetState();
 
-	// プレイヤーが話しかけたら
 	if ((playerState == Player::TALK) && (mPreviousPlayerState != Player::TALK)) {
 		if (GetGame()->GetPhase() == Game::PHASE_FAIL_GAME) {
 			// ゲーム失敗
@@ -63,12 +62,15 @@ void TalkText::UpdateActor(float deltatime)
 			mTalkTextComp->InittextPos();
 		}
 		else {
+			// 店員に話しかける
 			mTalkIdx = 0;
 			mTalkTextComp->SetText(JsonToString(mTalkData[mTalkIdx]));
 			mTalkTextComp->InittextPos();
 			mTalkTextComp->SetIsDraw(true);
 			SetPosition(glm::vec3(0.0f, -150.0f, 0.f));
 			mTalkTextComp->SetTextColor(glm::vec3(0.f, 0.f, 0.2f));
+			GetGame()->GetSound()->SetType(Sound::CLERK);
+			GetGame()->GetSound()->StartMusic();
 		}
 	}
 
@@ -94,6 +96,7 @@ void TalkText::UpdateActor(float deltatime)
 void TalkText::ActorInput(const uint8_t* keyState)
 {
 	Player::State playerState = GetGame()->GetPlayer()->GetState();
+	Sound* sound = GetGame()->GetSound();
 	// 描画が終わってからエンターキーが押下されたら
 	if ((playerState == Player::TALK) && (mTalkTextComp->GetIsFinishDraw())) {
 		if ((mTalkIdx == 2)&&(keyState[SDL_SCANCODE_2])) {
@@ -101,12 +104,16 @@ void TalkText::ActorInput(const uint8_t* keyState)
 			mTalkIdx = 3;
 			mTalkTextComp->SetText(JsonToString(mTalkData[mTalkIdx]));
 			mTalkTextComp->InittextPos();
+			sound->SetType(Sound::CANSEL);
+			sound->StartMusic();
 		}
 		else if ((mTalkIdx == 2) && (keyState[SDL_SCANCODE_1])) {
 			// ゲームをすると選択
 			mTalkIdx = 4;
 			mTalkTextComp->SetText(JsonToString(mTalkData[mTalkIdx]));
 			mTalkTextComp->InittextPos();
+			sound->SetType(Sound::SELECT);
+			sound->StartMusic();
 		}
 		else if ((mTalkIdx == 3) && (keyState[SDL_SCANCODE_RETURN])) {
 			// またきてね描画終了
@@ -114,6 +121,8 @@ void TalkText::ActorInput(const uint8_t* keyState)
 			mTalkIdx = 0;
 			GetGame()->GetPlayer()->SetState(Player::IDLE);
 			GetGame()->GetPlayer()->WaitSeconds(1000);
+			sound->SetType(Sound::SELECT);
+			sound->StartMusic();
 		}
 		else if ((mTalkIdx == 6) && (keyState[SDL_SCANCODE_RETURN])) {
 			// ゲーム開始のため、TALK終わり
@@ -142,13 +151,20 @@ void TalkText::ActorInput(const uint8_t* keyState)
 			mTalkIdx = 0;
 			GetGame()->GetPlayer()->SetState(Player::IDLE);
 			// BGM変更
-			Sound* sound = GetGame()->GetSound();
 			sound->SetType(Sound::GAME);
 			sound->StopMusic();
 			sound->SetType(Sound::NORMAL);
 			sound->StartMusic();
+			sound->SetType(Sound::SELECT);
+			sound->StartMusic();
 		}
-		else if ((mTalkIdx != 2) &&(keyState[SDL_SCANCODE_RETURN])) {
+		else if (
+			(mTalkIdx != 2) &&
+			(keyState[SDL_SCANCODE_RETURN])) {
+			if (mTalkIdx != 0) {
+				sound->SetType(Sound::SELECT);
+				sound->StartMusic();
+			}
 			mTalkIdx++;
 			mTalkTextComp->SetText(JsonToString(mTalkData[mTalkIdx]));
 			mTalkTextComp->InittextPos();

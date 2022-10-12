@@ -18,6 +18,7 @@ TreasureBox::TreasureBox(Game* game)
 	mSkinMeshComp = new SkinMeshComponent(this);
 	mSkinMeshComp->SetSkinMesh(game->GetSkinMesh("TreasureBox", "gltf"));
 	mSkinMeshComp->SetAnimIdx(0);
+	mSkinMeshComp->SetIsOneAnim(true);
 
 	{
 		glm::mat4 rotate_x = glm::rotate(glm::mat4(1.0f), (float)M_PI, glm::vec3(1.0f, 0.0f, 0.0f));
@@ -62,7 +63,7 @@ void TreasureBox::UpdateActor(float deltatime)
 		if (treasureTicks > 1600) {
 			mOpenTime = 0; // •ó” ‚ªŠJ‚¢‚½
 		}
-		mSkinMeshComp->SetAnimTime(treasureTicks);
+		//mSkinMeshComp->SetAnimTime(treasureTicks);
 	}
 }
 
@@ -78,6 +79,9 @@ void TreasureBox::ActorInput(const uint8_t* keys)
 			if (keys[SDL_SCANCODE_RETURN]) {
 				// •ó” ‚Ì‘O‚ÅReturn
 				mOpenTime = GetGame()->GetTicksCount();
+				mSkinMeshComp->SetStopAnimation(false);
+				mSkinMeshComp->SetIsOneAnim(true);
+				GetGame()->GetPlayer()->OpenChest();
 				GetGame()->GetPlayer()->WaitSeconds(3000);
 				GetGame()->SetPhase(Game::PHASE_SUCCSESS_GAME);
 			}

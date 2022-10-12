@@ -35,6 +35,39 @@ Sound::Sound()
 	ERRCHECK(mAudioSystem->getEvent("event:/GameBGM", &GameBGMDesc));
 	mGameBGM = NULL;
 	ERRCHECK(GameBGMDesc->createInstance(&mGameBGM));
+
+	// Œø‰Ê‰¹“Ç‚Ýo‚µ
+	FMOD::Studio::EventDescription* Effect = NULL;
+	ERRCHECK(mAudioSystem->getEvent("event:/Select", &Effect));
+	mSelect = NULL;
+	ERRCHECK(Effect->createInstance(&mSelect));
+
+	Effect = NULL;
+	ERRCHECK(mAudioSystem->getEvent("event:/Cansel", &Effect));
+	mCansel = NULL;
+	ERRCHECK(Effect->createInstance(&mCansel));
+
+	Effect = NULL;
+	ERRCHECK(mAudioSystem->getEvent("event:/CountDown", &Effect));
+	mCountDown = NULL;
+	ERRCHECK(Effect->createInstance(&mCountDown));
+
+	Effect = NULL;
+	ERRCHECK(mAudioSystem->getEvent("event:/OpenChest", &Effect));
+	mOpenChest = NULL;
+	ERRCHECK(Effect->createInstance(&mOpenChest));
+
+	Effect = NULL;
+	ERRCHECK(mAudioSystem->getEvent("event:/Clerk", &Effect));
+	mClerk = NULL;
+	ERRCHECK(Effect->createInstance(&mClerk));
+
+	Effect = NULL;
+	ERRCHECK(mAudioSystem->getEvent("event:/Walk", &Effect));
+	mWalk = NULL;
+	ERRCHECK(Effect->createInstance(&mWalk));
+
+
 }
 
 void Sound::Update()
@@ -52,7 +85,23 @@ void Sound::StartMusic()
 	case Sound::GAME:
 		ERRCHECK(mGameBGM->start());
 		break;
-	default:
+	case Sound::SELECT:
+		ERRCHECK(mSelect->start());
+		break;
+	case Sound::CANSEL:
+		ERRCHECK(mCansel->start());
+		break;
+	case Sound::COUNT_DOWN:
+		ERRCHECK(mCountDown->start());
+		break;
+	case Sound::OPEN_CHST:
+		ERRCHECK(mOpenChest->start());
+		break;
+	case Sound::CLERK:
+		ERRCHECK(mClerk->start());
+		break;
+	case Sound::WALK:
+		ERRCHECK(mWalk->start());
 		break;
 	}
 }
@@ -67,7 +116,8 @@ void Sound::StopMusic()
 	case Sound::GAME:
 		ERRCHECK(mGameBGM->stop(FMOD_STUDIO_STOP_IMMEDIATE));
 		break;
-	default:
+	case Sound::WALK:
+		ERRCHECK(mWalk->stop(FMOD_STUDIO_STOP_IMMEDIATE));
 		break;
 	}
 }

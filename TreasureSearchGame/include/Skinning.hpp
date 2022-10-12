@@ -7,7 +7,7 @@ public:
     SkinMesh();
     ~SkinMesh() {}
     //void Update(float deltaTime) override;
-    void GetBoneTransform(float TimeInSeconds, std::vector<glm::mat4>& Transforms);
+    int GetBoneTransform(float TimeInSeconds, std::vector<glm::mat4>& Transforms);
     void SetAnimIdx(int idx) { mAnimIdx = idx; }
 
 

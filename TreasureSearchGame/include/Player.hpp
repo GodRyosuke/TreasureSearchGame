@@ -21,7 +21,7 @@ public:
 	void SetState(State state) { mState = state; }
 	void WaitSeconds(uint32_t second);
 	bool GetIsWaitSeconds() { return mIsWaitSeconds; }
-
+	void OpenChest();	// 宝箱を空けるアニメーション
 	void SetPlayerRot(float rotate);
 
 private:
@@ -34,5 +34,6 @@ private:
 	State mPreviousState;
 	State mState;
 	bool mIsWaitSeconds;
+	bool mIsOneAnim;
 	uint32_t mStopTime;
 };

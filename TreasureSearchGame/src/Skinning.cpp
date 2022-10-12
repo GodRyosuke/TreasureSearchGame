@@ -264,7 +264,7 @@ void SkinMesh::ReadNodeHierarchy(float AnimationTimeTicks, const aiNode* pNode, 
     }
 }
 
-void SkinMesh::GetBoneTransform(float TimeInSeconds, std::vector<glm::mat4>& Transforms)
+int SkinMesh::GetBoneTransform(float TimeInSeconds, std::vector<glm::mat4>& Transforms)
 {
     int num = m_pScene->mNumAnimations;
     if (num == 0) {
@@ -272,7 +272,7 @@ void SkinMesh::GetBoneTransform(float TimeInSeconds, std::vector<glm::mat4>& Tra
         for (unsigned int i = 0; i < m_BoneInfo.size(); i++) {
             Transforms[i] = glm::mat4(1.0f);
         }
-        return;
+        return -1;
     }
 
     float TicksPerSecond = (float)(m_pScene->mAnimations[mAnimIdx]->mTicksPerSecond != NULL ? m_pScene->mAnimations[0]->mTicksPerSecond : 25.0f);
@@ -280,7 +280,7 @@ void SkinMesh::GetBoneTransform(float TimeInSeconds, std::vector<glm::mat4>& Tra
     float Duration = 0.0f;  // Animation‚ÌDuration‚Ì®”•”•ª‚ª“ü‚é
     float fraction = modf((float)m_pScene->mAnimations[mAnimIdx]->mDuration, &Duration);
     float AnimationTimeTicks = fmod(TimeInTicks, Duration);
-
+    int traseTime = TimeInTicks / Duration;
 
 
     glm::mat4 Identity = glm::mat4(1);
@@ -291,6 +291,7 @@ void SkinMesh::GetBoneTransform(float TimeInSeconds, std::vector<glm::mat4>& Tra
     for (unsigned int i = 0; i < m_BoneInfo.size(); i++) {
         Transforms[i] = m_BoneInfo[i].FinalTransformation;
     }
+    return traseTime;
 }
 
 

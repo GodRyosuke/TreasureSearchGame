@@ -11,6 +11,12 @@ public:
 	enum Type {
 		NORMAL
 		,GAME
+		,SELECT
+		,CANSEL
+		,COUNT_DOWN
+		,OPEN_CHST
+		,CLERK
+		,WALK
 		,NUM_TYPE
 	};
 	void Update();
@@ -22,6 +28,12 @@ private:
 	FMOD::Studio::System* mAudioSystem;
 	FMOD::Studio::EventInstance* mNormalBGM;
 	FMOD::Studio::EventInstance* mGameBGM;
+	FMOD::Studio::EventInstance* mSelect;
+	FMOD::Studio::EventInstance* mCansel;
+	FMOD::Studio::EventInstance* mCountDown;
+	FMOD::Studio::EventInstance* mOpenChest;
+	FMOD::Studio::EventInstance* mClerk;
+	FMOD::Studio::EventInstance* mWalk;
 
 	Type mType;
 };

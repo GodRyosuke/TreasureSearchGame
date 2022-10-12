@@ -14,6 +14,7 @@ Player::Player(Game* game)
 	:Actor(game)
 	,mMoveSpeed(0.1)
 	,mIsWaitSeconds(false)
+	,mIsOneAnim(false)
 {
 	SetPosition(glm::vec3(10.0f, 3.0f, 0.0f));
 	mPlayerRot = 180;
@@ -35,6 +36,14 @@ void Player::WaitSeconds(uint32_t second)
 {
 	mIsWaitSeconds = true;
 	mStopTime = GetGame()->GetTicksCount() + second;
+}
+
+void Player::OpenChest()
+{
+	mSkinMeshComp->SetIsOneAnim(true);
+	mSkinMeshComp->SetAnimIdx(5);
+	mState = OPEN_CHEST;
+	mIsOneAnim = true;
 }
 
 void Player::ActorInput(const uint8_t* keys)
@@ -103,7 +112,7 @@ void Player::ActorInput(const uint8_t* keys)
 			glm::vec3 boxPos = GetGame()->GetTreasurePos();
 			if (GetGame()->IsWall(playerNewPos)) {
 				// Playerのいる場所が壁なら更新しない
-				IsUpdatePlayerPos = false;
+				//IsUpdatePlayerPos = false;
 			}
 			else if (
 				((boxPos.x - 0.5f) < playerNewPos.x) && (playerNewPos.x < (boxPos.x + 0.5f)) &&
@@ -155,19 +164,29 @@ void Player::UpdateActor(float deltatime)
 	}
 
 	if ((preGamePhase != Game::PHASE_GAME) && (GetGame()->GetPhase() == Game::PHASE_GAME)) {
-		// たった今、Game Phaseになったら、
+		// たった今、Game Phaseになったら、カメラの位置を宝箱の前へ
 		glm::vec3 boxPos = GetGame()->GetTreasurePos();
 		glm::vec3 cameraPos = boxPos + glm::vec3(0.f, -1.f, 0.5f) * 5.f;
 		mFollowCamera->SetConstCamera(cameraPos, boxPos);
 		WaitSeconds(3000);
 	}
 	else if (!mIsWaitSeconds) {
+		// 元の位置にカメラを戻す
 		mFollowCamera->SetIsConstCamera(false);
 	}
 
 	if ((GetGame()->GetPhase() == Game::PHASE_SUCCSESS_GAME) && (!mIsWaitSeconds)) {
 		// 待ち時間終了したら
 		mState = TALK;
+	}
+
+	if (mSkinMeshComp->GetIsOneAnim()) {
+		if (mSkinMeshComp->GetIsFinishOneAnim()) {
+			// IDLEのアニメーションにする
+			mState = IDLE;
+			mSkinMeshComp->SetAnimIdx(4);
+			mSkinMeshComp->SetIsOneAnim(false); // ループにする
+		}
 	}
 
 	preGamePhase = GetGame()->GetPhase();
@@ -191,8 +210,11 @@ void Player::UpdateActor(float deltatime)
 	}
 		break;
 	case Player::OPEN_CHEST:
+	{
 		mDebugText->SetText(u"Open ");
+		mSkinMeshComp->SetAnimIdx(5);
 		break;
+	}
 	}
 
 }

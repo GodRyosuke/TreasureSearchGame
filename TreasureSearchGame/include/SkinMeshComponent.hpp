@@ -14,8 +14,10 @@ public:
 	void SetAnimIdx(int idx) { mAnimIdx = idx; }
 	void SetStopAnimation(bool stop) { mStopAnimation = stop; }
 	void SetZeroTransFrag(bool frag) { mZeroTransFrag = frag; }
-	void SetAnimTime(float time) { mAnimtime = time; }
+	void SetAnimTime(float time) { mAnimtime = time; mStopAnimation = true; }
 	void SetIsOneAnim(bool one);
+	bool GetIsOneAnim() const { return mIsOneAnim; }
+	bool GetIsFinishOneAnim();
 
 
 private:
@@ -28,5 +30,6 @@ private:
 	class SkinMesh* mSkinMesh;
 	std::vector<glm::mat4> mBoneMatrixPallete;
 	bool mIsOneAnim;
+	bool mIsFinishOneAnim;
 	uint32_t mAnimStartClock;
 };

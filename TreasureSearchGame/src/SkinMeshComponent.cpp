@@ -9,6 +9,8 @@ SkinMeshComponent::SkinMeshComponent(Actor* owner)
 	,mStopAnimation(false)
 	,mZeroTransFrag(false)
 	,mAnimtime(-1.3)
+	,mIsOneAnim(false)
+	,mIsFinishOneAnim(false)
 {
 }
 
@@ -17,12 +19,27 @@ void SkinMeshComponent::SetIsOneAnim(bool isOne)
 	mIsOneAnim = isOne;
 	if (isOne) {
 		mAnimStartClock = mOwner->GetGame()->GetTicksCount();
+		mIsFinishOneAnim = false;
 	}
+}
+
+bool SkinMeshComponent::GetIsFinishOneAnim()
+{
+	if (!mIsOneAnim) {
+		return false;
+	}
+	return mIsFinishOneAnim;
 }
 
 void SkinMeshComponent::Update(float deltatime)
 {
 	mSkinMesh->SetAnimIdx(mAnimIdx);
+
+	// 固定なら
+	if (mStopAnimation) {
+		mSkinMesh->GetBoneTransform(mAnimtime / 1000.f, mBoneMatrixPallete);
+		return;
+	}
 
 	float timeInTicks = 0;
 	//if (mAnimtime >= 0) {
@@ -40,8 +57,17 @@ void SkinMeshComponent::Update(float deltatime)
 		timeInTicks = mOwner->GetGame()->GetTicksCount();
 	}
 
+	std::vector<glm::mat4> matrixPallete;
+	int traseTime = mSkinMesh->GetBoneTransform(timeInTicks / 1000.f, matrixPallete);
 
-	mSkinMesh->GetBoneTransform(timeInTicks / 1000.f, mBoneMatrixPallete);
+	if (mIsOneAnim) {
+		if (traseTime > 0) {
+			// 一度きりのアニメーションなら、ループで描画しない
+			mIsFinishOneAnim = true;
+			return;
+		}
+	}
+	mBoneMatrixPallete = matrixPallete;
 }
 
 void SkinMeshComponent::Draw(Shader* shader)
