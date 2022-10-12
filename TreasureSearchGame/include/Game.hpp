@@ -40,6 +40,7 @@ public:
 	uint32_t GetRandom();
 
 	class Player* GetPlayer() { return mPlayer; }
+	class Clerk* GetClerk() { return mClerk; }
 	class TalkText* GetTalkText() { return mTalkText; }
 	class TreasureBox* GetTreasureBox() { return mTreasureBox; }
 	class Sound* GetSound() { return mSound; }
@@ -86,6 +87,7 @@ private:
 	void Draw();
 
 	bool LoadData();
+	void UnloadData();
 	void SetLighting();
 
 	const int mWindowWidth;
@@ -103,6 +105,7 @@ private:
 	//nl::json mTextData;
 
 	class Player* mPlayer;
+	class Clerk* mClerk;
 	class TalkText* mTalkText;
 	class TreasureBox* mTreasureBox;
 

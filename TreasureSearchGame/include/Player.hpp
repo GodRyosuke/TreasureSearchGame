@@ -28,6 +28,7 @@ private:
 	class FollowCamera* mFollowCamera;
 	class SkinMeshComponent* mSkinMeshComp;
 	class TextComponent* mDebugText;
+	class TextComponent* mGamePhaseText;
 	float mMoveSpeed;
 
 	float mPlayerRot;

@@ -12,6 +12,7 @@ public:
 
 	Clerk(class Game* game);
 	void UpdateActor(float deltaTime) override;
+	void BowToPlayer();
 
 
 private:

@@ -18,12 +18,49 @@ Clerk::Clerk(Game* game)
 void Clerk::UpdateActor(float deltatime)
 {
 	Player::State playerState = GetGame()->GetPlayer()->GetState();
-	if (playerState == Player::TALK) {
+
+
+
+	if (mSkinMeshComp->GetIsOneAnim()) {
+		if (mSkinMeshComp->GetIsFinishOneAnim()) {
+			// IDLEのアニメーションにする
+			mState = BOW;
+			mSkinMeshComp->SetAnimIdx(7);
+			mSkinMeshComp->SetIsOneAnim(false); // ループにする
+		}
+	} else 	if (playerState == Player::TALK) {
 		mState = TALK;
 		mSkinMeshComp->SetAnimIdx(7);
 	}
 	else {
+		mState = IDLE;
 		mSkinMeshComp->SetAnimIdx(6);
 	}
 
+
+	switch (mState)
+	{
+	case Clerk::IDLE:
+	{
+		mSkinMeshComp->SetAnimIdx(6);
+		break;
+	}
+	case Clerk::TALK:
+	{
+		mSkinMeshComp->SetAnimIdx(7);
+	}
+	break;
+	case Clerk::BOW:
+	{
+		mSkinMeshComp->SetAnimIdx(9);
+		break;
+	}
+	}
+}
+
+void Clerk::BowToPlayer()
+{
+	mSkinMeshComp->SetIsOneAnim(true);
+	mSkinMeshComp->SetAnimIdx(9);
+	mState = BOW;
 }

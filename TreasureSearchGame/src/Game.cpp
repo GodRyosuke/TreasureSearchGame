@@ -403,7 +403,7 @@ bool Game::LoadData()
 	a->SetScale(1.5f);
 
 	// “Xˆõ
-	a = new Clerk(this);
+	mClerk = new Clerk(this);
 
 	// •ó” 
 	mTreasureBox = new TreasureBox(this);
@@ -450,6 +450,7 @@ bool Game::LoadData()
 
 	// Talk Text ‚Ì“Ç‚Ýž‚Ý
 	mTalkText = new TalkText(this);
+
 
 	//mText = new TextComponent();
 	//mText->SetPos(glm::vec3(0.0f));
@@ -917,7 +918,20 @@ void Game::RunLoop()
 	}
 }
 
+void Game::UnloadData()
+{
+	// Delete actors
+	// Because ~Actor calls RemoveActor, have to use a different style loop
+	while (!mActors.empty())
+	{
+		delete mActors.back();
+	}
+}
+
 void Game::Shutdown()
 {
-
+	UnloadData();
+	mSound->ShutDown();
+	delete(mSound);
+	SDL_Quit();
 }

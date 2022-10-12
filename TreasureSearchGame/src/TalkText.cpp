@@ -3,6 +3,7 @@
 #include "Game.hpp"
 #include "TreasureBox.hpp"
 #include "Sound.hpp"
+#include "Clerk.hpp"
 #include <fstream>
 #include <codecvt>
 
@@ -104,6 +105,7 @@ void TalkText::ActorInput(const uint8_t* keyState)
 			mTalkIdx = 3;
 			mTalkTextComp->SetText(JsonToString(mTalkData[mTalkIdx]));
 			mTalkTextComp->InittextPos();
+			GetGame()->GetClerk()->BowToPlayer();
 			sound->SetType(Sound::CANSEL);
 			sound->StartMusic();
 		}
@@ -161,10 +163,8 @@ void TalkText::ActorInput(const uint8_t* keyState)
 		else if (
 			(mTalkIdx != 2) &&
 			(keyState[SDL_SCANCODE_RETURN])) {
-			if (mTalkIdx != 0) {
-				sound->SetType(Sound::SELECT);
-				sound->StartMusic();
-			}
+			sound->SetType(Sound::SELECT);
+			sound->StartMusic();
 			mTalkIdx++;
 			mTalkTextComp->SetText(JsonToString(mTalkData[mTalkIdx]));
 			mTalkTextComp->InittextPos();

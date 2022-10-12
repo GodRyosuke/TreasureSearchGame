@@ -3,6 +3,7 @@
 #include "fmod.hpp"
 #include "fmod_studio.hpp"
 #include "FMOD/common.hpp"
+#include <vector>
 
 class Sound
 {
@@ -23,8 +24,10 @@ public:
 	void StartMusic();
 	void StopMusic();
 	void SetType(const Type type) { mType = type; }
+	void ShutDown();
 
 private:
+	std::vector<FMOD::Studio::Bank*> mBanks;
 	FMOD::Studio::System* mAudioSystem;
 	FMOD::Studio::EventInstance* mNormalBGM;
 	FMOD::Studio::EventInstance* mGameBGM;

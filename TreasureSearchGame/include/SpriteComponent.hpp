@@ -14,6 +14,7 @@ public:
 	};
 
 	SpriteComponent(class Actor* owner, Type type = SPRITE);
+	~SpriteComponent();
 	bool Load(std::string filePath, float alpha = 1.0f);
 	virtual void Draw(class Shader* shader);
 

@@ -4,8 +4,10 @@
 #include "Game.hpp"
 #include "TalkText.hpp"
 #include "Player.hpp"
+#include "Sound.hpp"
 
 static Game::PHASE preGamePhase;
+static int prevTime;
 
 UserAssistText::UserAssistText(Game* game)
 	:Actor(game)
@@ -23,25 +25,36 @@ void UserAssistText::UpdateActor(float deltatime)
 		(1.0f < playerPos.y) && (playerPos.y < 2.0f) &&
 		(playerState != Player::TALK)
 		) {
-		SetScale(1.f);
-		SetPosition(glm::vec3(0.0f, 300.f, 0.f));
-		mTextComp->SetText(u"エンターキーで話す");
-		mTextComp->SetTextColor(glm::vec3(0.f, 0.f, 0.2f));
+		if (GetGame()->GetPhase() == Game::PHASE_NORMAL) {
+			SetScale(1.f);
+			SetPosition(glm::vec3(0.0f, 300.f, 0.f));
+			mTextComp->SetText(u"エンターキーで話す");
+			mTextComp->SetTextColor(glm::vec3(0.f, 1.f, 1.f));
+		}
 	}
 	else {
 		mTextComp->SetText(u"");
 	}
 
-	if ((playerState == Player::TALK) && (GetGame()->GetTalkText()->GetIsFinishDraw() == true)) {
-		SetPosition(glm::vec3(300.f, -300.f, 0.f));
-		SetScale(0.5f);
-		if (GetGame()->GetTalkText()->GetIsSelectText()) {
-			mTextComp->SetText(u"好きなほうを選択");
+	if (
+		(GetGame()->GetPhase() == Game::PHASE_NORMAL) || 
+		(GetGame()->GetPhase() == Game::PHASE_FAIL_GAME) || 
+		(GetGame()->GetPhase() == Game::PHASE_SUCCSESS_GAME)
+		) {
+		if ((playerState == Player::TALK) && (GetGame()->GetTalkText()->GetIsFinishDraw() == true)) {
+			SetPosition(glm::vec3(300.f, -300.f, 0.f));
+			SetScale(0.5f);
+			mTextComp->SetTextColor(glm::vec3(0.f, 0.f, 0.2f));
+			if (GetGame()->GetTalkText()->GetIsSelectText()) {
+				mTextComp->SetText(u"好きなほうを選択");
+			}
+			else {
+				mTextComp->SetText(u"エンターキーで進む");
+			}
 		}
-		else {
-			mTextComp->SetText(u"エンターキーで進む");
-		}
-		mTextComp->SetTextColor(glm::vec3(0.f, 0.f, 0.2f));
+	}
+	else {
+		mTextComp->SetText(u"");
 	}
 
 	// 宝箱の前に来たら表示
@@ -51,8 +64,10 @@ void UserAssistText::UpdateActor(float deltatime)
 			((boxPos.x - 1.f) < playerPos.x) && (playerPos.x < (boxPos.x + 1.f)) &&
 			((boxPos.y - 1.f) < playerPos.y) && (playerPos.y < (boxPos.y + 1.f))
 			) {
+			SetScale(1.f);
+			SetPosition(glm::vec3(0.0f, 300.f, 0.f));
+			mTextComp->SetTextColor(glm::vec3(0.f, 1.f, 1.f));
 			mTextComp->SetText(u"エンターキーで開ける");
-			mTextComp->SetTextColor(glm::vec3(0.f, 0.f, 0.2f));
 		}
 	}
 
@@ -63,8 +78,8 @@ TimerText::TimerText(Game* game)
 	:Actor(game)
 {
 	mTextComp = new TextComponent(this);
-	SetPosition(glm::vec3(500.f, 300.f, 0.f));
-	mTextComp->SetTextColor(glm::vec3(0.f, 0.f, 0.2f));
+	SetPosition(glm::vec3(450.f, 300.f, 0.f));
+	mTextComp->SetTextColor(glm::vec3(0.f, 1.f, 1.f));
 	mTime = mMaxTime = 60;
 }
 
@@ -86,7 +101,7 @@ void TimerText::UpdateActor(float deltatime)
 			mTextComp->SetTextColor(glm::vec3(1.f, 0.f, 0.1f));
 		}
 		else {
-			mTextComp->SetTextColor(glm::vec3(0.f, 0.f, 0.2f));
+			mTextComp->SetTextColor(glm::vec3(0.f, 1.f, 1.f));
 		}
 		if (mTime < 0) {
 			// 時間切れ
@@ -94,15 +109,22 @@ void TimerText::UpdateActor(float deltatime)
 			GetGame()->GetPlayer()->SetState(Player::TALK);
 			GetGame()->SetPhase(Game::PHASE_FAIL_GAME);
 		}
+		if (
+			((0 <= mTime) && (mTime <= 10)) &&	// 残り10秒
+			(prevTime != mTime)
+			) {
+			GetGame()->GetSound()->SetType(Sound::COUNT_DOWN);
+			GetGame()->GetSound()->StartMusic();
+		}
 	}
 	else {
 		// ゲームクリア、そのほか
 		mTextComp->SetText(u"");
 	}
 
+	prevTime = mTime;
 	uint32_t currTime = GetGame()->GetTicksCount();
 	mTime = mMaxTime - ((currTime - mStartTime) / 1000);	// 残り時間更新
-
 
 
 	preGamePhase = currGamePhase;

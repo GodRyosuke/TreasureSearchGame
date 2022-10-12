@@ -22,6 +22,8 @@ Sound::Sound()
 
 	FMOD::Studio::Bank* stringsBank = NULL;
 	ERRCHECK(mAudioSystem->loadBankFile(Common_MediaPath("./resources/Master.strings.bank"), FMOD_STUDIO_LOAD_BANK_NORMAL, &stringsBank));
+	mBanks.push_back(masterBank);
+	mBanks.push_back(stringsBank);
 
 	// Audio Data“Ç‚Ýo‚µ
 	// “X“à‚Å—¬‚ê‚éBGM
@@ -120,4 +122,9 @@ void Sound::StopMusic()
 		ERRCHECK(mWalk->stop(FMOD_STUDIO_STOP_IMMEDIATE));
 		break;
 	}
+}
+
+void Sound::ShutDown()
+{
+	//mAudioSystem->unloadAll();
 }

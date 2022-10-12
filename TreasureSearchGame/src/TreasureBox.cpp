@@ -1,11 +1,12 @@
 #include "TreasureBox.hpp"
 #include "Game.hpp"
-#include"SkinMeshComponent.hpp"
+#include "SkinMeshComponent.hpp"
 #include "Player.hpp"
 #include "gtc/matrix_transform.hpp"
 #include "gtc/type_ptr.hpp"
 #include "gtx/rotate_vector.hpp"
 #include "gtx/vector_angle.hpp"
+#include "Sound.hpp"
 
 static Game::PHASE preGamePhase;
 
@@ -84,6 +85,9 @@ void TreasureBox::ActorInput(const uint8_t* keys)
 				GetGame()->GetPlayer()->OpenChest();
 				GetGame()->GetPlayer()->WaitSeconds(3000);
 				GetGame()->SetPhase(Game::PHASE_SUCCSESS_GAME);
+				Sound* sound = GetGame()->GetSound();
+				sound->SetType(Sound::OPEN_CHST);
+				sound->StartMusic();
 			}
 		}
 	}

@@ -26,6 +26,11 @@ SpriteComponent::SpriteComponent(Actor* owner, Type type)
 	mOwner->GetGame()->AddSpriteComp(this);
 }
 
+SpriteComponent::~SpriteComponent()
+{
+	mOwner->GetGame()->RemoveSpriteComp(this);
+}
+
 bool SpriteComponent::Load(std::string filePath, float alpha)
 {
 	mAlpha = alpha;

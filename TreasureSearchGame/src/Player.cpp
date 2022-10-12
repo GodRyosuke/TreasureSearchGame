@@ -7,6 +7,7 @@
 #include "gtx/rotate_vector.hpp"
 #include "gtx/vector_angle.hpp"
 #include "TextComponent.hpp"
+#include "Sound.hpp"
 
 static Game::PHASE preGamePhase;
 
@@ -25,6 +26,9 @@ Player::Player(Game* game)
 
 	Actor* a = new Actor(game);
 	mDebugText = new TextComponent(a);
+	a = new Actor(game);
+	a->SetPosition(glm::vec3(0.f, 300.f, 0.f));
+	mGamePhaseText = new TextComponent(a);
 	
 	mFollowCamera = new FollowCamera(this);
 	mFollowCamera->SnapToIdeal();
@@ -74,7 +78,10 @@ void Player::ActorInput(const uint8_t* keys)
 			(1.0f < GetPosition().y) && (GetPosition().y < 2.0f)
 			) {
 			if (keys[SDL_SCANCODE_RETURN]) {
-				GetGame()->SetPhase(Game::PHASE_TALK);
+				//GetGame()->SetPhase(Game::PHASE_TALK);
+				Sound* sound = GetGame()->GetSound();
+				sound->SetType(Sound::SELECT);
+				sound->StartMusic();
 				mState = TALK;
 			}
 		}
@@ -190,6 +197,22 @@ void Player::UpdateActor(float deltatime)
 	}
 
 	preGamePhase = GetGame()->GetPhase();
+
+	//if (
+	//	(mPreviousState != WALK) && (mState == WALK)
+	//	) {
+	//	Sound* sound = GetGame()->GetSound();
+	//	sound->SetType(Sound::WALK);
+	//	sound->StartMusic();
+	//}
+	//if (
+	//	(mPreviousState == WALK) && (mState != WALK)
+	//	) {
+	//	Sound* sound = GetGame()->GetSound();
+	//	sound->SetType(Sound::WALK);
+	//	sound->StopMusic();
+	//}
+
 	switch (mState)
 	{
 	case Player::WALK:
@@ -217,4 +240,23 @@ void Player::UpdateActor(float deltatime)
 	}
 	}
 
+	switch (preGamePhase) {
+	case Game::PHASE_NORMAL:
+		mGamePhaseText->SetText(u"normal");
+		break;
+	case Game::PHASE_GAME:
+		mGamePhaseText->SetText(u"game");
+		break;
+	case Game::PHASE_SUCCSESS_GAME:
+		mGamePhaseText->SetText(u"success game");
+		break;
+	case Game::PHASE_FAIL_GAME:
+		mGamePhaseText->SetText(u"fail game");
+		break;
+	default:
+		mGamePhaseText->SetText(u"others!!");
+		break;
+	}
+	//mDebugText->SetText(u"");
+	mGamePhaseText->SetText(u"");
 }
