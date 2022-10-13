@@ -143,7 +143,7 @@ XCOPY "$(SolutionDir)TreasureSearchGame\resources" %OUTPUT_DIRECTORY% /e /y</Com
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)dependencies\SDL2\lib\x64;$(SolutionDir)dependencies\fmod\lib;$(SolutionDir)dependencies\glew\lib;$(SolutionDir)dependencies\assimp\lib\Release;%(AdditionalLibraryDirectories);$(SolutionDir)dependencies\freetype\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>fmod_vc.lib;fmodstudio_vc.lib;SDL2.lib;SDL2main.lib;freetype.lib;glew32s.lib;opengl32.lib;assimp-vc142-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>fmod_vc.lib;fmodstudio_vc.lib;SDL2.lib;SDL2main.lib;freetype.lib;glew32.lib;opengl32.lib;assimp-vc142-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>XCOPY "$(SolutionDir)dependencies\SDL2\lib\x64\*.dll" "$(OutDir)" /e /y  
