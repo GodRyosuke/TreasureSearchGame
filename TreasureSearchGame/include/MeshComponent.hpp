@@ -7,11 +7,11 @@ class MeshComponent : public Component
 {
 public:
 	MeshComponent(class Actor* owner, bool isSkeletal = false);
-	~MeshComponent(){}
+	~MeshComponent();
 	virtual void Draw(class Shader* shader);
 	void SetMesh(class Mesh* mesh) { mMesh = mesh; }
 	void SetTexture(std::string filePath) { mTexturePath = filePath; }
-	bool GetIsSkeltal() { return mIsSkeletal; }
+	bool GetIsSkeletal() { return mIsSkeletal; }
 	void SetAlpha(float alpha) { mAlpha = alpha; }
 
 protected:

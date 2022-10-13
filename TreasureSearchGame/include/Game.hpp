@@ -55,7 +55,7 @@ public:
 
 	void AddMeshComp(class MeshComponent* meshcomp);
 	void RemoveMeshComp(class MeshComponent* mesh);
-	void RemoveMeshComp(class SkinMeshComponent* mesh);
+	//void RemoveMeshComp(class SkinMeshComponent* mesh);
 	Uint32 GetTicksCount() { return mTicksCount; }
 
 

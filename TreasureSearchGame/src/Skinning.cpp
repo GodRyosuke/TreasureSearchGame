@@ -13,6 +13,11 @@ SkinMesh::SkinMesh()
 
 }
 
+SkinMesh::~SkinMesh()
+{
+    glDeleteVertexArrays(1, &mBoneBuffer);
+}
+
 void SkinMesh::GetGlobalInvTrans()
 {
     GLUtil glutil;
@@ -65,13 +70,12 @@ void SkinMesh::LoadMesh(const aiMesh* pMesh, unsigned int meshIdx)
 
 void SkinMesh::PopulateBuffers()
 {
-    GLuint m_boneBuffer;
     // 頂点データを読み込む
     Mesh::PopulateBuffers();
 
     // Bone and Weights
-    glGenBuffers(1, &m_boneBuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, m_boneBuffer);
+    glGenBuffers(1, &mBoneBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, mBoneBuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(m_Bones[0]) * m_Bones.size(), &m_Bones[0], GL_STATIC_DRAW);
     glEnableVertexAttribArray(3);
     glVertexAttribIPointer(3, MAX_NUM_BONES_PER_VERTEX, GL_INT, sizeof(VertexBoneData), (const GLvoid*)0);

@@ -9,6 +9,7 @@
 class Shader {
 public:
 	Shader();
+	~Shader();
 	bool CreateShaderProgram(std::string vertFilePath, std::string fragFilePath);
 	void UseProgram();
 	void SetMatrixUniform(std::string uniformName, glm::mat4 mat);

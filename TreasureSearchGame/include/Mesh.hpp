@@ -17,7 +17,7 @@
 class Mesh{
 public:
     Mesh();
-    ~Mesh() {}
+    ~Mesh();
     bool Load(std::string fileName, std::string ext = "fbx");
     // Texture, Diffuse, Ambient, Specular�Ȃǂ̐ݒ�
     void SetTexture(std::string filePath) { mTexturePath = filePath; }
@@ -72,8 +72,18 @@ private:
         glm::vec3 NormalMap;
         class Texture* DiffuseTexture;
     };
-
+    enum BUFFER_TYPE {
+        INDEX_BUFFER = 0,
+        POS_VB = 1,
+        TEXCOORD_VB = 2,
+        NORMAL_VB = 3,
+        NUM_BUFFERS = 4,  // required only for instancing
+    };
     unsigned int mVertexArray;
+    unsigned int m_Buffers[NUM_BUFFERS];
+
+
+
 
     std::vector<Material> m_Materials;
     std::vector<glm::vec3> m_Positions;

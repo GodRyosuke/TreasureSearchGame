@@ -11,6 +11,14 @@ Mesh::Mesh()
 {
 }
 
+Mesh::~Mesh()
+{
+    for (int i = 0; i < NUM_BUFFERS; i++) {
+        glDeleteBuffers(1, &m_Buffers[i]);
+    }
+    glDeleteVertexArrays(1, &mVertexArray);
+}
+
 bool Mesh::Load(std::string fileName, std::string ext)
 {
     std::string FilePath = "./resources/" + fileName + "/" + fileName + "." + ext;
@@ -123,10 +131,9 @@ bool Mesh::Load(std::string fileName, std::string ext)
     }
 
     // Vertex Array Objectì¬
-    unsigned int VertexArray;
 
-    glGenVertexArrays(1, &VertexArray);
-    glBindVertexArray(VertexArray);
+    glGenVertexArrays(1, &mVertexArray);
+    glBindVertexArray(mVertexArray);
 
     // Vertex Buffer‚Ìì¬
     PopulateBuffers();
@@ -137,7 +144,6 @@ bool Mesh::Load(std::string fileName, std::string ext)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-    mVertexArray = VertexArray;
 
 
     bool checkErr = (glGetError() == GL_NO_ERROR);
@@ -189,14 +195,10 @@ void Mesh::LoadMesh(const aiMesh* pMesh, unsigned int meshIdx)
 
 void Mesh::PopulateBuffers()
 {
-    enum BUFFER_TYPE {
-        INDEX_BUFFER = 0,
-        POS_VB = 1,
-        TEXCOORD_VB = 2,
-        NORMAL_VB = 3,
-        NUM_BUFFERS = 4,  // required only for instancing
-    };
-    GLuint m_Buffers[NUM_BUFFERS] = { 0 };
+    for (int i = 0; i < NUM_BUFFERS; i++) {
+        m_Buffers[i] = 0;
+    }
+    
     glGenBuffers(NUM_BUFFERS, m_Buffers);
 
     // Vertex Data
@@ -279,5 +281,6 @@ void Mesh::SetMaterialUniform(Shader* shader)
             m_Meshes[i].BaseVertex);
     }
 }
+
 
 

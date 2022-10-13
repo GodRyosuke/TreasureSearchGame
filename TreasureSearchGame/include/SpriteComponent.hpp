@@ -29,6 +29,8 @@ protected:
 
 	float mAlpha;
 	unsigned int mVertexArray;
+	unsigned int mVertexBuffer;
+	unsigned int mIndexBuffer;
 	Type mType;
 
 private:

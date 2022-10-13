@@ -8,6 +8,11 @@ Shader::Shader()
 
 }
 
+Shader::~Shader()
+{
+	glDeleteProgram(mShaderProgram);
+}
+
 
 static bool CompileShader(std::string filepath, GLenum shaderType, GLuint& shader)
 {

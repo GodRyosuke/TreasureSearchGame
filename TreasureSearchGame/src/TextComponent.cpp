@@ -8,12 +8,11 @@ TextComponent::TextComponent(Actor* owner, Type type)
 	:SpriteComponent(owner, type)
 {
 	// TTF“Ç‚Ýž‚Ý
-	FT_Library library;
 	//FT_Face face;
 	FT_GlyphSlot slot;
 	// Load Font
-	FT_Init_FreeType(&library);
-	FT_New_Face(library, "./resources/arialuni.ttf", 0, &mFontFace);
+	FT_Init_FreeType(&mFTlibrary);
+	FT_New_Face(mFTlibrary, "./resources/arialuni.ttf", 0, &mFontFace);
 	FT_Select_Charmap(mFontFace, ft_encoding_unicode);
 	FT_Set_Pixel_Sizes(mFontFace, 0, 48);
 	slot = mFontFace->glyph;
@@ -44,6 +43,12 @@ TextComponent::TextComponent(Actor* owner, Type type)
 
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+TextComponent::~TextComponent()
+{
+	FT_Done_Face(mFontFace);
+	FT_Done_FreeType(mFTlibrary);
 }
 
 TextComponent::TexChar TextComponent::LoadUTFChar(char16_t c)

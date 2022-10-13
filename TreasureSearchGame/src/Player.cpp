@@ -80,8 +80,7 @@ void Player::ActorInput(const uint8_t* keys)
 			if (keys[SDL_SCANCODE_RETURN]) {
 				//GetGame()->SetPhase(Game::PHASE_TALK);
 				Sound* sound = GetGame()->GetSound();
-				sound->SetType(Sound::SELECT);
-				sound->StartMusic();
+				sound->StartMusic("event:/Select");
 				mState = TALK;
 			}
 		}

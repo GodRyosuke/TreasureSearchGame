@@ -113,8 +113,7 @@ void TimerText::UpdateActor(float deltatime)
 			((0 <= mTime) && (mTime <= 10)) &&	// Žc‚è10•b
 			(prevTime != mTime)
 			) {
-			GetGame()->GetSound()->SetType(Sound::COUNT_DOWN);
-			GetGame()->GetSound()->StartMusic();
+			GetGame()->GetSound()->StartMusic("event:/CountDown");
 		}
 	}
 	else {

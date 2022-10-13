@@ -410,8 +410,7 @@ bool Game::LoadData()
 
 	// サウンド関連
 	mSound = new Sound();
-	mSound->SetType(Sound::NORMAL);	
-	mSound->StartMusic();	// 店内のBGMを流す
+	mSound->StartMusic("event:/NormalBGM");	// 店内のBGMを流す
 
 
 
@@ -672,27 +671,10 @@ SkinMesh* Game::GetSkinMesh(std::string filePath, std::string ext)
 }
 
 
-void Game::RemoveActor(Actor* actor)
-{
-	// Is it in actors?
-	auto iter = std::find(mActors.begin(), mActors.end(), actor);
-	if (iter != mActors.end())
-	{
-		// Swap to end of vector and pop off (avoid erase copies)
-		std::iter_swap(iter, mActors.end() - 1);
-		mActors.pop_back();
-	}
-}
-
-void Game::RemoveSpriteComp(SpriteComponent* sprite)
-{
-	auto iter = std::find(mSpriteComps.begin(), mSpriteComps.end(), sprite);
-	mSpriteComps.erase(iter);
-}
 
 void Game::AddMeshComp(MeshComponent* mesh)
 {
-	if (mesh->GetIsSkeltal()) {
+	if (mesh->GetIsSkeletal()) {
 		SkinMeshComponent* skin = static_cast<SkinMeshComponent*>(mesh);
 		mSkinMeshComps.push_back(skin);
 	}
@@ -722,17 +704,59 @@ void Game::AddSpriteComp(SpriteComponent* sprite)
 	}
 }
 
-void Game::RemoveMeshComp(MeshComponent* mesh)
+void Game::RemoveActor(Actor* actor)
 {
-	auto iter = std::find(mMeshComps.begin(), mMeshComps.end(), mesh);
-	mMeshComps.erase(iter);
+	// Is it in actors?
+	auto iter = std::find(mActors.begin(), mActors.end(), actor);
+	if (iter != mActors.end())
+	{
+		// Swap to end of vector and pop off (avoid erase copies)
+		std::iter_swap(iter, mActors.end() - 1);
+		mActors.pop_back();
+	}
 }
 
-void Game::RemoveMeshComp(SkinMeshComponent* mesh)
+void Game::RemoveMeshComp(MeshComponent* mesh)
 {
-	auto iter = std::find(mSkinMeshComps.begin(), mSkinMeshComps.end(), mesh);
-	mSkinMeshComps.erase(iter);
+	if (mesh->GetIsSkeletal())
+	{
+		SkinMeshComponent* sk = static_cast<SkinMeshComponent*>(mesh);
+		auto iter = std::find(mSkinMeshComps.begin(), mSkinMeshComps.end(), sk);
+		mSkinMeshComps.erase(iter);
+	}
+	else
+	{
+		auto iter = std::find(mMeshComps.begin(), mMeshComps.end(), mesh);
+		mMeshComps.erase(iter);
+	}
 }
+
+void Game::RemoveSpriteComp(SpriteComponent* sprite)
+{
+	switch (sprite->GetType()) {
+	case SpriteComponent::SPRITE:
+	{
+		auto iter = std::find(mSpriteComps.begin(), mSpriteComps.end(), sprite);
+		mSpriteComps.erase(iter);
+		break;
+	}
+	case SpriteComponent::TEXT:
+	{
+		TextComponent* text = static_cast<TextComponent*>(sprite);
+		auto iter = std::find(mTextComps.begin(), mTextComps.end(), text);
+		mTextComps.erase(iter);
+		break;
+	}
+	case SpriteComponent::TALK_TEXT:
+	{
+		TalkTextComponent* text = static_cast<TalkTextComponent*>(sprite);
+		auto iter = std::find(mTalkTextComps.begin(), mTalkTextComps.end(), text);
+		mTalkTextComps.erase(iter);
+		break;
+	}
+	}
+}
+
 
 void Game::RemoveTextComp(class TextComponent* text)
 {
@@ -759,105 +783,12 @@ void Game::Draw()
 		mc->Draw(mMeshShader);
 	}
 
-
-	//for (auto mesh : mMeshes) {
-	//	if (mesh.meshName == "TreasureChest") {
-	//		mesh.mesh->SetPos(glm::vec3(4.0f, 5.0f / 2.0f, 0.0f));
-	//		mesh.mesh->Draw(mMeshShader, mTicksCount / 1000.0f);
-	//		mesh.mesh->SetPos(glm::vec3(4.0f, 4.0f, 0.0f));
-	//		mesh.mesh->Draw(mMeshShader, mTicksCount / 1000.0f);
-	//	}
-	//}
-
-	// 床描画
-	//mPlane->SetPlaneType(Plane::CONCRETE);
-	//for (int y = 0; y < 5; y++) {
-	//	for (int x = 0; x < 15; x++) {
-	//		float x_pos = 1.0f + 2.0f * x;
-	//		float y_pos = 1.0f + 2.0f * y;
-	//		glm::mat4 rotate = glm::rotate(glm::mat4(1.0f), (float)M_PI / 2.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-	//		mPlane->SetRotate(rotate);
-	//		mPlane->SetPos(glm::vec3(x_pos, y_pos, 0.0f));
-	//		mPlane->Draw(mMeshShader, mTicksCount / 1000.0f);
-	//	}
-	//}
-
-	//// 壁描画
-	//mPlane->SetPlaneType(Plane::BRICK);
-	//for (int x = 0; x < 15; x++) {
-	//	for (float z = 1.f; z <= 3.f; z += 2.f) {
-	//		float x_pos = 1.0f + 2.0f * x;
-	//		float y_pos = 0.f;
-	//		mPlane->SetPos(glm::vec3(x_pos, y_pos, z));
-	//		mPlane->SetRotate(glm::mat4(1.f));
-	//		mPlane->Draw(mMeshShader, mTicksCount / 1000.0f);
-	//		y_pos = 30.f;
-	//		mPlane->SetPos(glm::vec3(x_pos, y_pos, z));
-	//		mPlane->SetRotate(glm::mat4(1.f));
-	//		mPlane->Draw(mMeshShader, mTicksCount / 1000.0f);
-	//		y_pos = 0.f;
-	//		mPlane->SetPos(glm::vec3(y_pos, x_pos, z));
-	//		glm::mat4 rotate = glm::rotate(glm::mat4(1.0f), (float)M_PI / 2.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-	//		mPlane->SetRotate(rotate);
-	//		mPlane->Draw(mMeshShader, mTicksCount / 1000.0f);
-	//		y_pos = 30.f;
-	//		mPlane->SetPos(glm::vec3(y_pos, x_pos, z));
-	//		mPlane->SetRotate(rotate);
-	//		mPlane->Draw(mMeshShader, mTicksCount / 1000.0f);
-	//	}
-	//}
-
-	//// 屋根描画
-	//mRoof->SetPos(glm::vec3(15.f, 15.f, 4.f));
-	//mRoof->SetRotate(glm::mat4(1.f));
-	//mRoof->SetScale(15.f);
-	//mRoof->Draw(mMeshShader, mTicksCount / 1000.f);
-
-
-
-	//// Mazeの床描画
-	//mMazeBox->SetScale(1.0f);
-	//for (int y = 5; y < 15; y++) {
-	//	for (int x = 0; x < 15; x++) {
-	//		mMazeBox->SetBoxType((y * 15 + x) % 2 ? MazeBox::BLACK : MazeBox::WHITE);
-	//		float x_pos = 1.0f + 2.0f * x;
-	//		float y_pos = 1.0f + 2.0f * y;
-
-	//		if (mLevelData[y - 5][x] == '-') {
-	//			// 通路
-	//			mMazeBox->SetPos(glm::vec3(x_pos, y_pos, 0.f));
-	//		}
-	//		else {
-	//			// 通れない
-	//			glm::vec3 playerPos = mPlayer->GetPos();
-	//			if (
-	//				(x_pos - 1.5 <= playerPos.x) && (playerPos.x <= x_pos + 1.5) &&
-	//				(y_pos - 1.5 <= playerPos.y) && (playerPos.y <= y_pos + 1.5)
-	//				) {
-	//				if (mMazeData[y - 5][x] <= 2.0f) {
-	//					mMazeData[y - 5][x] += 0.01;
-	//				}
-	//			}
-	//			else {
-	//				if (mMazeData[y - 5][x] >= 0.f) {
-	//					mMazeData[y - 5][x] -= 0.01;
-	//				}
-	//			}
-	//			mMazeBox->SetPos(glm::vec3(x_pos, y_pos, mMazeData[y - 5][x]));
-	//		}
-
-	//		mMazeBox->Draw(mMeshShader, mTicksCount / 1000.0f);
-	//	}
-	//}
-
-
 	// Draw Skin Mesh
 	mSkinningShader->UseProgram();
 	for (auto skinmesh : mSkinMeshComps) {
 		skinmesh->Draw(mSkinningShader);
 	}
 
-	//mPlayer->Draw(mSkinningShader, mTicksCount / 1000.0f);
 
 	// Draw Sprites
 	glDisable(GL_DEPTH_TEST);
@@ -880,29 +811,6 @@ void Game::Draw()
 		talktext->Draw(mTextShader);
 	}
 
-	// 文字描画
-	// エンターキーではなす
-	//if (mPhase != PHASE_TALK) {
-	//	if (
-	//		(2.0f < mPlayer->GetPos().x) && (mPlayer->GetPos().x < 3.0f) &&
-	//		(1.0f < mPlayer->GetPos().y) && (mPlayer->GetPos().y < 2.0f)
-	//		) {
-	//		mText->SetPos(glm::vec3(0.0f, 300.f, 0.f));
-	//		mText->SetText(u"エンターキーで話す");
-	//		mText->SetTextColor(glm::vec3(0.f, 0.f, 0.2f));
-	//		mText->Draw(mTextShader);
-	//	}
-	//}
-
-	//// 話し中ならトーク画面描画
-	//if (mPhase == PHASE_TALK) {
-	//}
-	//mTextBox->Draw(mSpriteShader);
-
-
-
-
-
 
 
 	SDL_GL_SwapWindow(mWindow);
@@ -921,16 +829,41 @@ void Game::RunLoop()
 void Game::UnloadData()
 {
 	// Delete actors
-	// Because ~Actor calls RemoveActor, have to use a different style loop
 	while (!mActors.empty())
 	{
-		delete mActors.back();
+		delete mActors.back();	// SpriteやText, TalkTextここでUnload
 	}
+
+
+	// Mesh
+	for (auto i : mMeshes)
+	{
+		delete i.second;
+	}
+	mMeshes.clear();
+	// SkinMesh
+	for (auto i : mSkinMeshes) {
+		delete i.second;
+	}
+	mSkinMeshes.clear();
+
 }
 
 void Game::Shutdown()
 {
 	UnloadData();
+
+	// unload renderer
+	//delete mSpriteVerts;
+	//mSpriteShader->Unload();
+	//mMeshShader->Unload();
+	delete mSkinningShader;
+	delete mTextShader;
+	delete mSpriteShader;
+	delete mMeshShader;
+	SDL_GL_DeleteContext(mContext);
+	SDL_DestroyWindow(mWindow);
+	// Sound
 	mSound->ShutDown();
 	delete(mSound);
 	SDL_Quit();

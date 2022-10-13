@@ -11,6 +11,7 @@
 class TextComponent : public SpriteComponent {
 public:
 	TextComponent(class Actor* owner, Type type = TEXT);
+	~TextComponent();
 	virtual void Draw(class Shader* shader) override;
 	void DrawTalkText(class Shader* shader);
 	virtual void Update(float deltaTime) override;
@@ -31,11 +32,11 @@ protected:
 	std::map<char16_t, TexChar> mJapanTexChars;
 	void SetUniforms(class Shader* shader) override;
 
-	unsigned int mVertexBuffer;
 
 private:
 
 	FT_Face mFontFace;
+	FT_Library mFTlibrary;
 	glm::vec3 mTextColor;
 	std::u16string mText;
 	float mDrawSpeed;

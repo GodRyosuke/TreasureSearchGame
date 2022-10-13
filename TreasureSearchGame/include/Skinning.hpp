@@ -5,7 +5,7 @@
 class SkinMesh : public Mesh {
 public:
     SkinMesh();
-    ~SkinMesh() {}
+    ~SkinMesh();
     //void Update(float deltaTime) override;
     int GetBoneTransform(float TimeInSeconds, std::vector<glm::mat4>& Transforms);
     void SetAnimIdx(int idx) { mAnimIdx = idx; }
@@ -76,6 +76,7 @@ private:
     std::map<std::string, unsigned int> m_BoneNameToIndexMap;
     std::vector<VertexBoneData> m_Bones;
 
+    unsigned int mBoneBuffer;
     glm::mat4 m_GlobalInverseTransform;
     int mAnimIdx;
 };

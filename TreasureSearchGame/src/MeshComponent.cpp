@@ -12,6 +12,11 @@ MeshComponent::MeshComponent(Actor* owner, bool isSkeletal)
     mOwner->GetGame()->AddMeshComp(this);
 }
 
+MeshComponent::~MeshComponent()
+{
+    mOwner->GetGame()->RemoveMeshComp(this);
+}
+
 void MeshComponent::Draw(Shader* shader)
 {
     shader->UseProgram();

@@ -86,8 +86,7 @@ void TreasureBox::ActorInput(const uint8_t* keys)
 				GetGame()->GetPlayer()->WaitSeconds(3000);
 				GetGame()->SetPhase(Game::PHASE_SUCCSESS_GAME);
 				Sound* sound = GetGame()->GetSound();
-				sound->SetType(Sound::OPEN_CHST);
-				sound->StartMusic();
+				sound->StartMusic("event:/OpenChest");
 			}
 		}
 	}

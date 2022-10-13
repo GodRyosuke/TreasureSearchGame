@@ -1,7 +1,6 @@
 #include "Sound.hpp"
 
 Sound::Sound()
-	:mType(NORMAL)
 {
 	void* extraDriverData = NULL;
 	Common_Init(&extraDriverData);
@@ -27,49 +26,74 @@ Sound::Sound()
 
 	// Audio Data読み出し
 	// 店内で流れるBGM
-	FMOD::Studio::EventDescription* NormalBGMDesc = NULL;
-	ERRCHECK(mAudioSystem->getEvent("event:/NormalBGM", &NormalBGMDesc));
-	mNormalBGM = NULL;
-	ERRCHECK(NormalBGMDesc->createInstance(&mNormalBGM));
-
-	// ゲーム時に流れる音楽
-	FMOD::Studio::EventDescription* GameBGMDesc = NULL;
-	ERRCHECK(mAudioSystem->getEvent("event:/GameBGM", &GameBGMDesc));
-	mGameBGM = NULL;
-	ERRCHECK(GameBGMDesc->createInstance(&mGameBGM));
-
-	// 効果音読み出し
-	FMOD::Studio::EventDescription* Effect = NULL;
-	ERRCHECK(mAudioSystem->getEvent("event:/Select", &Effect));
-	mSelect = NULL;
-	ERRCHECK(Effect->createInstance(&mSelect));
-
-	Effect = NULL;
-	ERRCHECK(mAudioSystem->getEvent("event:/Cansel", &Effect));
-	mCansel = NULL;
-	ERRCHECK(Effect->createInstance(&mCansel));
-
-	Effect = NULL;
-	ERRCHECK(mAudioSystem->getEvent("event:/CountDown", &Effect));
-	mCountDown = NULL;
-	ERRCHECK(Effect->createInstance(&mCountDown));
-
-	Effect = NULL;
-	ERRCHECK(mAudioSystem->getEvent("event:/OpenChest", &Effect));
-	mOpenChest = NULL;
-	ERRCHECK(Effect->createInstance(&mOpenChest));
-
-	Effect = NULL;
-	ERRCHECK(mAudioSystem->getEvent("event:/Clerk", &Effect));
-	mClerk = NULL;
-	ERRCHECK(Effect->createInstance(&mClerk));
-
-	Effect = NULL;
-	ERRCHECK(mAudioSystem->getEvent("event:/Walk", &Effect));
-	mWalk = NULL;
-	ERRCHECK(Effect->createInstance(&mWalk));
+	LoadEvents("event:/NormalBGM");
+	LoadEvents("event:/GameBGM");
+	LoadEvents("event:/Select");
+	LoadEvents("event:/Cansel");
+	LoadEvents("event:/CountDown");
+	LoadEvents("event:/OpenChest");
+	LoadEvents("event:/Clerk");
+	LoadEvents("event:/Walk");
 
 
+	//FMOD::Studio::EventDescription* NormalBGMDesc = NULL;
+	//ERRCHECK(mAudioSystem->getEvent("event:/NormalBGM", &NormalBGMDesc));
+	//mNormalBGM = NULL;
+	//ERRCHECK(NormalBGMDesc->createInstance(&mNormalBGM));
+	//mEvents.insert()
+
+	//// ゲーム時に流れる音楽
+	//FMOD::Studio::EventDescription* GameBGMDesc = NULL;
+	//ERRCHECK(mAudioSystem->getEvent("event:/GameBGM", &GameBGMDesc));
+	//mGameBGM = NULL;
+	//ERRCHECK(GameBGMDesc->createInstance(&mGameBGM));
+
+	//// 効果音読み出し
+	//FMOD::Studio::EventDescription* Effect = NULL;
+	//ERRCHECK(mAudioSystem->getEvent("event:/Select", &Effect));
+	//mSelect = NULL;
+	//ERRCHECK(Effect->createInstance(&mSelect));
+
+	//Effect = NULL;
+	//ERRCHECK(mAudioSystem->getEvent("event:/Cansel", &Effect));
+	//mCansel = NULL;
+	//ERRCHECK(Effect->createInstance(&mCansel));
+
+	//Effect = NULL;
+	//ERRCHECK(mAudioSystem->getEvent("event:/CountDown", &Effect));
+	//mCountDown = NULL;
+	//ERRCHECK(Effect->createInstance(&mCountDown));
+
+	//Effect = NULL;
+	//ERRCHECK(mAudioSystem->getEvent("event:/OpenChest", &Effect));
+	//mOpenChest = NULL;
+	//ERRCHECK(Effect->createInstance(&mOpenChest));
+
+	//Effect = NULL;
+	//ERRCHECK(mAudioSystem->getEvent("event:/Clerk", &Effect));
+	//mClerk = NULL;
+	//ERRCHECK(Effect->createInstance(&mClerk));
+
+	//Effect = NULL;
+	//ERRCHECK(mAudioSystem->getEvent("event:/Walk", &Effect));
+	//mWalk = NULL;
+	//ERRCHECK(Effect->createInstance(&mWalk));
+}
+
+void Sound::LoadEvents(std::string eventName)
+{
+	FMOD::Studio::EventDescription* eventDesc = NULL;
+	ERRCHECK(mAudioSystem->getEvent(eventName.c_str(), &eventDesc));
+	FMOD::Studio::EventInstance* eventInstance = NULL;
+	ERRCHECK(eventDesc->createInstance(&eventInstance));
+
+	if (eventInstance) {
+		mEvents.emplace(eventName, eventInstance);
+	}
+	else {
+		delete eventInstance;
+		eventInstance = nullptr;
+	}
 }
 
 void Sound::Update()
@@ -77,54 +101,75 @@ void Sound::Update()
 	ERRCHECK(mAudioSystem->update());
 }
 
-void Sound::StartMusic()
+void Sound::StartMusic(std::string eventName)
 {
-	switch (mType)
-	{
-	case Sound::NORMAL:
-		ERRCHECK(mNormalBGM->start());
-		break;
-	case Sound::GAME:
-		ERRCHECK(mGameBGM->start());
-		break;
-	case Sound::SELECT:
-		ERRCHECK(mSelect->start());
-		break;
-	case Sound::CANSEL:
-		ERRCHECK(mCansel->start());
-		break;
-	case Sound::COUNT_DOWN:
-		ERRCHECK(mCountDown->start());
-		break;
-	case Sound::OPEN_CHST:
-		ERRCHECK(mOpenChest->start());
-		break;
-	case Sound::CLERK:
-		ERRCHECK(mClerk->start());
-		break;
-	case Sound::WALK:
-		ERRCHECK(mWalk->start());
-		break;
+	auto iter = mEvents.find(eventName);
+	if (iter != mEvents.end()) {
+		iter->second->start();
 	}
+
+	//switch (mType)
+	//{
+	//case Sound::NORMAL:
+	//	ERRCHECK(mNormalBGM->start());
+	//	break;
+	//case Sound::GAME:
+	//	ERRCHECK(mGameBGM->start());
+	//	break;
+	//case Sound::SELECT:
+	//	ERRCHECK(mSelect->start());
+	//	break;
+	//case Sound::CANSEL:
+	//	ERRCHECK(mCansel->start());
+	//	break;
+	//case Sound::COUNT_DOWN:
+	//	ERRCHECK(mCountDown->start());
+	//	break;
+	//case Sound::OPEN_CHST:
+	//	ERRCHECK(mOpenChest->start());
+	//	break;
+	//case Sound::CLERK:
+	//	ERRCHECK(mClerk->start());
+	//	break;
+	//case Sound::WALK:
+	//	ERRCHECK(mWalk->start());
+	//	break;
+	//}
 }
 
-void Sound::StopMusic()
+void Sound::StopMusic(std::string eventName)
 {
-	switch (mType)
-	{
-	case Sound::NORMAL:
-		ERRCHECK(mNormalBGM->stop(FMOD_STUDIO_STOP_IMMEDIATE));
-		break;
-	case Sound::GAME:
-		ERRCHECK(mGameBGM->stop(FMOD_STUDIO_STOP_IMMEDIATE));
-		break;
-	case Sound::WALK:
-		ERRCHECK(mWalk->stop(FMOD_STUDIO_STOP_IMMEDIATE));
-		break;
+	auto iter = mEvents.find(eventName);
+	if (iter != mEvents.end()) {
+		iter->second->stop(FMOD_STUDIO_STOP_IMMEDIATE);
 	}
+
+	//switch (mType)
+	//{
+	//case Sound::NORMAL:
+	//	ERRCHECK(mNormalBGM->stop(FMOD_STUDIO_STOP_IMMEDIATE));
+	//	break;
+	//case Sound::GAME:
+	//	ERRCHECK(mGameBGM->stop(FMOD_STUDIO_STOP_IMMEDIATE));
+	//	break;
+	//case Sound::WALK:
+	//	ERRCHECK(mWalk->stop(FMOD_STUDIO_STOP_IMMEDIATE));
+	//	break;
+	//}
 }
 
 void Sound::ShutDown()
 {
-	//mAudioSystem->unloadAll();
+	// Unload Bank
+	for (auto& iter : mBanks)
+	{
+		// Unload the sample data, then the bank itself
+		iter->unloadSampleData();
+		iter->unload();
+	}
+	mBanks.clear();
+
+	// Unload Events
+	mEvents.clear();
+	mAudioSystem->unloadAll();
 }

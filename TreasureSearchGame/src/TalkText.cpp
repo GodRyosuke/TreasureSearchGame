@@ -70,8 +70,7 @@ void TalkText::UpdateActor(float deltatime)
 			mTalkTextComp->SetIsDraw(true);
 			SetPosition(glm::vec3(0.0f, -150.0f, 0.f));
 			mTalkTextComp->SetTextColor(glm::vec3(0.f, 0.f, 0.2f));
-			GetGame()->GetSound()->SetType(Sound::CLERK);
-			GetGame()->GetSound()->StartMusic();
+			GetGame()->GetSound()->StartMusic("event:/Clerk");
 		}
 	}
 
@@ -106,16 +105,14 @@ void TalkText::ActorInput(const uint8_t* keyState)
 			mTalkTextComp->SetText(JsonToString(mTalkData[mTalkIdx]));
 			mTalkTextComp->InittextPos();
 			GetGame()->GetClerk()->BowToPlayer();
-			sound->SetType(Sound::CANSEL);
-			sound->StartMusic();
+			sound->StartMusic("event:/Cansel");
 		}
 		else if ((mTalkIdx == 2) && (keyState[SDL_SCANCODE_1])) {
 			// ゲームをすると選択
 			mTalkIdx = 4;
 			mTalkTextComp->SetText(JsonToString(mTalkData[mTalkIdx]));
 			mTalkTextComp->InittextPos();
-			sound->SetType(Sound::SELECT);
-			sound->StartMusic();
+			sound->StartMusic("event:/Select");
 		}
 		else if ((mTalkIdx == 3) && (keyState[SDL_SCANCODE_RETURN])) {
 			// またきてね描画終了
@@ -123,8 +120,7 @@ void TalkText::ActorInput(const uint8_t* keyState)
 			mTalkIdx = 0;
 			GetGame()->GetPlayer()->SetState(Player::IDLE);
 			GetGame()->GetPlayer()->WaitSeconds(1000);
-			sound->SetType(Sound::SELECT);
-			sound->StartMusic();
+			sound->StartMusic("event:/Select");
 		}
 		else if ((mTalkIdx == 6) && (keyState[SDL_SCANCODE_RETURN])) {
 			// ゲーム開始のため、TALK終わり
@@ -139,10 +135,8 @@ void TalkText::ActorInput(const uint8_t* keyState)
 			mResultIdx = GetGame()->GetRandom() % 5;
 			// BGM変更
 			Sound* sound = GetGame()->GetSound();
-			sound->SetType(Sound::NORMAL);
-			sound->StopMusic();
-			sound->SetType(Sound::GAME);
-			sound->StartMusic();
+			sound->StopMusic("event:/NormalBGM");
+			sound->StartMusic("event:/GameBGM");
 		}
 		else if (
 			((GetGame()->GetPhase() == Game::PHASE_FAIL_GAME) ||
@@ -153,18 +147,14 @@ void TalkText::ActorInput(const uint8_t* keyState)
 			mTalkIdx = 0;
 			GetGame()->GetPlayer()->SetState(Player::IDLE);
 			// BGM変更
-			sound->SetType(Sound::GAME);
-			sound->StopMusic();
-			sound->SetType(Sound::NORMAL);
-			sound->StartMusic();
-			sound->SetType(Sound::SELECT);
-			sound->StartMusic();
+			sound->StopMusic("event:/GameBGM");
+			sound->StartMusic("event:/NormalBGM");
+			sound->StartMusic("event:/Select");
 		}
 		else if (
 			(mTalkIdx != 2) &&
 			(keyState[SDL_SCANCODE_RETURN])) {
-			sound->SetType(Sound::SELECT);
-			sound->StartMusic();
+			sound->StartMusic("event:/Select");
 			mTalkIdx++;
 			mTalkTextComp->SetText(JsonToString(mTalkData[mTalkIdx]));
 			mTalkTextComp->InittextPos();

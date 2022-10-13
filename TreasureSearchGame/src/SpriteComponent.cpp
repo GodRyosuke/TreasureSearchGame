@@ -28,8 +28,12 @@ SpriteComponent::SpriteComponent(Actor* owner, Type type)
 
 SpriteComponent::~SpriteComponent()
 {
+	glDeleteBuffers(1, &mVertexBuffer);
+	glDeleteBuffers(1, &mIndexBuffer);
+	glDeleteVertexArrays(1, &mVertexArray);
 	mOwner->GetGame()->RemoveSpriteComp(this);
 }
+
 
 bool SpriteComponent::Load(std::string filePath, float alpha)
 {
@@ -38,20 +42,18 @@ bool SpriteComponent::Load(std::string filePath, float alpha)
 	mTexture = new Texture(filePath);
 
 	// Vertex Array ObjectçÏê¨
-	unsigned int vertexBuffer;
-	unsigned int indexBuffer;
 	glGenVertexArrays(1, &mVertexArray);
 	glBindVertexArray(mVertexArray);
 
-	glGenBuffers(1, &vertexBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+	glGenBuffers(1, &mVertexBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, mVertexBuffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(SpriteVertices), SpriteVertices, GL_STATIC_DRAW);
 
-	glGenBuffers(1, &indexBuffer);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+	glGenBuffers(1, &mIndexBuffer);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBuffer);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(SpriteIndices), SpriteIndices, GL_STATIC_DRAW);
 
-	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, mVertexBuffer);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
