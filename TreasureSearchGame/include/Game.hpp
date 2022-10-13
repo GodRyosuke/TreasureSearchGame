@@ -101,7 +101,7 @@ private:
 	class Mesh* mConcretePlane;
 	class Mesh* mRoof;
 	
-	class Text* mText;
+	//class Text* mText;
 	//nl::json mTextData;
 
 	class Player* mPlayer;
@@ -131,11 +131,11 @@ private:
 
 
 	// Camera
-	glm::vec3 mCameraUP;
-	glm::vec3 mCameraOrientation;
-	float mMoveSensitivity;
+	//glm::vec3 mCameraUP;
+	//glm::vec3 mCameraOrientation;
+	//float mMoveSensitivity;
 
-	glm::vec3 mMousePos;
+	//glm::vec3 mMousePos;
 
 
 	std::vector<class Actor*> mActors;

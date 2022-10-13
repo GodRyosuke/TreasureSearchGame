@@ -78,10 +78,11 @@ void Player::ActorInput(const uint8_t* keys)
 			(1.0f < GetPosition().y) && (GetPosition().y < 2.0f)
 			) {
 			if (keys[SDL_SCANCODE_RETURN]) {
-				//GetGame()->SetPhase(Game::PHASE_TALK);
-				Sound* sound = GetGame()->GetSound();
-				sound->StartMusic("event:/Select");
-				mState = TALK;
+				if (GetGame()->GetPhase() == Game::PHASE_NORMAL) {
+					Sound* sound = GetGame()->GetSound();
+					sound->StartMusic("event:/Select");
+					mState = TALK;
+				}
 			}
 		}
 	}
@@ -118,7 +119,7 @@ void Player::ActorInput(const uint8_t* keys)
 			glm::vec3 boxPos = GetGame()->GetTreasurePos();
 			if (GetGame()->IsWall(playerNewPos)) {
 				// Player‚Ì‚¢‚éêŠ‚ª•Ç‚È‚çXV‚µ‚È‚¢
-				//IsUpdatePlayerPos = false;
+				IsUpdatePlayerPos = false;
 			}
 			else if (
 				((boxPos.x - 0.5f) < playerNewPos.x) && (playerNewPos.x < (boxPos.x + 0.5f)) &&
@@ -256,6 +257,6 @@ void Player::UpdateActor(float deltatime)
 		mGamePhaseText->SetText(u"others!!");
 		break;
 	}
-	//mDebugText->SetText(u"");
+	mDebugText->SetText(u"");
 	mGamePhaseText->SetText(u"");
 }

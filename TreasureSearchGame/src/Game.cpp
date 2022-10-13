@@ -35,12 +35,9 @@ Game::Game()
 	:mWindowWidth(1024),
 	mWindowHeight(768),
 	mIsRunning(true),
-	mPhase(PHASE_NORMAL),
-	mMoveSensitivity(100.0f)
+	mPhase(PHASE_NORMAL)
 	, mLevelIdx(0)
 {
-	mCameraUP = glm::vec3(0.0f, 0.0f, 1.0f);
-	mCameraOrientation = glm::vec3(0.5f, 0, 0);
 
 
 }
@@ -478,12 +475,6 @@ uint32_t Game::GetRandom()
 
 void Game::ProcessInput()
 {
-	SDL_Point mouse_position = { mWindowWidth / 2, mWindowHeight / 2 };
-	SDL_GetMouseState(&mouse_position.x, &mouse_position.y);
-	mMousePos.x = mouse_position.x;
-	mMousePos.y = mouse_position.y;
-	//printf("%d %d\n", mMousePos.x, mMousePos.y);
-
 	SDL_Event event;
 	while (SDL_PollEvent(&event))
 	{
@@ -492,34 +483,28 @@ void Game::ProcessInput()
 		case SDL_QUIT:
 			mIsRunning = false;
 			break;
-		case SDL_MOUSEBUTTONDOWN:	// マウスのボタンが押されたら
-		{
-			if (mPhase == PHASE_IDLE) {
-				//mLastMousePos = mMousePos;
-				//mSwipingDropPos = mMousePos / GRID_SIZE;
-				mPhase = PHASE_MOVE;
+		//case SDL_MOUSEBUTTONDOWN:	// マウスのボタンが押されたら
+		//{
+		//	if (mPhase == PHASE_IDLE) {
+		//		mPhase = PHASE_MOVE;
+		//		SDL_WarpMouseInWindow(mWindow, mWindowWidth / 2, mWindowHeight / 2);
+		//		SDL_ShowCursor(SDL_DISABLE);
+		//	}
+		//}
+		//break;
+		//case SDL_MOUSEBUTTONUP:		// マウスを離したら
+		//	if (mPhase == PHASE_MOVE) {
+		//		mPhase = PHASE_IDLE;
 
-				SDL_WarpMouseInWindow(mWindow, mWindowWidth / 2, mWindowHeight / 2);
-				mMousePos.x = mWindowWidth / 2;
-				mMousePos.y = mWindowHeight / 2;
-				SDL_ShowCursor(SDL_DISABLE);
-				//std::cout << "----------------------------------------------called\n";
-			}
-		}
-		break;
-		case SDL_MOUSEBUTTONUP:		// マウスを離したら
-			if (mPhase == PHASE_MOVE) {
-				mPhase = PHASE_IDLE;
-
-				/*if (EraseDrops()) {
-					phase = PHASE_ERASE;
-				}
-				else {
-					phase = PHASE_IDLE;
-				}*/
-				SDL_ShowCursor(SDL_ENABLE);
-			}
-			break;
+		//		/*if (EraseDrops()) {
+		//			phase = PHASE_ERASE;
+		//		}
+		//		else {
+		//			phase = PHASE_IDLE;
+		//		}*/
+		//		SDL_ShowCursor(SDL_ENABLE);
+		//	}
+		//	break;
 		}
 	}
 
@@ -549,30 +534,30 @@ void Game::UpdateGame()
 
 	mTicksCount = SDL_GetTicks();
 
-	if (mPhase == PHASE_MOVE) {
-		//printf("%d %d\n", mMousePos.x, mMousePos.y);
+	//if (mPhase == PHASE_MOVE) {
+	//	//printf("%d %d\n", mMousePos.x, mMousePos.y);
 
-		float rotX = mMoveSensitivity * (float)((float)mMousePos.y - ((float)mWindowHeight / 2.0f)) / (float)mWindowHeight;
-		float rotY = mMoveSensitivity * (float)((float)mMousePos.x - ((float)mWindowWidth / 2.0f)) / (float)mWindowWidth;
-		//printf("rotX: %f rotY: %f\t", rotX, rotY);
-		// Calculates upcoming vertical change in the Orientation
-		glm::vec3 newOrientation = glm::rotate(mCameraOrientation, glm::radians(-rotX), glm::normalize(glm::cross(mCameraOrientation, mCameraUP)));
+	//	float rotX = mMoveSensitivity * (float)((float)mMousePos.y - ((float)mWindowHeight / 2.0f)) / (float)mWindowHeight;
+	//	float rotY = mMoveSensitivity * (float)((float)mMousePos.x - ((float)mWindowWidth / 2.0f)) / (float)mWindowWidth;
+	//	//printf("rotX: %f rotY: %f\t", rotX, rotY);
+	//	// Calculates upcoming vertical change in the Orientation
+	//	glm::vec3 newOrientation = glm::rotate(mCameraOrientation, glm::radians(-rotX), glm::normalize(glm::cross(mCameraOrientation, mCameraUP)));
 
-		// Decides whether or not the next vertical Orientation is legal or not
-		int rad = abs(glm::angle(newOrientation, mCameraUP) - glm::radians(90.0f));
-		//std::cout << rad * 180 / M_PI << std::endl;
-		if (abs(glm::angle(newOrientation, mCameraUP) - glm::radians(90.0f)) <= glm::radians(85.0f))
-		{
-			mCameraOrientation = newOrientation;
-		}
+	//	// Decides whether or not the next vertical Orientation is legal or not
+	//	int rad = abs(glm::angle(newOrientation, mCameraUP) - glm::radians(90.0f));
+	//	//std::cout << rad * 180 / M_PI << std::endl;
+	//	if (abs(glm::angle(newOrientation, mCameraUP) - glm::radians(90.0f)) <= glm::radians(85.0f))
+	//	{
+	//		mCameraOrientation = newOrientation;
+	//	}
 
-		// Rotates the Orientation left and right
-		mCameraOrientation = glm::rotate(mCameraOrientation, glm::radians(-rotY), mCameraUP);
+	//	// Rotates the Orientation left and right
+	//	mCameraOrientation = glm::rotate(mCameraOrientation, glm::radians(-rotY), mCameraUP);
 
-		if ((mMousePos.x != mWindowWidth / 2) || (mMousePos.y != mWindowHeight / 2)) {
-			SDL_WarpMouseInWindow(mWindow, mWindowWidth / 2, mWindowHeight / 2);
-		}
-	}
+	//	if ((mMousePos.x != mWindowWidth / 2) || (mMousePos.y != mWindowHeight / 2)) {
+	//		SDL_WarpMouseInWindow(mWindow, mWindowWidth / 2, mWindowHeight / 2);
+	//	}
+	//}
 
 	for (auto actor : mActors) {
 		actor->Update(deltaTime);

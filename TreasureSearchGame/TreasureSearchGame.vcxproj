@@ -191,34 +191,34 @@ XCOPY "$(SolutionDir)TreasureSearchGame\resources" %OUTPUT_DIRECTORY% /e /y</Com
     <ClInclude Include="include\Actor\TreasureBox.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Actor.cpp" />
-    <ClCompile Include="src\Clerk.cpp" />
-    <ClCompile Include="src\Component.cpp" />
-    <ClCompile Include="src\Counter.cpp" />
+    <ClCompile Include="src\Actor\Actor.cpp" />
+    <ClCompile Include="src\Actor\Clerk.cpp" />
+    <ClCompile Include="src\Component\Component.cpp" />
+    <ClCompile Include="src\Actor\Counter.cpp" />
     <ClCompile Include="src\FMOD\common.cpp" />
     <ClCompile Include="src\FMOD\common_platform.cpp" />
-    <ClCompile Include="src\FollowCamera.cpp" />
+    <ClCompile Include="src\Component\FollowCamera.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\Main.cpp" />
-    <ClCompile Include="src\MazeBox.cpp" />
+    <ClCompile Include="src\Actor\MazeBox.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
-    <ClCompile Include="src\MeshComponent.cpp" />
-    <ClCompile Include="src\Plane.cpp" />
-    <ClCompile Include="src\Player.cpp" />
+    <ClCompile Include="src\Component\MeshComponent.cpp" />
+    <ClCompile Include="src\Actor\Plane.cpp" />
+    <ClCompile Include="src\Actor\Player.cpp" />
     <ClCompile Include="src\Random.cpp" />
-    <ClCompile Include="src\Roof.cpp" />
+    <ClCompile Include="src\Actor\Roof.cpp" />
     <ClCompile Include="src\Shader.cpp" />
-    <ClCompile Include="src\SkinMeshComponent.cpp" />
+    <ClCompile Include="src\Component\SkinMeshComponent.cpp" />
     <ClCompile Include="src\Skinning.cpp" />
     <ClCompile Include="src\Sound.cpp" />
-    <ClCompile Include="src\SpriteComponent.cpp" />
-    <ClCompile Include="src\TalkText.cpp" />
-    <ClCompile Include="src\TalkTextComponent.cpp" />
-    <ClCompile Include="src\Text.cpp" />
-    <ClCompile Include="src\TextComponent.cpp" />
-    <ClCompile Include="src\TextBox.cpp" />
+    <ClCompile Include="src\Component\SpriteComponent.cpp" />
+    <ClCompile Include="src\Actor\TalkText.cpp" />
+    <ClCompile Include="src\Component\TalkTextComponent.cpp" />
+    <ClCompile Include="src\Actor\Text.cpp" />
+    <ClCompile Include="src\Component\TextComponent.cpp" />
+    <ClCompile Include="src\Actor\TextBox.cpp" />
     <ClCompile Include="src\Texture.cpp" />
-    <ClCompile Include="src\TreasureBox.cpp" />
+    <ClCompile Include="src\Actor\TreasureBox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\LevelData\1.level" />
