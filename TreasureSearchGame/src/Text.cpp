@@ -1,9 +1,9 @@
 #include <codecvt>
-#include "Text.hpp"
-#include "TextComponent.hpp"
+#include "Actor/Text.hpp"
+#include "Component/TextComponent.hpp"
 #include "Game.hpp"
-#include "TalkText.hpp"
-#include "Player.hpp"
+#include "Actor/TalkText.hpp"
+#include "Actor/Player.hpp"
 #include "Sound.hpp"
 
 static Game::PHASE preGamePhase;

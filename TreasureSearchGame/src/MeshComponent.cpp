@@ -1,7 +1,7 @@
-#include "MeshComponent.hpp"
+#include "Component/MeshComponent.hpp"
 #include "Mesh.hpp"
 #include "Shader.hpp"
-#include "Actor.hpp"
+#include "Actor/Actor.hpp"
 #include "Game.hpp"
 
 MeshComponent::MeshComponent(Actor* owner, bool isSkeletal)

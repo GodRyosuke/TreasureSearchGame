@@ -1,7 +1,7 @@
-#include "TextBox.hpp"
+#include "Actor/TextBox.hpp"
 #include "Game.hpp"
-#include "Player.hpp"
-#include "SpriteComponent.hpp"
+#include "Actor/Player.hpp"
+#include "Component/SpriteComponent.hpp"
 
 TextBox::TextBox(Game* game)
 	:Actor(game)

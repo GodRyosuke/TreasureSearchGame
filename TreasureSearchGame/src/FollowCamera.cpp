@@ -1,8 +1,8 @@
-#include "FollowCamera.hpp"
+#include "Component/FollowCamera.hpp"
 #include "Mesh.hpp"
 #include "Shader.hpp"
 #include "Game.hpp"
-#include "Actor.hpp"
+#include "Actor/Actor.hpp"
 
 FollowCamera::FollowCamera(Actor* owner)
 	:Component(owner)

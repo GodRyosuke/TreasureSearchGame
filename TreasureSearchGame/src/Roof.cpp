@@ -1,6 +1,6 @@
-#include "Roof.hpp"
+#include "Actor/Roof.hpp"
 #include "Game.hpp"
-#include "MeshComponent.hpp"
+#include "Component/MeshComponent.hpp"
 
 Roof::Roof(Game* game)
 	:Actor(game)

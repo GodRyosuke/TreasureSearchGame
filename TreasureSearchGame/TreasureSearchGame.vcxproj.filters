@@ -33,61 +33,58 @@
     <ClInclude Include="include\Texture.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="include\TextureShadowMap.hpp">
+    <ClInclude Include="include\Component\SpriteComponent.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="include\SpriteComponent.hpp">
+    <ClInclude Include="include\Component\TextComponent.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="include\TextComponent.hpp">
+    <ClInclude Include="include\Actor\MazeBox.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="include\MazeBox.hpp">
+    <ClInclude Include="include\Component\FollowCamera.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="include\FollowCamera.hpp">
+    <ClInclude Include="include\Actor\Player.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="include\Player.hpp">
+    <ClInclude Include="include\Actor\Plane.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="include\Plane.hpp">
+    <ClInclude Include="include\Component\TalkTextComponent.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="include\TalkTextComponent.hpp">
+    <ClInclude Include="include\Actor\Actor.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="include\Actor.hpp">
+    <ClInclude Include="include\Component\Component.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="include\Component.hpp">
+    <ClInclude Include="include\Component\MeshComponent.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="include\MeshComponent.hpp">
+    <ClInclude Include="include\Component\SkinMeshComponent.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="include\SkinMeshComponent.hpp">
+    <ClInclude Include="include\Actor\Roof.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="include\Roof.hpp">
+    <ClInclude Include="include\Actor\TextBox.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="include\TextBox.hpp">
+    <ClInclude Include="include\Actor\Text.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="include\Text.hpp">
+    <ClInclude Include="include\Actor\TalkText.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="include\TalkText.hpp">
+    <ClInclude Include="include\Actor\Counter.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="include\Counter.hpp">
+    <ClInclude Include="include\Actor\Clerk.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="include\Clerk.hpp">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="include\TreasureBox.hpp">
+    <ClInclude Include="include\Actor\TreasureBox.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="include\FMOD\common.hpp">
@@ -120,9 +117,6 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="src\Texture.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TextureShadowMap.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="src\SpriteComponent.cpp">

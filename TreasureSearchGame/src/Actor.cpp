@@ -6,9 +6,9 @@
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
 
-#include "Actor.hpp"
+#include "Actor/Actor.hpp"
 #include "Game.hpp"
-#include "Component.hpp"
+#include "Component/Component.hpp"
 #include "gtc/matrix_transform.hpp"
 #include "gtc/type_ptr.hpp"
 #include "gtx/rotate_vector.hpp"

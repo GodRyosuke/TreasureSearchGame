@@ -7,7 +7,6 @@
 #include <assimp/Importer.hpp>      // C++ importer interface
 #include <assimp/scene.h>       // Output data structure
 #include <assimp/postprocess.h> // Post processing flags
-#include "Component.hpp"
 #include <unordered_map>
 
 #define MAX_NUM_BONES_PER_VERTEX 4

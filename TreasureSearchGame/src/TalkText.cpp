@@ -1,9 +1,9 @@
-#include "TalkText.hpp"
-#include "TalkTextComponent.hpp"
+#include "Actor/TalkText.hpp"
+#include "Component/TalkTextComponent.hpp"
 #include "Game.hpp"
-#include "TreasureBox.hpp"
+#include "Actor/TreasureBox.hpp"
 #include "Sound.hpp"
-#include "Clerk.hpp"
+#include "Actor/Clerk.hpp"
 #include <fstream>
 #include <codecvt>
 

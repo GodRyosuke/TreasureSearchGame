@@ -1,8 +1,8 @@
-#include "MazeBox.hpp"
+#include "Actor/MazeBox.hpp"
 #include "Texture.hpp"
-#include "MeshComponent.hpp"
+#include "Component/MeshComponent.hpp"
 #include "Game.hpp"
-#include "Player.hpp"
+#include "Actor/Player.hpp"
 
 MazeBox::MazeBox(Game* game)
 	:Actor(game)

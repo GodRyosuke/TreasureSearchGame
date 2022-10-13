@@ -2,7 +2,7 @@
 #include <iostream>
 #include <GLUtil.hpp>
 #include "Shader.hpp"
-#include "Actor.hpp"
+#include "Actor/Actor.hpp"
 #include "Game.hpp"
 
 

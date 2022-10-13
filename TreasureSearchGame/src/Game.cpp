@@ -6,22 +6,23 @@
 #include "gtc/type_ptr.hpp"
 #include "gtx/rotate_vector.hpp"
 #include "gtx/vector_angle.hpp"
-#include "Player.hpp"
+#include "Actor/Player.hpp"
 #include "Shader.hpp"
-#include "Plane.hpp"
+#include "Actor/Plane.hpp"
+#include "Actor/MazeBox.hpp"
 #include "Skinning.hpp"
-#include "SpriteComponent.hpp"
-#include "MeshComponent.hpp"
-#include "SkinMeshComponent.hpp"
-#include "Roof.hpp"
-#include "TextBox.hpp"
-#include "TextComponent.hpp"
-#include "TalkTextComponent.hpp"
-#include "Text.hpp"
-#include "TalkText.hpp"
-#include "Counter.hpp"
-#include "Clerk.hpp"
-#include "TreasureBox.hpp"
+#include "Component/SpriteComponent.hpp"
+#include "Component/MeshComponent.hpp"
+#include "Component/SkinMeshComponent.hpp"
+#include "Actor/Roof.hpp"
+#include "Actor/TextBox.hpp"
+#include "Component/TextComponent.hpp"
+#include "Component/TalkTextComponent.hpp"
+#include "Actor/Text.hpp"
+#include "Actor/TalkText.hpp"
+#include "Actor/Counter.hpp"
+#include "Actor/Clerk.hpp"
+#include "Actor/TreasureBox.hpp"
 #include "Sound.hpp"
 #include "Random.hpp"
 #include <fstream>
@@ -36,7 +37,7 @@ Game::Game()
 	mIsRunning(true),
 	mPhase(PHASE_NORMAL),
 	mMoveSensitivity(100.0f)
-	,mLevelIdx(0)
+	, mLevelIdx(0)
 {
 	mCameraUP = glm::vec3(0.0f, 0.0f, 1.0f);
 	mCameraOrientation = glm::vec3(0.5f, 0, 0);
@@ -413,51 +414,12 @@ bool Game::LoadData()
 	mSound->StartMusic("event:/NormalBGM");	// “X“à‚ÌBGM‚ð—¬‚·
 
 
-
-	//{
-	//	// Treasure Box
-	//	Mesh* mesh = new Mesh();
-	//	if (mesh->Load("./resources/TreasureBox/", "scene.gltf")) {
-	//		mesh->SetPos(glm::vec3(4.0f, 5.0f / 2.0f, 0.0f));
-	//		mesh->SetRotate(glm::mat4(1.0f));
-	//		mesh->SetScale(0.01f / 2.0f);
-	//		mMeshes.push_back(MeshData(mesh, "TreasureChest"));
-	//	}
-	//}
-	//{
-	//	// Maze Box
-	//	MazeBox* mazeBox = new MazeBox("./resources/MazeBox/", 
-	//		"MazeBox.fbx", "BlackUV.png", "WhiteUV.png");
-	//	mazeBox->SetPos(glm::vec3(4.0f, 5.0f, 0.0f));
-	//	mazeBox->SetRotate(glm::mat4(1.0f));
-	//	mazeBox->SetScale(1.0f);
-	//	mazeBox->SetBoxType(MazeBox::BLACK);
-	//	mMazeBox = mazeBox;
-	//	mMazeData = new float* [10];
-	//	for (int y = 0; y < 10; y++) {
-	//		mMazeData[y] = new float[15];
-	//		for (int x = 0; x < 15; x++) {
-	//			mMazeData[y][x] = 0.f;
-	//		}
-	//	}
-	//}
-
-
 	// Load Text
 	a = new UserAssistText(this);
 	a = new TimerText(this);
 
 	// Talk Text ‚Ì“Ç‚Ýž‚Ý
 	mTalkText = new TalkText(this);
-
-
-	//mText = new TextComponent();
-	//mText->SetPos(glm::vec3(0.0f));
-	//mText->SetRotate(glm::mat4(1.0f));
-	//mText->SetScale(1.0f);
-	//mText->SetAlpha(1.0f);
-	//mText->SetTextColor(glm::vec3(0.0f, 0.0f, 0.2f));
-
 
 
 	return true;

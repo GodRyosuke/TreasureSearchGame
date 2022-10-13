@@ -1,7 +1,7 @@
-#include "Plane.hpp"
+#include "Actor/Plane.hpp"
 #include <iostream>
 #include "Game.hpp"
-#include "MeshComponent.hpp"
+#include "Component/MeshComponent.hpp"
 
 Plane::Plane(Game* game)
 	:Actor(game)

@@ -6,8 +6,8 @@
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
 
-#include "Component.hpp"
-#include "Actor.hpp"
+#include "Component/Component.hpp"
+#include "Actor/Actor.hpp"
 
 Component::Component(Actor* owner, int updateOrder)
 	:mOwner(owner)

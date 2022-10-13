@@ -161,35 +161,34 @@ XCOPY "$(SolutionDir)TreasureSearchGame\resources" %OUTPUT_DIRECTORY% /e /y</Com
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="include\Actor.hpp" />
-    <ClInclude Include="include\Clerk.hpp" />
-    <ClInclude Include="include\Component.hpp" />
-    <ClInclude Include="include\Counter.hpp" />
+    <ClInclude Include="include\Actor\Actor.hpp" />
+    <ClInclude Include="include\Actor\Clerk.hpp" />
+    <ClInclude Include="include\Component\Component.hpp" />
+    <ClInclude Include="include\Actor\Counter.hpp" />
     <ClInclude Include="include\FMOD\common.hpp" />
     <ClInclude Include="include\FMOD\common_platform.hpp" />
-    <ClInclude Include="include\FollowCamera.hpp" />
+    <ClInclude Include="include\Component\FollowCamera.hpp" />
     <ClInclude Include="include\Game.hpp" />
     <ClInclude Include="include\GLUtil.hpp" />
-    <ClInclude Include="include\MazeBox.hpp" />
+    <ClInclude Include="include\Actor\MazeBox.hpp" />
     <ClInclude Include="include\Mesh.hpp" />
-    <ClInclude Include="include\MeshComponent.hpp" />
-    <ClInclude Include="include\Plane.hpp" />
-    <ClInclude Include="include\Player.hpp" />
+    <ClInclude Include="include\Component\MeshComponent.hpp" />
+    <ClInclude Include="include\Actor\Plane.hpp" />
+    <ClInclude Include="include\Actor\Player.hpp" />
     <ClInclude Include="include\Random.hpp" />
-    <ClInclude Include="include\Roof.hpp" />
+    <ClInclude Include="include\Actor\Roof.hpp" />
     <ClInclude Include="include\Shader.hpp" />
-    <ClInclude Include="include\SkinMeshComponent.hpp" />
+    <ClInclude Include="include\Component\SkinMeshComponent.hpp" />
     <ClInclude Include="include\Skinning.hpp" />
     <ClInclude Include="include\Sound.hpp" />
-    <ClInclude Include="include\SpriteComponent.hpp" />
-    <ClInclude Include="include\TalkText.hpp" />
-    <ClInclude Include="include\TalkTextComponent.hpp" />
-    <ClInclude Include="include\Text.hpp" />
-    <ClInclude Include="include\TextComponent.hpp" />
-    <ClInclude Include="include\TextBox.hpp" />
+    <ClInclude Include="include\Component\SpriteComponent.hpp" />
+    <ClInclude Include="include\Actor\TalkText.hpp" />
+    <ClInclude Include="include\Component\TalkTextComponent.hpp" />
+    <ClInclude Include="include\Actor\Text.hpp" />
+    <ClInclude Include="include\Component\TextComponent.hpp" />
+    <ClInclude Include="include\Actor\TextBox.hpp" />
     <ClInclude Include="include\Texture.hpp" />
-    <ClInclude Include="include\TextureShadowMap.hpp" />
-    <ClInclude Include="include\TreasureBox.hpp" />
+    <ClInclude Include="include\Actor\TreasureBox.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Actor.cpp" />
@@ -219,7 +218,6 @@ XCOPY "$(SolutionDir)TreasureSearchGame\resources" %OUTPUT_DIRECTORY% /e /y</Com
     <ClCompile Include="src\TextComponent.cpp" />
     <ClCompile Include="src\TextBox.cpp" />
     <ClCompile Include="src\Texture.cpp" />
-    <ClCompile Include="src\TextureShadowMap.cpp" />
     <ClCompile Include="src\TreasureBox.cpp" />
   </ItemGroup>
   <ItemGroup>

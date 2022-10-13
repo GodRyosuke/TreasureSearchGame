@@ -2,7 +2,7 @@
 
 #include "SDL.h"
 #include "glew.h"
-#include "MazeBox.hpp"
+#include "glm.hpp"
 #include <string>
 #include <unordered_map>
 
@@ -110,7 +110,6 @@ private:
 	class TreasureBox* mTreasureBox;
 
 	class Plane* mPlane;
-	MazeBox* mMazeBox;
 	float** mMazeData;
 	//char** mLevelData;
 	std::vector<char**> mLevelArray;

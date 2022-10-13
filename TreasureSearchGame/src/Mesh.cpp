@@ -3,7 +3,7 @@
 #include "GLUtil.hpp"
 #include "Texture.hpp"
 #include "Shader.hpp"
-#include "Actor.hpp"
+#include "Actor/Actor.hpp"
 
 
 Mesh::Mesh()

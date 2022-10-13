@@ -1,12 +1,12 @@
-#include "Player.hpp"
+#include "Actor/Player.hpp"
 #include "Game.hpp"
-#include "FollowCamera.hpp"
-#include "SkinMeshComponent.hpp"
+#include "Component/FollowCamera.hpp"
+#include "Component/SkinMeshComponent.hpp"
 #include "gtc/matrix_transform.hpp"
 #include "gtc/type_ptr.hpp"
 #include "gtx/rotate_vector.hpp"
 #include "gtx/vector_angle.hpp"
-#include "TextComponent.hpp"
+#include "Component/TextComponent.hpp"
 #include "Sound.hpp"
 
 static Game::PHASE preGamePhase;

@@ -1,5 +1,5 @@
-#include "Actor.hpp"
-#include "SpriteComponent.hpp"
+#include "Actor/Actor.hpp"
+#include "Component/SpriteComponent.hpp"
 #include "Shader.hpp"
 #include "Game.hpp"
 #include "Texture.hpp"

@@ -1,7 +1,7 @@
 #include "Game.hpp"
-#include "Counter.hpp"
-#include "MazeBox.hpp"
-#include "MeshComponent.hpp"
+#include "Actor/Counter.hpp"
+#include "Actor/MazeBox.hpp"
+#include "Component/MeshComponent.hpp"
 
 Counter::Counter(Game* game)
 	:Actor(game)

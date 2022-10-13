@@ -1,7 +1,7 @@
-#include "Clerk.hpp"
-#include "SkinMeshComponent.hpp"
+#include "Actor/Clerk.hpp"
+#include "Component/SkinMeshComponent.hpp"
 #include "Game.hpp"
-#include "Player.hpp"
+#include "Actor/Player.hpp"
 
 Clerk::Clerk(Game* game)
 	:Actor(game)

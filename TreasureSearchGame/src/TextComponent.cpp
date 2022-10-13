@@ -1,7 +1,7 @@
-#include "TextComponent.hpp"
+#include "Component/TextComponent.hpp"
 #include <iostream>
 #include "Shader.hpp"
-#include "Actor.hpp"
+#include "Actor/Actor.hpp"
 #include "Game.hpp"
 
 TextComponent::TextComponent(Actor* owner, Type type)

@@ -1,6 +1,6 @@
-#include "TalkTextComponent.hpp"
+#include "Component/TalkTextComponent.hpp"
 #include "Shader.hpp"
-#include "Actor.hpp"
+#include "Actor/Actor.hpp"
 #include <fstream>
 
 

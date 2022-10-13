@@ -1,5 +1,5 @@
-#include "SkinMeshComponent.hpp"
-#include "Actor.hpp"
+#include "Component/SkinMeshComponent.hpp"
+#include "Actor/Actor.hpp"
 #include "Skinning.hpp"
 #include "Game.hpp"
 #include "Shader.hpp"
