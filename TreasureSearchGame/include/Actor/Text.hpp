@@ -3,6 +3,7 @@
 #include "Actor.hpp"
 #include <string>
 
+// キー入力情報をユーザーに伝える
 class UserAssistText : public Actor
 {
 public:
@@ -14,6 +15,7 @@ private:
 	class TextComponent* mTextComp;
 };
 
+// 残り時間描画
 class TimerText : public Actor
 {
 public:

@@ -6,7 +6,7 @@
 
 MazeBox::MazeBox(Game* game)
 	:Actor(game)
-	,mGrowingSpeed(0.007f)
+	,mGrowingSpeed(0.13f)
 	,mZ(0.f)
 {
 	mMeshComp = new MeshComponent(this);
@@ -33,12 +33,12 @@ void MazeBox::UpdateActor(float deltaTime)
 			(boxPos.y - 1.5 <= playerPos.y) && (playerPos.y <= boxPos.y + 1.5)
 			) {
 			if ((GetGame()->IsWall(boxPos)) && (mZ < 2.0f)) {
-				mZ += 0.1f;
+				mZ += mGrowingSpeed;
 			}
 		}
 		else {
 			if (0.f < mZ) {
-				mZ -= 0.1f;
+				mZ -= mGrowingSpeed;
 			}
 		}
 
@@ -46,7 +46,7 @@ void MazeBox::UpdateActor(float deltaTime)
 	else {
 		// ƒQ[ƒ€I—¹‚µ‚½‚çA—§‚¿ã‚ª‚Á‚Ä‚¢‚éMazeBox‚ð‰º‚°‚é
 		if (0.f < mZ) {
-			mZ -= 0.1f;
+			mZ -= mGrowingSpeed;
 		}
 	}
 
@@ -60,26 +60,3 @@ void MazeBox::UpdateActor(float deltaTime)
 	SetPosition(glm::vec3(boxPos.x, boxPos.y, mZ));
 }
 
-void MazeBox::GrowUp()
-{
-	if (z >= 2.0f) {
-		mState = UP_STATE;
-		IsGrowing = false;
-		return;
-	}
-	mState = GROW_UP_STATE;
-	IsGrowing = true;
-	z += mGrowingSpeed;
-}
-
-void MazeBox::GrowDown()
-{
-	if (z <= 0.f) {
-		mState = DOWN_STATE;
-		IsDowning = false;
-		return;
-	}
-	mState = GROW_DOWN_STATE;
-	IsDowning = true;
-	z -= mGrowingSpeed;
-}

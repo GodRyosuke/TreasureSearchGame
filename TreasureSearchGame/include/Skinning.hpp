@@ -6,7 +6,6 @@ class SkinMesh : public Mesh {
 public:
     SkinMesh();
     ~SkinMesh();
-    //void Update(float deltaTime) override;
     int GetBoneTransform(float TimeInSeconds, std::vector<glm::mat4>& Transforms);
     void SetAnimIdx(int idx) { mAnimIdx = idx; }
 
@@ -40,19 +39,12 @@ private:
         void AddBoneData(unsigned int BoneID, float Weight)
         {
             for (unsigned int i = 0; i < MAX_NUM_BONES_PER_VERTEX; i++) {
-                //if ((BoneIDs[i] == BoneID) && (Weights[i] != 0.0)) { // ‚·‚Å‚ÉŠŽ‚µ‚Ä‚¢‚½‚ç’Ç‰Á‚µ‚È‚¢
-                //    return;
-                //}
                 if (Weights[i] == 0.0) {
                     BoneIDs[i] = BoneID;
                     Weights[i] = Weight;
-                    //printf("Adding bone %d weight %f at index %i\n", BoneID, Weight, i);
                     return;
                 }
             }
-
-            // should never get here - more bones than we have space for
-            //assert(0);
         }
     };
 

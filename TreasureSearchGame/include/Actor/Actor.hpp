@@ -8,19 +8,16 @@ public:
 	Actor(class Game* game);
 	virtual ~Actor();
 
-	// Update function called from Game (not overridable)
 	void Update(float deltaTime);
-	// Updates all the components attached to the actor (not overridable)
+	// Actorが保有しているComponentを更新
 	void UpdateComponents(float deltaTime);
-	// Any actor-specific update code (overridable)
+	// Actor固有の更新
 	virtual void UpdateActor(float deltaTime);
 
-	// ProcessInput function called from Game (not overridable)
 	void ProcessInput(const uint8_t* keyState);
-	// Any actor-specific input code (overridable)
+	// Acttor固有の入力
 	virtual void ActorInput(const uint8_t* keyState);
 
-	// Getters/setters
 	const glm::vec3& GetPosition() const { return mPosition; }
 	void SetPosition(const glm::vec3& pos) { mPosition = pos; mRecomputeWorldTransform = true; }
 	float GetScale() const { return mScale; }

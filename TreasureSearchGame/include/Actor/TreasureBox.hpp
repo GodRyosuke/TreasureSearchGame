@@ -1,5 +1,6 @@
 #include "Actor.hpp"
 
+// ‚²‚Ù‚¤‚Ñ‚Ì•ó” 
 class TreasureBox : public Actor
 {
 public:

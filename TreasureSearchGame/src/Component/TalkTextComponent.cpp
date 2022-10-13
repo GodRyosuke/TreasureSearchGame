@@ -52,7 +52,6 @@ void TalkTextComponent::Draw(Shader* shader)
 
 	glm::vec3 FontCenter = glm::vec3(0.0f);
 	// •¶Žš‚Ìtexchar‚Ì‘å‚«‚³‚ðŽæ“¾
-	//int FontWidth = (mJapanTexChars.begin()->second.Advance >> 6) * mOwner->GetScale();
 	const int FontWidth = 48;
 	FontCenter.x = FontWidth * 20 / 2.0f; // •¶Žš”‚Í20•¶Žš
 	FontCenter.y = FontWidth / 2.0f;
@@ -116,15 +115,5 @@ void TalkTextComponent::Draw(Shader* shader)
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
-
-
-
-//void TalkTextComponent::ShowTalkText(Shader* shader)
-//{
-//	SetText(GetText(mData["TalkCostomer"]["Welcome"]["Talk2"]));
-//	mOwner->SetPosition(glm::vec3(0.0f, -150.0f, 0.f));
-//	SetTextColor(glm::vec3(0.f, 0.f, 0.2f));
-//	DrawTalkText(shader);
-//}
 
 

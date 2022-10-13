@@ -17,7 +17,7 @@ Player::Player(Game* game)
 	,mIsWaitSeconds(false)
 	,mIsOneAnim(false)
 {
-	SetPosition(glm::vec3(10.0f, 3.0f, 0.0f));
+	SetPosition(glm::vec3(28.0f, 3.0f, 0.0f));
 	mPlayerRot = 180;
 	SetScale(0.002f);
 	mSkinMeshComp = new SkinMeshComponent(this);
@@ -197,21 +197,6 @@ void Player::UpdateActor(float deltatime)
 	}
 
 	preGamePhase = GetGame()->GetPhase();
-
-	//if (
-	//	(mPreviousState != WALK) && (mState == WALK)
-	//	) {
-	//	Sound* sound = GetGame()->GetSound();
-	//	sound->SetType(Sound::WALK);
-	//	sound->StartMusic();
-	//}
-	//if (
-	//	(mPreviousState == WALK) && (mState != WALK)
-	//	) {
-	//	Sound* sound = GetGame()->GetSound();
-	//	sound->SetType(Sound::WALK);
-	//	sound->StopMusic();
-	//}
 
 	switch (mState)
 	{

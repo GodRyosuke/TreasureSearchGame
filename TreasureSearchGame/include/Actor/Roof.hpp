@@ -1,5 +1,6 @@
 #include "Actor.hpp"
 
+// ‰®ª
 class Roof : public Actor
 {
 public:

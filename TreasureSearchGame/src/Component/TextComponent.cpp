@@ -8,7 +8,6 @@ TextComponent::TextComponent(Actor* owner, Type type)
 	:SpriteComponent(owner, type)
 {
 	// TTFì«Ç›çûÇ›
-	//FT_Face face;
 	FT_GlyphSlot slot;
 	// Load Font
 	FT_Init_FreeType(&mFTlibrary);

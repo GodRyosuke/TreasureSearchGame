@@ -35,17 +35,6 @@ Texture::Texture(std::string filePath)
 	//glGenerateMipmap(GL_TEXTURE_2D);
 	glBindTexture(texture_data, 0);		// unbind
 	stbi_image_free(PictureData);
-
-
-
-	//SDL_Surface* surf = IMG_Load(filePath.c_str());
-	//if (!surf)
-	//{
-	//	SDL_Log("Failed to load texture file %s", filePath.c_str());
-	//	return;
-	//}
-
-	//SDL_FreeSurface(surf);
 }
 
 Texture::Texture(std::vector<std::string> filePaths)

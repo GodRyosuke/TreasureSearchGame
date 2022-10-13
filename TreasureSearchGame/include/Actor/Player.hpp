@@ -19,7 +19,7 @@ public:
 	void UpdateActor(float deltaTime) override;
 	State GetState() { return mState; }
 	void SetState(State state) { mState = state; }
-	void WaitSeconds(uint32_t second);
+	void WaitSeconds(uint32_t second);	// これが呼ばれている間、入力を受け付けない
 	bool GetIsWaitSeconds() { return mIsWaitSeconds; }
 	void OpenChest();	// 宝箱を空けるアニメーション
 	void SetPlayerRot(float rotate);
@@ -27,8 +27,6 @@ public:
 private:
 	class FollowCamera* mFollowCamera;
 	class SkinMeshComponent* mSkinMeshComp;
-	class TextComponent* mDebugText;
-	class TextComponent* mGamePhaseText;
 	float mMoveSpeed;
 
 	float mPlayerRot;
@@ -37,4 +35,8 @@ private:
 	bool mIsWaitSeconds;
 	bool mIsOneAnim;
 	uint32_t mStopTime;
+
+	// Debug用
+	class TextComponent* mDebugText;
+	class TextComponent* mGamePhaseText;
 };

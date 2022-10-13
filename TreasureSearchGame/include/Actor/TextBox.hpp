@@ -1,5 +1,6 @@
 #include "Actor.hpp"
 
+// 文字を描画するテクストボックス
 class TextBox : public Actor
 {
 public:

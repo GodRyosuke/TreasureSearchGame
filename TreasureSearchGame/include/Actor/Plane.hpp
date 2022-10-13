@@ -3,6 +3,7 @@
 #include "Actor.hpp"
 #include <string>
 
+// è∞Ç‚ï«Ç…égópÇ∑ÇÈïΩñ 
 class Plane : public Actor
 {
 public:
@@ -14,8 +15,6 @@ public:
 	};
 
 	void UpdateActor(float deltatime) override;
-	bool LoadBrickTex(std::string filePath);
-	bool LoadConcreteTex(std::string filePath);
 	void SetPlaneType(PlaneType type) { mType = type; }
 
 private:

@@ -11,9 +11,6 @@
 class Game {
 public:
 	enum PHASE {
-		PHASE_IDLE,
-		PHASE_MOVE,
-		PHASE_TALK,
 		PHASE_NORMAL,
 		PHASE_GAME,
 		PHASE_FAIL_GAME,
@@ -33,29 +30,29 @@ public:
 
 	class Mesh* GetMesh(std::string filePath, std::string ext);
 	class SkinMesh* GetSkinMesh(std::string filePath, std::string ext);
+
 	void AddSpriteComp(class SpriteComponent* sprite);
 	void RemoveSpriteComp(class SpriteComponent* sprite);
 	void RemoveTextComp(class TextComponent* text);
 
 	uint32_t GetRandom();
+	class Sound* GetSound() { return mSound; }
 
 	class Player* GetPlayer() { return mPlayer; }
 	class Clerk* GetClerk() { return mClerk; }
 	class TalkText* GetTalkText() { return mTalkText; }
 	class TreasureBox* GetTreasureBox() { return mTreasureBox; }
-	class Sound* GetSound() { return mSound; }
 
 	void SetPhase(PHASE phase) { mPhase = phase; }
 	PHASE GetPhase() { return mPhase; }
 
 	// posÇ™ï«Ç©ÅH
 	bool IsWall(glm::vec3 pos);
-	void SetLevel();
+	void SetLevel();	// ñ¿òHÇÃÇ…ì‡óeÇÉâÉìÉ_ÉÄÇ…ê›íË
 	glm::vec3 GetTreasurePos();
 
 	void AddMeshComp(class MeshComponent* meshcomp);
 	void RemoveMeshComp(class MeshComponent* mesh);
-	//void RemoveMeshComp(class SkinMeshComponent* mesh);
 	Uint32 GetTicksCount() { return mTicksCount; }
 
 
@@ -97,46 +94,27 @@ private:
 	std::vector<SpotLight> mSpotLights;
 
 
-	class SpriteComponent* mTextBox;
-	class Mesh* mConcretePlane;
-	class Mesh* mRoof;
-	
-	//class Text* mText;
-	//nl::json mTextData;
-
 	class Player* mPlayer;
 	class Clerk* mClerk;
 	class TalkText* mTalkText;
 	class TreasureBox* mTreasureBox;
-
 	class Plane* mPlane;
+
 	float** mMazeData;
-	//char** mLevelData;
 	std::vector<char**> mLevelArray;
 	int mLevelIdx;
-
 	
-
+	// Shaders
 	class Shader* mSkinningShader;
 	class Shader* mMeshShader;
 	class Shader* mSpriteShader;
 	class Shader* mTextShader;
 
-	class Random* mRandom;
-
-
+	// Phase
 	PHASE mPhase;
 
+	class Random* mRandom;
 	class Sound* mSound;
-
-
-	// Camera
-	//glm::vec3 mCameraUP;
-	//glm::vec3 mCameraOrientation;
-	//float mMoveSensitivity;
-
-	//glm::vec3 mMousePos;
-
 
 	std::vector<class Actor*> mActors;
 	std::vector<class SpriteComponent*> mSpriteComps;
@@ -144,12 +122,10 @@ private:
 	std::vector<class TalkTextComponent*> mTalkTextComps;
 	std::unordered_map<std::string, class Mesh*> mMeshes;
 	std::vector<class MeshComponent*> mMeshComps;
-	//std::vector<class Mesh*> mMeshes;
 	std::unordered_map<std::string, class SkinMesh*> mSkinMeshes;
 	std::vector<class SkinMeshComponent*> mSkinMeshComps;
 
 	SDL_Window* mWindow;
-	// OpenGL context
 	SDL_GLContext mContext;
 	Uint32 mTicksCount;
 };

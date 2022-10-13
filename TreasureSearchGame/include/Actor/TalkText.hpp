@@ -4,7 +4,7 @@
 
 namespace nl = nlohmann;
 
-
+// 店員との会話や、ゲーム終了時の文字
 class TalkText : public Actor
 {
 public:

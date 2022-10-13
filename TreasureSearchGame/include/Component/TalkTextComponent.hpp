@@ -7,7 +7,6 @@ public:
 	void Input(const uint8_t* keyState);
 	virtual void Update(float deltaTime) override;
 	void Draw(class Shader* shader) override;
-	//void ShowTalkText(class Shader* shader);
 	void SetText(std::u16string text) { mText = text; }
 	void InittextPos();
 	bool GetIsFinishDraw() { return mIsFnishDraw; }

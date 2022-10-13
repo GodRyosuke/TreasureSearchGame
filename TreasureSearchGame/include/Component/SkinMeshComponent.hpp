@@ -21,8 +21,6 @@ public:
 
 
 private:
-	//void SetMatrixUniform(class Shader* shader) override;
-
 	int mAnimIdx;
 	bool mZeroTransFrag;
 	bool mStopAnimation;

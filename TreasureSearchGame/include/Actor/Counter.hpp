@@ -7,6 +7,7 @@ public:
 
 };
 
+// カウンターを形成する一つの箱
 class CounterBox : public Actor
 {
 public:

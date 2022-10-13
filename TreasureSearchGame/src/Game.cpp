@@ -38,8 +38,6 @@ Game::Game()
 	mPhase(PHASE_NORMAL)
 	, mLevelIdx(0)
 {
-
-
 }
 
 
@@ -113,7 +111,6 @@ void Game::SetLighting()
 
 	for (auto shader : Shaders) {
 		shader->UseProgram();
-		//shader->SetVectorUniform("gEyeWorldPos", mCameraPos);
 		shader->SetSamplerUniform("gShadowMap", 1);
 		shader->SetSamplerUniform("gSampler", 0);
 		shader->SetSamplerUniform("gNumSpotLights", mSpotLights.size());
@@ -207,10 +204,6 @@ bool Game::LoadData()
 
 
 	// Set Camera
-	//glm::mat4 CameraView = glm::lookAt(
-	//	mCameraPos,
-	//	mCameraPos + mCameraOrientation,
-	//	mCameraUP);
 	glm::mat4 CameraProj = glm::perspective(glm::radians(45.0f), (float)mWindowWidth / mWindowHeight, 0.1f, 100.0f);
 	glm::mat4 SpotLightView = glm::lookAt(
 		mSpotLights[0].pointLight.Position,
@@ -291,10 +284,6 @@ bool Game::LoadData()
 	SetLighting();
 
 	// Load Level Data
-	//mLevelData = new char* [10];
-	//for (int y = 0; y < 10; y++) {
-	//	mLevelData[y] = new char[15];
-	//}
 	for (int i = 1; i <= 5; i++) {
 		char** levelData = new char* [10];
 		for (int y = 0; y < 10; y++) {
@@ -374,7 +363,6 @@ bool Game::LoadData()
 
 	// 屋根を読み込む
 	Actor* a = new Roof(this);
-
 
 	// Player
 	mPlayer = new Player(this);
@@ -483,28 +471,6 @@ void Game::ProcessInput()
 		case SDL_QUIT:
 			mIsRunning = false;
 			break;
-		//case SDL_MOUSEBUTTONDOWN:	// マウスのボタンが押されたら
-		//{
-		//	if (mPhase == PHASE_IDLE) {
-		//		mPhase = PHASE_MOVE;
-		//		SDL_WarpMouseInWindow(mWindow, mWindowWidth / 2, mWindowHeight / 2);
-		//		SDL_ShowCursor(SDL_DISABLE);
-		//	}
-		//}
-		//break;
-		//case SDL_MOUSEBUTTONUP:		// マウスを離したら
-		//	if (mPhase == PHASE_MOVE) {
-		//		mPhase = PHASE_IDLE;
-
-		//		/*if (EraseDrops()) {
-		//			phase = PHASE_ERASE;
-		//		}
-		//		else {
-		//			phase = PHASE_IDLE;
-		//		}*/
-		//		SDL_ShowCursor(SDL_ENABLE);
-		//	}
-		//	break;
 		}
 	}
 
@@ -534,38 +500,12 @@ void Game::UpdateGame()
 
 	mTicksCount = SDL_GetTicks();
 
-	//if (mPhase == PHASE_MOVE) {
-	//	//printf("%d %d\n", mMousePos.x, mMousePos.y);
-
-	//	float rotX = mMoveSensitivity * (float)((float)mMousePos.y - ((float)mWindowHeight / 2.0f)) / (float)mWindowHeight;
-	//	float rotY = mMoveSensitivity * (float)((float)mMousePos.x - ((float)mWindowWidth / 2.0f)) / (float)mWindowWidth;
-	//	//printf("rotX: %f rotY: %f\t", rotX, rotY);
-	//	// Calculates upcoming vertical change in the Orientation
-	//	glm::vec3 newOrientation = glm::rotate(mCameraOrientation, glm::radians(-rotX), glm::normalize(glm::cross(mCameraOrientation, mCameraUP)));
-
-	//	// Decides whether or not the next vertical Orientation is legal or not
-	//	int rad = abs(glm::angle(newOrientation, mCameraUP) - glm::radians(90.0f));
-	//	//std::cout << rad * 180 / M_PI << std::endl;
-	//	if (abs(glm::angle(newOrientation, mCameraUP) - glm::radians(90.0f)) <= glm::radians(85.0f))
-	//	{
-	//		mCameraOrientation = newOrientation;
-	//	}
-
-	//	// Rotates the Orientation left and right
-	//	mCameraOrientation = glm::rotate(mCameraOrientation, glm::radians(-rotY), mCameraUP);
-
-	//	if ((mMousePos.x != mWindowWidth / 2) || (mMousePos.y != mWindowHeight / 2)) {
-	//		SDL_WarpMouseInWindow(mWindow, mWindowWidth / 2, mWindowHeight / 2);
-	//	}
-	//}
 
 	for (auto actor : mActors) {
 		actor->Update(deltaTime);
 	}
 
 	mSound->Update();
-
-	//mPlayer->Update(deltaTime);
 }
 
 Mesh* Game::GetMesh(std::string fileName, std::string ext)
@@ -801,9 +741,6 @@ void Game::Shutdown()
 	UnloadData();
 
 	// unload renderer
-	//delete mSpriteVerts;
-	//mSpriteShader->Unload();
-	//mMeshShader->Unload();
 	delete mSkinningShader;
 	delete mTextShader;
 	delete mSpriteShader;

@@ -34,50 +34,6 @@ Sound::Sound()
 	LoadEvents("event:/OpenChest");
 	LoadEvents("event:/Clerk");
 	LoadEvents("event:/Walk");
-
-
-	//FMOD::Studio::EventDescription* NormalBGMDesc = NULL;
-	//ERRCHECK(mAudioSystem->getEvent("event:/NormalBGM", &NormalBGMDesc));
-	//mNormalBGM = NULL;
-	//ERRCHECK(NormalBGMDesc->createInstance(&mNormalBGM));
-	//mEvents.insert()
-
-	//// ƒQ[ƒ€Žž‚É—¬‚ê‚é‰¹Šy
-	//FMOD::Studio::EventDescription* GameBGMDesc = NULL;
-	//ERRCHECK(mAudioSystem->getEvent("event:/GameBGM", &GameBGMDesc));
-	//mGameBGM = NULL;
-	//ERRCHECK(GameBGMDesc->createInstance(&mGameBGM));
-
-	//// Œø‰Ê‰¹“Ç‚Ýo‚µ
-	//FMOD::Studio::EventDescription* Effect = NULL;
-	//ERRCHECK(mAudioSystem->getEvent("event:/Select", &Effect));
-	//mSelect = NULL;
-	//ERRCHECK(Effect->createInstance(&mSelect));
-
-	//Effect = NULL;
-	//ERRCHECK(mAudioSystem->getEvent("event:/Cansel", &Effect));
-	//mCansel = NULL;
-	//ERRCHECK(Effect->createInstance(&mCansel));
-
-	//Effect = NULL;
-	//ERRCHECK(mAudioSystem->getEvent("event:/CountDown", &Effect));
-	//mCountDown = NULL;
-	//ERRCHECK(Effect->createInstance(&mCountDown));
-
-	//Effect = NULL;
-	//ERRCHECK(mAudioSystem->getEvent("event:/OpenChest", &Effect));
-	//mOpenChest = NULL;
-	//ERRCHECK(Effect->createInstance(&mOpenChest));
-
-	//Effect = NULL;
-	//ERRCHECK(mAudioSystem->getEvent("event:/Clerk", &Effect));
-	//mClerk = NULL;
-	//ERRCHECK(Effect->createInstance(&mClerk));
-
-	//Effect = NULL;
-	//ERRCHECK(mAudioSystem->getEvent("event:/Walk", &Effect));
-	//mWalk = NULL;
-	//ERRCHECK(Effect->createInstance(&mWalk));
 }
 
 void Sound::LoadEvents(std::string eventName)
@@ -107,34 +63,6 @@ void Sound::StartMusic(std::string eventName)
 	if (iter != mEvents.end()) {
 		iter->second->start();
 	}
-
-	//switch (mType)
-	//{
-	//case Sound::NORMAL:
-	//	ERRCHECK(mNormalBGM->start());
-	//	break;
-	//case Sound::GAME:
-	//	ERRCHECK(mGameBGM->start());
-	//	break;
-	//case Sound::SELECT:
-	//	ERRCHECK(mSelect->start());
-	//	break;
-	//case Sound::CANSEL:
-	//	ERRCHECK(mCansel->start());
-	//	break;
-	//case Sound::COUNT_DOWN:
-	//	ERRCHECK(mCountDown->start());
-	//	break;
-	//case Sound::OPEN_CHST:
-	//	ERRCHECK(mOpenChest->start());
-	//	break;
-	//case Sound::CLERK:
-	//	ERRCHECK(mClerk->start());
-	//	break;
-	//case Sound::WALK:
-	//	ERRCHECK(mWalk->start());
-	//	break;
-	//}
 }
 
 void Sound::StopMusic(std::string eventName)
@@ -143,19 +71,6 @@ void Sound::StopMusic(std::string eventName)
 	if (iter != mEvents.end()) {
 		iter->second->stop(FMOD_STUDIO_STOP_IMMEDIATE);
 	}
-
-	//switch (mType)
-	//{
-	//case Sound::NORMAL:
-	//	ERRCHECK(mNormalBGM->stop(FMOD_STUDIO_STOP_IMMEDIATE));
-	//	break;
-	//case Sound::GAME:
-	//	ERRCHECK(mGameBGM->stop(FMOD_STUDIO_STOP_IMMEDIATE));
-	//	break;
-	//case Sound::WALK:
-	//	ERRCHECK(mWalk->stop(FMOD_STUDIO_STOP_IMMEDIATE));
-	//	break;
-	//}
 }
 
 void Sound::ShutDown()

@@ -24,7 +24,6 @@ public:
 	Type GetType() { return mType; }
 
 protected:
-
 	virtual void SetUniforms(class Shader* shader);
 
 	float mAlpha;

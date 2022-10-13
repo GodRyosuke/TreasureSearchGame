@@ -245,7 +245,6 @@ void SkinMesh::ReadNodeHierarchy(float AnimationTimeTicks, const aiNode* pNode, 
         //Matrix4f RotationM = Matrix4f(RotationQ.GetMatrix());
         aiMatrix3x3 rotationMat = RotationQ.GetMatrix();
         glm::mat4 RotationM = glutil.ToGlmMat4(rotationMat);
-        //std::cout << RotationM[0][0] << '\t' << RotationM[0][1] << '\t' << RotationM[0][2] << '\t' << RotationM[0][3] << '\t' << std::endl;
 
         // Interpolate translation and generate translation transformation matrix
         aiVector3D Translation;
